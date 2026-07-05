@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy &amp; Disclaimer | NHS Finance Tool</title>
+<meta name="description" content="How NHS Finance Tool handles your data, and our full disclaimer: these calculators are for general guidance only and are not financial, tax or legal advice.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/privacy/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NHS Finance Tool">
+<meta property="og:title" content="Privacy Policy &amp; Disclaimer | NHS Finance Tool">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/privacy/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- ── LEAVING SITE MODAL ── -->
+<div id="leaving-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;font-family:'Nunito',sans-serif;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#00843D,#007B8A);padding:18px 22px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:15px;font-weight:800;color:#fff;">🔗 You're leaving NHS Finance Tool</div>
+      <button onclick="closeLeavingModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div style="padding:22px;">
+      <div style="display:flex;align-items:center;gap:12px;background:#F7F9FB;border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:28px;" id="leaving-icon">🔍</div>
+        <div><div style="font-size:14px;font-weight:800;color:#1A2331;" id="leaving-name">Partner site</div><div style="font-size:12px;color:#8A9BB0;" id="leaving-desc">Sponsored link</div></div>
+      </div>
+      <div style="font-size:13px;color:#4A5568;line-height:1.7;margin-bottom:16px;">You are leaving <strong>NHS Finance Tool</strong>. The destination site has its own privacy policy and may use cookies. We may earn a small commission if you apply — at no cost to you, and our calculator results are unaffected by this.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button onclick="closeLeavingModal()" style="padding:11px;background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;font-size:13px;font-weight:700;color:#4A5568;cursor:pointer;">← Stay here</button>
+        <button onclick="proceedToPartnerSite()" style="padding:11px;background:#00843D;border:none;border-radius:8px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;">Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── DISCLAIMER SPLASH ── -->
+<div id="disclaimer-splash" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:10002;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div style="background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;font-family:'Nunito',sans-serif;box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+    <div style="background:linear-gradient(135deg,#1A2E44,#007B8A);padding:22px 24px;border-radius:16px 16px 0 0;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;"><div style="font-size:28px;">🏥</div><div style="font-size:20px;font-weight:900;color:#fff;">NHS Finance Tool</div></div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.75);">Free NHS-specific calculators — please read before using this site</div>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#FEF2F2;border:2px solid #EF4444;border-radius:10px;padding:16px 18px;margin-bottom:18px;">
+        <div style="font-size:14px;font-weight:900;color:#991B1B;margin-bottom:8px;">⚠️ Not Financial Advice</div>
+        <div style="font-size:13px;color:#7F1D1D;line-height:1.7;">NHS Finance Tool is <strong>not authorised or regulated by the Financial Conduct Authority (FCA)</strong> and does not provide financial, tax or legal advice. Every result is an estimate for general information only. Always consult a qualified, FCA-authorised financial adviser or accountant before making decisions about pensions, tax or your Ltd company.</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:#1A2E44;margin-bottom:10px;">What NHS Finance Tool is:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🧮</div><strong>Free NHS calculators</strong><br>Take-home pay, pension Annual Allowance, Ltd company tax</div>
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🔒</div><strong>Completely private</strong><br>All calculations run in your browser — nothing is stored or sent anywhere</div>
+      </div>
+      <div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:#78350F;line-height:1.7;"><strong>What NHS Finance Tool is not:</strong> a financial adviser · an IFA · an accountant · FCA authorised or regulated. Figures are estimates and may differ from your actual payslip, Annual Benefit Statement or HMRC calculation.</div>
+      <div style="background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;padding:13px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+        <div id="splash-checkbox" onclick="toggleSplashCheck()" style="width:20px;height:20px;border:2px solid #D0D7DE;border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;"></div>
+        <div style="font-size:12px;color:#4A5568;line-height:1.6;" onclick="toggleSplashCheck()">I understand this tool provides general guidance only, not financial, tax or legal advice, and I will consult a qualified adviser before making decisions.</div>
+      </div>
+      <button id="splash-btn" disabled onclick="acceptDisclaimer()" style="width:100%;padding:13px;background:#D0D7DE;color:#8A9BB0;border:none;border-radius:9px;font-size:14px;font-weight:800;cursor:not-allowed;">Tick the box above to continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── COOKIE NOTICE ── -->
+<div id="cookie-banner">
+  <div class="cookie-text"><strong>🍪 Our cookie policy</strong> — NHS Finance Tool uses <strong>no tracking or advertising cookies</strong>. All calculations run entirely in your browser. <a onclick="showCookieInfo()">Learn more</a></div>
+  <div class="cookie-btns"><button class="cookie-btn-info" onclick="showCookieInfo()">More info</button><button class="cookie-btn-accept" onclick="acceptCookies()">Got it ✓</button></div>
+</div>
+<div id="cookie-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:520px;width:100%;font-family:'Nunito',sans-serif;">
+    <div style="background:#00843D;padding:18px 22px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:16px;font-weight:800;color:#fff;">🍪 Our Cookie Policy</div>
+      <button onclick="closeCookieInfo()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:22px;font-size:13px;color:#4A5568;line-height:1.7;">
+      No tracking, analytics or advertising cookies are used. We store one item in your browser (your preference to dismiss this notice) — nothing personal, nothing sent to a server. All calculations happen entirely on your device.
+      <button onclick="acceptCookies()" style="width:100%;padding:12px;background:#00843D;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px;">Got it — close ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo" style="text-decoration:none;">NHS<span>Finance</span>Tool</a>
+    <div class="nav-right">
+      <div class="nav-trust">
+        <div class="nav-trust-badge"><span>🏥</span> Built for NHS Staff</div>
+        <div class="nav-trust-badge"><span>🔒</span> Data never stored</div>
+      </div>
+      <a href="/privacy/" class="nav-home-btn" style="text-decoration:none;display:inline-block;">Disclaimer &amp; Privacy</a>
+    </div>
+  </div>
+</nav>
+<div class="page active">
+<div class="tool-header" style="background:linear-gradient(135deg,#1A2E44,#243B55);padding:44px 20px 36px;">
+  <button class="back-btn" onclick="showPage('home')">← Back to Home</button>
+  <h1>🔒 Privacy Policy &amp; Disclaimer</h1>
+  <p>How we handle your data, and our full terms of use</p>
+</div>
+<div class="tool-body">
+<div style="max-width:700px;margin:0 auto;font-size:14px;color:var(--gray5);line-height:1.8;">
+
+  <div style="background:#FEF2F2;border:2px solid #EF4444;border-radius:12px;padding:18px;margin-bottom:28px;">
+    <div style="font-size:15px;font-weight:800;color:#991B1B;margin-bottom:6px;">⚠️ Not Financial, Tax or Legal Advice</div>
+    <div style="font-size:13px;line-height:1.7;">NHS Finance Tool is <strong>not authorised or regulated by the Financial Conduct Authority (FCA)</strong>. Nothing on this site is financial, tax or legal advice, and nothing here is a personal recommendation. Every calculator produces an estimate for general information only. Always consult a qualified, FCA-authorised financial adviser or a qualified accountant before making decisions about your pension, tax position or company structure.</div>
+  </div>
+
+  <h2 style="color:var(--navy);font-size:18px;font-weight:900;margin:24px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--gray2);">1. About This Site</h2>
+  <p>NHS Finance Tool is a free set of calculators built specifically for NHS pay structures and the NHS pension. It's part of the same family of independent UK financial tools as Cookie-Free.co.uk. Nothing on this site constitutes financial, tax or legal advice.</p>
+
+  <h2 style="color:var(--navy);font-size:18px;font-weight:900;margin:24px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--gray2);">2. Data We Collect</h2>
+  <p><strong>Calculator inputs:</strong> every calculation runs entirely inside your browser. We do not transmit, store or process any of the salary, pension or company figures you enter. No account or sign-up is required for any tool on this site.</p>
+  <p><strong>Cookies:</strong> we do not use tracking, advertising or analytics cookies. A single browser storage item remembers that you've seen the disclaimer and cookie notice — nothing personal, and it never leaves your device.</p>
+
+  <h2 style="color:var(--navy);font-size:18px;font-weight:900;margin:24px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--gray2);">3. NHS Pension &amp; Tax Figures</h2>
+  <p>Tax, National Insurance, NHS pension and Annual Allowance figures are based on published HMRC and NHS Pensions rates for each tax year selected. Results are estimates and may differ from your actual payslip or Annual Benefit Statement, which take into account your specific circumstances, rota, and any local pay arrangements. Always verify NHS pension figures against your statement at totalrewardstatements.nhs.uk.</p>
+
+  <h2 style="color:var(--navy);font-size:18px;font-weight:900;margin:24px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--gray2);">4. Ltd Company &amp; Family Income Splitting</h2>
+  <p>The Ltd Company Tax Optimiser illustrates possible strategies based on the figures you enter. It does not constitute tax or legal advice. Arrangements involving dividends to a spouse or family member are subject to HMRC's settlements legislation (ITTOIA 2005 s624) and carry real risk if they lack commercial substance. Always take specialist advice from a qualified accountant before implementing any strategy shown by this tool.</p>
+
+  <h2 style="color:var(--navy);font-size:18px;font-weight:900;margin:24px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--gray2);">5. FCA Compliance</h2>
+  <p>NHS Finance Tool is not authorised or regulated by the FCA. We do not provide regulated financial advice and do not make personal recommendations. Where we refer you to a third party (for example, an adviser-matching service), that third party is responsible for its own FCA compliance, and any such link is clearly marked.</p>
+
+  <h2 style="color:var(--navy);font-size:18px;font-weight:900;margin:24px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--gray2);">6. Disclaimer</h2>
+  <p>Calculator results are estimates based on the information you enter and simplified assumptions about tax and pension rules. They are for general guidance only and must not be relied upon for financial, tax or legal decisions. Always seek advice from a qualified, regulated professional before acting.</p>
+
+  <h2 style="color:var(--navy);font-size:18px;font-weight:900;margin:24px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--gray2);">7. Contact</h2>
+  <p>For queries about this site: <strong>hello@nhsfinancetool.co.uk</strong></p>
+  <p style="font-size:12px;color:var(--gray4);margin-top:20px;font-style:italic;">Last updated: July 2026</p>
+</div>
+<button class="back-btn-bottom" onclick="showPage('home')">← Back to Home</button>
+</div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

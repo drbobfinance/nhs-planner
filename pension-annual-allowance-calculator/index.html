@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NHS Pension Annual Allowance Calculator 2026 — PIA, Tapering &amp; Carry Forward | NHS Finance Tool</title>
+<meta name="description" content="Free NHS pension Annual Allowance calculator using the correct PIA formula. Check tapering, carry forward from the last 3 years, and get a month-by-month breach projection.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/pension-annual-allowance-calculator/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NHS Finance Tool">
+<meta property="og:title" content="NHS Pension Annual Allowance Calculator 2026 — PIA, Tapering &amp; Carry Forward">
+<meta property="og:description" content="Free NHS pension Annual Allowance calculator with the correct PIA formula, tapering, carry forward and a month-by-month breach projection.">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/pension-annual-allowance-calculator/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- ── LEAVING SITE MODAL ── -->
+<div id="leaving-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;font-family:'Nunito',sans-serif;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#00843D,#007B8A);padding:18px 22px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:15px;font-weight:800;color:#fff;">🔗 You're leaving NHS Finance Tool</div>
+      <button onclick="closeLeavingModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div style="padding:22px;">
+      <div style="display:flex;align-items:center;gap:12px;background:#F7F9FB;border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:28px;" id="leaving-icon">🔍</div>
+        <div><div style="font-size:14px;font-weight:800;color:#1A2331;" id="leaving-name">Partner site</div><div style="font-size:12px;color:#8A9BB0;" id="leaving-desc">Sponsored link</div></div>
+      </div>
+      <div style="font-size:13px;color:#4A5568;line-height:1.7;margin-bottom:16px;">You are leaving <strong>NHS Finance Tool</strong>. The destination site has its own privacy policy and may use cookies. We may earn a small commission if you apply — at no cost to you, and our calculator results are unaffected by this.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button onclick="closeLeavingModal()" style="padding:11px;background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;font-size:13px;font-weight:700;color:#4A5568;cursor:pointer;">← Stay here</button>
+        <button onclick="proceedToPartnerSite()" style="padding:11px;background:#00843D;border:none;border-radius:8px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;">Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── DISCLAIMER SPLASH ── -->
+<div id="disclaimer-splash" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:10002;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div style="background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;font-family:'Nunito',sans-serif;box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+    <div style="background:linear-gradient(135deg,#1A2E44,#007B8A);padding:22px 24px;border-radius:16px 16px 0 0;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;"><div style="font-size:28px;">🏥</div><div style="font-size:20px;font-weight:900;color:#fff;">NHS Finance Tool</div></div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.75);">Free NHS-specific calculators — please read before using this site</div>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#FEF2F2;border:2px solid #EF4444;border-radius:10px;padding:16px 18px;margin-bottom:18px;">
+        <div style="font-size:14px;font-weight:900;color:#991B1B;margin-bottom:8px;">⚠️ Not Financial Advice</div>
+        <div style="font-size:13px;color:#7F1D1D;line-height:1.7;">NHS Finance Tool is <strong>not authorised or regulated by the Financial Conduct Authority (FCA)</strong> and does not provide financial, tax or legal advice. Every result is an estimate for general information only. Always consult a qualified, FCA-authorised financial adviser or accountant before making decisions about pensions, tax or your Ltd company.</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:#1A2E44;margin-bottom:10px;">What NHS Finance Tool is:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🧮</div><strong>Free NHS calculators</strong><br>Take-home pay, pension Annual Allowance, Ltd company tax</div>
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🔒</div><strong>Completely private</strong><br>All calculations run in your browser — nothing is stored or sent anywhere</div>
+      </div>
+      <div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:#78350F;line-height:1.7;"><strong>What NHS Finance Tool is not:</strong> a financial adviser · an IFA · an accountant · FCA authorised or regulated. Figures are estimates and may differ from your actual payslip, Annual Benefit Statement or HMRC calculation.</div>
+      <div style="background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;padding:13px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+        <div id="splash-checkbox" onclick="toggleSplashCheck()" style="width:20px;height:20px;border:2px solid #D0D7DE;border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;"></div>
+        <div style="font-size:12px;color:#4A5568;line-height:1.6;" onclick="toggleSplashCheck()">I understand this tool provides general guidance only, not financial, tax or legal advice, and I will consult a qualified adviser before making decisions.</div>
+      </div>
+      <button id="splash-btn" disabled onclick="acceptDisclaimer()" style="width:100%;padding:13px;background:#D0D7DE;color:#8A9BB0;border:none;border-radius:9px;font-size:14px;font-weight:800;cursor:not-allowed;">Tick the box above to continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── COOKIE NOTICE ── -->
+<div id="cookie-banner">
+  <div class="cookie-text"><strong>🍪 Our cookie policy</strong> — NHS Finance Tool uses <strong>no tracking or advertising cookies</strong>. All calculations run entirely in your browser. <a onclick="showCookieInfo()">Learn more</a></div>
+  <div class="cookie-btns"><button class="cookie-btn-info" onclick="showCookieInfo()">More info</button><button class="cookie-btn-accept" onclick="acceptCookies()">Got it ✓</button></div>
+</div>
+<div id="cookie-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:520px;width:100%;font-family:'Nunito',sans-serif;">
+    <div style="background:#00843D;padding:18px 22px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:16px;font-weight:800;color:#fff;">🍪 Our Cookie Policy</div>
+      <button onclick="closeCookieInfo()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:22px;font-size:13px;color:#4A5568;line-height:1.7;">
+      No tracking, analytics or advertising cookies are used. We store one item in your browser (your preference to dismiss this notice) — nothing personal, nothing sent to a server. All calculations happen entirely on your device.
+      <button onclick="acceptCookies()" style="width:100%;padding:12px;background:#00843D;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px;">Got it — close ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo" style="text-decoration:none;">NHS<span>Finance</span>Tool</a>
+    <div class="nav-right">
+      <div class="nav-trust">
+        <div class="nav-trust-badge"><span>🏥</span> Built for NHS Staff</div>
+        <div class="nav-trust-badge"><span>🔒</span> Data never stored</div>
+      </div>
+      <a href="/privacy/" class="nav-home-btn" style="text-decoration:none;display:inline-block;">Disclaimer &amp; Privacy</a>
+    </div>
+  </div>
+</nav>
+<div class="page active">
+<div class="tool-header" style="background:linear-gradient(135deg,#9333EA,#7C3AED);padding:44px 20px 36px;">
+  <button class="back-btn" onclick="showPage('home')">← Back to all NHS tools</button>
+  <h1>⚙️ NHS Pension Annual Allowance Calculator</h1>
+  <p>Correct NHS PIA formula, with tapering, carry forward and a month-by-month breach projection</p>
+</div>
+<div class="tool-body">
+
+<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong> NHS pension Annual Allowance calculations are genuinely complex. Always cross-check this estimate against your Annual Benefit Statement at totalrewardstatements.nhs.uk.</div>
+
+<!-- ══ EDUCATIONAL: WHAT IS THE ANNUAL ALLOWANCE ══ -->
+<div style="background:#F5F3FF;border:1px solid #DDD6FE;border-radius:12px;padding:20px 22px;margin-bottom:20px;">
+  <h2 style="font-size:16px;font-weight:900;color:#5B21B6;margin-bottom:10px;">📖 What is the Annual Allowance, in plain English?</h2>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-bottom:10px;">Every year, there's a limit on how much your pension is allowed to <em>grow</em> before extra tax kicks in. That limit is called the <strong>Annual Allowance (AA)</strong>. For most people it's currently <strong>£60,000</strong> a year. It isn't about how much you personally pay in — with a final-salary-style scheme like the NHS pension, it's about how much your future annual pension increased in value over the year, converted into a notional "contribution" figure called your <strong>Pension Input Amount (PIA)</strong>.</p>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-bottom:10px;">The NHS pension is unusually generous, which is great for your retirement — but it also means the PIA can grow faster than people expect, especially after a promotion, a big jump in overtime/PAs, or a pay rise. If your PIA for the year is higher than your Annual Allowance, you don't get taxed on the excess directly — instead it gets added to your income and taxed at your marginal rate as an <strong>Annual Allowance charge</strong>. This can come as a surprise because it isn't shown on your monthly payslip; it only shows up when your Annual Benefit Statement lands or HMRC catches up with you.</p>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;">Three things can reduce how much allowance you actually have: <strong>tapering</strong> (explained below), having <strong>no carry forward left</strong> from previous years, and simply having a PIA that's grown a lot in one go.</p>
+</div>
+
+<!-- ══ EDUCATIONAL: ADJUSTED INCOME ══ -->
+<div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;padding:20px 22px;margin-bottom:20px;">
+  <h2 style="font-size:16px;font-weight:900;color:#1E40AF;margin-bottom:10px;">📖 What does "adjusted income" actually mean?</h2>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-bottom:10px;">This is the single most misunderstood part of the whole system, so here's the plain version. There are two different income figures HMRC looks at:</p>
+  <div style="background:#fff;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+    <strong style="font-size:13px;color:#1E40AF;">Threshold income</strong> — roughly speaking, your total taxable income for the year (salary, private practice, dividends, rental income etc.) <em>minus</em> any personal pension contributions you made yourself. This is the first test: if threshold income is £200,000 or below, tapering doesn't apply to you at all, no matter how high your adjusted income is.
+  </div>
+  <div style="background:#fff;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+    <strong style="font-size:13px;color:#1E40AF;">Adjusted income</strong> — your threshold income, but with your <em>employer's</em> pension contributions added back on top (for NHS staff, that's the NHS's own contribution, currently around 20.68% of your pensionable pay — a substantial amount, since the NHS scheme is generous). This is the second test: if adjusted income is above £260,000, tapering starts to bite.
+  </div>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;"><strong>Worked example:</strong> Say your NHS salary is £120,000 and you earn £90,000 from private practice, with no personal pension contributions of your own. Threshold income = £210,000 (above £200,000, so tapering is in play). The NHS employer contribution on your £120,000 salary is about £24,800. Adjusted income = £210,000 + £24,800 = £234,800 — below £260,000, so in this example tapering still wouldn't apply. But add another £30,000 of private practice income and adjusted income tips over £260,000, and your Annual Allowance starts shrinking by £1 for every £2 above that — down to a floor of £10,000.</p>
+</div>
+
+<!-- ══ EDUCATIONAL: PRIVATE PENSION FROM A LTD COMPANY ══ -->
+<div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:20px 22px;margin-bottom:20px;">
+  <h2 style="font-size:16px;font-weight:900;color:#166534;margin-bottom:10px;">📖 Paying into a private pension from a Ltd company — what does that mean?</h2>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-bottom:10px;">If you have private practice or locum income running through a limited company (see our <a href="/ltd-company-tax-calculator/" style="color:#166534;font-weight:700;">Ltd Company Tax Optimiser</a>), the company itself can pay money directly into a personal pension (a SIPP, typically) on your behalf — this is called an <strong>employer pension contribution</strong>, even though "employer" here just means your own company.</p>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-bottom:10px;">Why bother? Three reasons: (1) it's a genuine business expense, so it reduces the company's profit and therefore its Corporation Tax bill — <strong>fully tax-deductible</strong>; (2) unlike paying yourself a salary or dividend first and then contributing personally, there's no Income Tax, dividend tax or National Insurance charged on the way — the money goes straight from company profit into your pension; (3) it counts towards your Annual Allowance headroom just like any other pension contribution, so if you have unused allowance (see your result below), this is usually the single most tax-efficient way to use it.</p>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;">The catch: it still uses up your Annual Allowance for the year, same as everything else. If you've already used up your allowance through NHS pension growth alone, adding more via the company would trigger an AA charge rather than saving tax — so it only makes sense once you know your headroom, which is exactly what the calculator below works out.</p>
+</div>
+
+<!-- ══ EDUCATIONAL: BUYING ADDITIONAL NHS PENSION ══ -->
+<div style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:12px;padding:20px 22px;margin-bottom:20px;">
+  <h2 style="font-size:16px;font-weight:900;color:#92400E;margin-bottom:10px;">📖 Can I "buy extra years" in the NHS pension?</h2>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-bottom:10px;">Not quite "extra years" any more — that language is left over from the older 1995 Section scheme. If you're in the 2015 Scheme (most current staff), the equivalent option is called <strong>Additional Pension</strong>: you can buy a fixed amount of extra <em>annual</em> pension (paid from retirement onwards), purchased either as a one-off lump sum or as ongoing contributions over a set number of years, up to a maximum amount set by NHS Pensions each scheme year.</p>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-bottom:10px;">There's also a separate option called <strong>ERRBO (Early Retirement Reduction Buy Out)</strong>, which reduces the penalty for retiring before your normal pension age, rather than increasing your pension itself.</p>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-bottom:10px;">Two important points: buying Additional Pension <strong>does count towards your Annual Allowance</strong> for the year you pay it (whether lump sum or spread), so it's subject to exactly the same headroom limits as everything else on this page. Applications and up-to-date costs are handled directly through <a href="#" onclick="return leavesite('https://www.nhsbsa.nhs.uk','NHS Pensions (NHSBSA)','Apply for Additional Pension','🏥')" style="color:#92400E;font-weight:700;">NHS Pensions (NHSBSA)</a>.</p>
+
+  <div style="background:#fff;border-radius:8px;padding:14px 16px;">
+    <strong style="font-size:13px;color:#92400E;">Why can't this site just calculate the cost for you?</strong>
+    <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-top:6px;margin-bottom:10px;">Every other figure on this site — take-home pay, tax, National Insurance — is worked out from fixed, published rates that apply to everyone equally. Additional Pension isn't priced that way. NHS Pensions works out what it costs you personally using <strong>actuarial factors</strong>: tables built by actuaries (specialists in pricing long-term financial risk) that estimate, roughly speaking, how many years you're likely to draw the pension for and how that money grows or is discounted in the meantime.</p>
+    <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-bottom:10px;">In practice that means the cost of buying, say, £1,000 a year of extra pension depends on:</p>
+    <ul style="font-size:13px;color:#4A5568;line-height:1.8;margin:0 0 10px 20px;">
+      <li><strong>Your age</strong> when you buy it — younger buyers pay less per £1,000 of pension, because NHS Pensions assumes there's longer for the "investment" to grow before you draw it, and it has more years of your ongoing contributions to work with if you're spreading the cost.</li>
+      <li><strong>How you pay</strong> — a one-off lump sum is priced differently to spreading the cost as monthly contributions over several years.</li>
+      <li><strong>The scheme's assumptions at the time</strong> — the actuarial tables themselves are reviewed and updated by the scheme's actuaries periodically (life expectancy assumptions, discount rates and so on), so the same purchase can cost a different amount from one year to the next even for someone the same age.</li>
+    </ul>
+    <p style="font-size:13px;color:#4A5568;line-height:1.8;">Because those tables aren't public in a form we could safely embed here, showing you a made-up number would risk being wrong for your actual circumstances — which matters for a decision that isn't easily reversible. That's why we point you to NHS Pensions directly for a genuine, personalised quote, rather than guessing.</p>
+  </div>
+  <p style="font-size:13px;color:#4A5568;line-height:1.8;margin-top:10px;">It's worth getting a specialist adviser's view alongside that quote before committing, since buying Additional Pension is a long-term decision and hard to undo once started.</p>
+</div>
+
+<div class="form-section"><h3><span>📅</span> Tax Year &amp; Pensionable Pay</h3>
+  <div class="form-grid">
+    <div class="field"><label>Tax year</label>
+      <select id="aa-tyear">
+        <option value="2023/24">2023/24</option>
+        <option value="2024/25" selected>2024/25 (current)</option>
+        <option value="2025/26">2025/26</option>
+        <option value="2026/27">2026/27</option>
+      </select>
+    </div>
+    <div class="field"><label>Scotland resident?</label>
+      <select id="aa-scotland"><option value="">No — England / Wales / NI</option><option value="yes">Yes — Scotland</option></select>
+    </div>
+    <div class="field"><label>Total NHS pensionable pay this year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-salary"></div></div>
+    <div class="field"><label>NHS pensionable pay last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-prevpay"></div><div class="hint">Leave blank to assume the same as this year.</div></div>
+    <div class="field"><label>Personal AVC contributions (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-avc"></div></div>
+    <div class="field"><label>Personal SIPP contributions (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-sipp"></div></div>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>📊</span> Income for Tapering</h3>
+  <div style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:9px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--gray5);">⚠️ If your threshold income exceeds £200,000 and adjusted income exceeds £260,000, your Annual Allowance reduces by £1 for every £2 of adjusted income above £260,000 — down to a minimum of £10,000.</div>
+  <div class="form-grid">
+    <div class="field"><label>Other income (private practice, dividends etc.)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-other"></div></div>
+    <div class="field"><label>Personal pension contributions already made</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-personalpen"></div></div>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>🔄</span> Carry Forward (unused allowance from the last 3 years)</h3>
+  <div class="field field-full"><label>Mode</label>
+    <select id="aa-mode" onchange="nhsftAAModeToggle()">
+      <option value="simple">Simple — I know my unused allowance for each year</option>
+      <option value="detailed">Detailed — enter PIA and AA for each year</option>
+    </select>
+  </div>
+  <div id="aa-simple-cf" class="form-grid">
+    <div class="field"><label>Unused allowance — 3 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-cf1"></div></div>
+    <div class="field"><label>Unused allowance — 2 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-cf2"></div></div>
+    <div class="field"><label>Unused allowance — last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-cf3"></div></div>
+  </div>
+  <div id="aa-detailed-cf" style="display:none;">
+    <div style="background:var(--gray1);border-radius:9px;padding:14px;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">3 years ago</div>
+      <div class="form-grid">
+        <div class="field"><label>PIA that year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-py1-pia"></div></div>
+        <div class="field"><label>Annual Allowance that year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-py1-aa" value="40000"></div></div>
+      </div>
+    </div>
+    <div style="background:var(--gray1);border-radius:9px;padding:14px;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">2 years ago</div>
+      <div class="form-grid">
+        <div class="field"><label>PIA that year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-py2-pia"></div></div>
+        <div class="field"><label>Annual Allowance that year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-py2-aa" value="60000"></div></div>
+      </div>
+    </div>
+    <div style="background:var(--gray1);border-radius:9px;padding:14px;margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">Last year</div>
+      <div class="form-grid">
+        <div class="field"><label>PIA that year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-py3-pia"></div></div>
+        <div class="field"><label>Annual Allowance that year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="aa-py3-aa" value="60000"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="calc-btn" onclick="calcNHSAA()">Calculate My Annual Allowance Position →</button>
+<div id="aa-out"></div>
+
+<div style="background:linear-gradient(135deg,#F5F3FF,#EDE9FE);border:2px solid #C4B5FD;border-radius:14px;padding:18px 20px;margin-top:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+  <span style="font-size:28px;">➕</span>
+  <div style="flex:1;min-width:200px;">
+    <div style="font-size:14px;font-weight:800;color:#5B21B6;">Doing extra shifts, overtime or strike cover?</div>
+    <div style="font-size:12px;color:#6B7280;">See exactly how much more you can earn this year before you breach your Annual Allowance.</div>
+  </div>
+  <a href="/nhs-overtime-annual-allowance-calculator/" style="background:#7C3AED;color:#fff;text-decoration:none;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:800;white-space:nowrap;">Open the Headroom Calculator →</a>
+</div>
+
+<div class="disclaimer"><strong>Disclaimer:</strong> This is an estimate based on the figures you enter. NHS pension AA calculations are complex — always verify against your actual Annual Benefit Statement and seek specialist pension tax advice before making decisions such as opting out, buying Additional Pension or requesting Scheme Pays.</div>
+<button class="back-btn-bottom" onclick="showPage('home')">← Back to all NHS tools</button>
+
+</div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

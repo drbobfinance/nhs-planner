@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NHS Overtime &amp; Extra Shifts Calculator — How Much Before You Breach Your Annual Allowance? | NHS Finance Tool</title>
+<meta name="description" content="Free calculator for NHS staff doing extra shifts, overtime or strike cover: enter any ad-hoc payments and see exactly how much more you can earn this year before breaching your pension Annual Allowance.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/nhs-overtime-annual-allowance-calculator/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NHS Finance Tool">
+<meta property="og:title" content="NHS Overtime &amp; Extra Shifts Calculator — How Much Before You Breach Your Annual Allowance?">
+<meta property="og:description" content="Enter any ad-hoc extra shifts or overtime and see how much more you can earn this year before breaching your NHS pension Annual Allowance.">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/nhs-overtime-annual-allowance-calculator/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- ── LEAVING SITE MODAL ── -->
+<div id="leaving-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;font-family:'Nunito',sans-serif;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#00843D,#007B8A);padding:18px 22px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:15px;font-weight:800;color:#fff;">🔗 You're leaving NHS Finance Tool</div>
+      <button onclick="closeLeavingModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div style="padding:22px;">
+      <div style="display:flex;align-items:center;gap:12px;background:#F7F9FB;border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:28px;" id="leaving-icon">🔍</div>
+        <div><div style="font-size:14px;font-weight:800;color:#1A2331;" id="leaving-name">Partner site</div><div style="font-size:12px;color:#8A9BB0;" id="leaving-desc">Sponsored link</div></div>
+      </div>
+      <div style="font-size:13px;color:#4A5568;line-height:1.7;margin-bottom:16px;">You are leaving <strong>NHS Finance Tool</strong>. The destination site has its own privacy policy and may use cookies. We may earn a small commission if you apply — at no cost to you, and our calculator results are unaffected by this.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button onclick="closeLeavingModal()" style="padding:11px;background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;font-size:13px;font-weight:700;color:#4A5568;cursor:pointer;">← Stay here</button>
+        <button onclick="proceedToPartnerSite()" style="padding:11px;background:#00843D;border:none;border-radius:8px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;">Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── DISCLAIMER SPLASH ── -->
+<div id="disclaimer-splash" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:10002;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div style="background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;font-family:'Nunito',sans-serif;box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+    <div style="background:linear-gradient(135deg,#1A2E44,#007B8A);padding:22px 24px;border-radius:16px 16px 0 0;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;"><div style="font-size:28px;">🏥</div><div style="font-size:20px;font-weight:900;color:#fff;">NHS Finance Tool</div></div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.75);">Free NHS-specific calculators — please read before using this site</div>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#FEF2F2;border:2px solid #EF4444;border-radius:10px;padding:16px 18px;margin-bottom:18px;">
+        <div style="font-size:14px;font-weight:900;color:#991B1B;margin-bottom:8px;">⚠️ Not Financial Advice</div>
+        <div style="font-size:13px;color:#7F1D1D;line-height:1.7;">NHS Finance Tool is <strong>not authorised or regulated by the Financial Conduct Authority (FCA)</strong> and does not provide financial, tax or legal advice. Every result is an estimate for general information only. Always consult a qualified, FCA-authorised financial adviser or accountant before making decisions about pensions, tax or your Ltd company.</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:#1A2E44;margin-bottom:10px;">What NHS Finance Tool is:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🧮</div><strong>Free NHS calculators</strong><br>Take-home pay, pension Annual Allowance, Ltd company tax</div>
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🔒</div><strong>Completely private</strong><br>All calculations run in your browser — nothing is stored or sent anywhere</div>
+      </div>
+      <div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:#78350F;line-height:1.7;"><strong>What NHS Finance Tool is not:</strong> a financial adviser · an IFA · an accountant · FCA authorised or regulated. Figures are estimates and may differ from your actual payslip, Annual Benefit Statement or HMRC calculation.</div>
+      <div style="background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;padding:13px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+        <div id="splash-checkbox" onclick="toggleSplashCheck()" style="width:20px;height:20px;border:2px solid #D0D7DE;border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;"></div>
+        <div style="font-size:12px;color:#4A5568;line-height:1.6;" onclick="toggleSplashCheck()">I understand this tool provides general guidance only, not financial, tax or legal advice, and I will consult a qualified adviser before making decisions.</div>
+      </div>
+      <button id="splash-btn" disabled onclick="acceptDisclaimer()" style="width:100%;padding:13px;background:#D0D7DE;color:#8A9BB0;border:none;border-radius:9px;font-size:14px;font-weight:800;cursor:not-allowed;">Tick the box above to continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── COOKIE NOTICE ── -->
+<div id="cookie-banner">
+  <div class="cookie-text"><strong>🍪 Our cookie policy</strong> — NHS Finance Tool uses <strong>no tracking or advertising cookies</strong>. All calculations run entirely in your browser. <a onclick="showCookieInfo()">Learn more</a></div>
+  <div class="cookie-btns"><button class="cookie-btn-info" onclick="showCookieInfo()">More info</button><button class="cookie-btn-accept" onclick="acceptCookies()">Got it ✓</button></div>
+</div>
+<div id="cookie-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:520px;width:100%;font-family:'Nunito',sans-serif;">
+    <div style="background:#00843D;padding:18px 22px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:16px;font-weight:800;color:#fff;">🍪 Our Cookie Policy</div>
+      <button onclick="closeCookieInfo()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:22px;font-size:13px;color:#4A5568;line-height:1.7;">
+      No tracking, analytics or advertising cookies are used. We store one item in your browser (your preference to dismiss this notice) — nothing personal, nothing sent to a server. All calculations happen entirely on your device.
+      <button onclick="acceptCookies()" style="width:100%;padding:12px;background:#00843D;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px;">Got it — close ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo" style="text-decoration:none;">NHS<span>Finance</span>Tool</a>
+    <div class="nav-right">
+      <div class="nav-trust">
+        <div class="nav-trust-badge"><span>🏥</span> Built for NHS Staff</div>
+        <div class="nav-trust-badge"><span>🔒</span> Data never stored</div>
+      </div>
+      <a href="/privacy/" class="nav-home-btn" style="text-decoration:none;display:inline-block;">Disclaimer &amp; Privacy</a>
+    </div>
+  </div>
+</nav>
+<div class="page active">
+<div class="tool-header" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);padding:44px 20px 36px;">
+  <button class="back-btn" onclick="showPage('home')">← Back to all NHS tools</button>
+  <h1>➕ NHS Overtime &amp; Extra Shifts Calculator</h1>
+  <p>Add up any extra shifts, overtime or strike cover — freehand — and see how much more you can safely earn before breaching your Annual Allowance</p>
+</div>
+<div class="tool-body">
+
+<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong> This estimates the effect of extra pensionable pay on your Annual Allowance. It doesn't replace your Annual Benefit Statement.</div>
+
+<div style="background:#F5F3FF;border:1px solid #DDD6FE;border-radius:12px;padding:18px 20px;margin-bottom:20px;font-size:13px;color:#4A5568;line-height:1.8;">
+  <strong style="color:#5B21B6;">Why this exists:</strong> normal overtime rates are predictable, but strike cover, urgent locum shifts or one-off enhanced rates can pay several hundred or even over a thousand pounds a day — and it's easy to lose track of how that's adding up against your Annual Allowance until the bill arrives the following year. Add each extra payment below with whatever amount it actually was, then hit calculate.
+</div>
+
+<div class="form-section"><h3><span>📅</span> Your Baseline (before extra shifts)</h3>
+  <div class="form-grid">
+    <div class="field"><label>Tax year</label>
+      <select id="ov-tyear">
+        <option value="2023/24">2023/24</option>
+        <option value="2024/25" selected>2024/25 (current)</option>
+        <option value="2025/26">2025/26</option>
+        <option value="2026/27">2026/27</option>
+      </select>
+    </div>
+    <div class="field"><label>Basic NHS pensionable pay this year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-salary"></div><div class="hint">Before any extra shifts — your contracted salary.</div></div>
+    <div class="field"><label>NHS pensionable pay last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-prevpay"></div><div class="hint">Leave blank to assume the same as this year.</div></div>
+    <div class="field"><label>Other income (private practice, dividends etc.)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-other"></div></div>
+    <div class="field"><label>Personal pension contributions already made</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-personalpen"></div></div>
+  </div>
+  <div class="form-grid" style="margin-top:6px;">
+    <div class="field"><label>Carry forward — 3 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf1"></div></div>
+    <div class="field"><label>Carry forward — 2 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf2"></div></div>
+    <div class="field"><label>Carry forward — last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf3"></div></div>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>➕</span> Extra Shifts &amp; Overtime This Year</h3>
+  <div style="font-size:12px;color:var(--gray5);margin-bottom:12px;">Add every extra payment as its own row — regular overtime, additional PAs, strike cover, whatever the actual amount was. There's no limit on how many you add.</div>
+  <div id="ov-shifts"></div>
+  <button type="button" onclick="nhsftAddShiftRow()" style="background:#F5F3FF;border:1.5px dashed #C4B5FD;color:#5B21B6;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:800;cursor:pointer;width:100%;margin-top:6px;">+ Add another shift or payment</button>
+  <div style="display:flex;justify-content:space-between;align-items:center;background:var(--gray1);border-radius:9px;padding:12px 16px;margin-top:14px;">
+    <span style="font-size:13px;font-weight:800;color:var(--navy);">Running total of extra shifts:</span>
+    <span id="ov-running-total" style="font-size:16px;font-weight:900;color:#5B21B6;font-family:monospace;">£0</span>
+  </div>
+</div>
+
+<button class="calc-btn" onclick="calcOvertimeHeadroom()">Calculate My Headroom →</button>
+<div id="ov-out"></div>
+
+<div class="disclaimer"><strong>Disclaimer:</strong> This assumes all extra pay listed is pensionable — check with your trust's payroll if unsure, since not all extra payments count towards the NHS pension. Always verify against your Annual Benefit Statement and seek specialist pension tax advice before turning down or accepting extra shifts based on this figure.</div>
+<button class="back-btn-bottom" onclick="showPage('home')">← Back to all NHS tools</button>
+
+</div>
+</div>
+
+<script src="/js/app.js"></script>
+<script>nhsftAddShiftRow(); nhsftAddShiftRow();</script>
+</body>
+</html>

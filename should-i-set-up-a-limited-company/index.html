@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Should an NHS Doctor Set Up a Ltd Company? Costs, Tax &amp; Annual Allowance Explained | NHS Finance Tool</title>
+<meta name="description" content="Should you set up a limited company for NHS private practice or locum income? Plain-English guide to the tax savings, costs, paperwork, liabilities — and how it can help you avoid breaching your pension Annual Allowance.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/should-i-set-up-a-limited-company/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NHS Finance Tool">
+<meta property="og:title" content="Should an NHS Doctor Set Up a Ltd Company? Costs, Tax &amp; Annual Allowance Explained">
+<meta property="og:description" content="Plain-English guide to whether a limited company makes sense for NHS private practice or locum income — tax, costs, paperwork and the Annual Allowance angle.">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/should-i-set-up-a-limited-company/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- ── LEAVING SITE MODAL ── -->
+<div id="leaving-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;font-family:'Nunito',sans-serif;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#00843D,#007B8A);padding:18px 22px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:15px;font-weight:800;color:#fff;">🔗 You're leaving NHS Finance Tool</div>
+      <button onclick="closeLeavingModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div style="padding:22px;">
+      <div style="display:flex;align-items:center;gap:12px;background:#F7F9FB;border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:28px;" id="leaving-icon">🔍</div>
+        <div><div style="font-size:14px;font-weight:800;color:#1A2331;" id="leaving-name">Partner site</div><div style="font-size:12px;color:#8A9BB0;" id="leaving-desc">Sponsored link</div></div>
+      </div>
+      <div style="font-size:13px;color:#4A5568;line-height:1.7;margin-bottom:16px;">You are leaving <strong>NHS Finance Tool</strong>. The destination site has its own privacy policy and may use cookies. We may earn a small commission if you apply — at no cost to you, and our calculator results are unaffected by this.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button onclick="closeLeavingModal()" style="padding:11px;background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;font-size:13px;font-weight:700;color:#4A5568;cursor:pointer;">← Stay here</button>
+        <button onclick="proceedToPartnerSite()" style="padding:11px;background:#00843D;border:none;border-radius:8px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;">Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── DISCLAIMER SPLASH ── -->
+<div id="disclaimer-splash" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:10002;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div style="background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;font-family:'Nunito',sans-serif;box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+    <div style="background:linear-gradient(135deg,#1A2E44,#007B8A);padding:22px 24px;border-radius:16px 16px 0 0;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;"><div style="font-size:28px;">🏥</div><div style="font-size:20px;font-weight:900;color:#fff;">NHS Finance Tool</div></div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.75);">Free NHS-specific calculators — please read before using this site</div>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#FEF2F2;border:2px solid #EF4444;border-radius:10px;padding:16px 18px;margin-bottom:18px;">
+        <div style="font-size:14px;font-weight:900;color:#991B1B;margin-bottom:8px;">⚠️ Not Financial Advice</div>
+        <div style="font-size:13px;color:#7F1D1D;line-height:1.7;">NHS Finance Tool is <strong>not authorised or regulated by the Financial Conduct Authority (FCA)</strong> and does not provide financial, tax or legal advice. Every result is an estimate for general information only. Always consult a qualified, FCA-authorised financial adviser or accountant before making decisions about pensions, tax or your Ltd company.</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:#1A2E44;margin-bottom:10px;">What NHS Finance Tool is:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🧮</div><strong>Free NHS calculators</strong><br>Take-home pay, pension Annual Allowance, Ltd company tax</div>
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🔒</div><strong>Completely private</strong><br>All calculations run in your browser — nothing is stored or sent anywhere</div>
+      </div>
+      <div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:#78350F;line-height:1.7;"><strong>What NHS Finance Tool is not:</strong> a financial adviser · an IFA · an accountant · FCA authorised or regulated. Figures are estimates and may differ from your actual payslip, Annual Benefit Statement or HMRC calculation.</div>
+      <div style="background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;padding:13px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+        <div id="splash-checkbox" onclick="toggleSplashCheck()" style="width:20px;height:20px;border:2px solid #D0D7DE;border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;"></div>
+        <div style="font-size:12px;color:#4A5568;line-height:1.6;" onclick="toggleSplashCheck()">I understand this tool provides general guidance only, not financial, tax or legal advice, and I will consult a qualified adviser before making decisions.</div>
+      </div>
+      <button id="splash-btn" disabled onclick="acceptDisclaimer()" style="width:100%;padding:13px;background:#D0D7DE;color:#8A9BB0;border:none;border-radius:9px;font-size:14px;font-weight:800;cursor:not-allowed;">Tick the box above to continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── COOKIE NOTICE ── -->
+<div id="cookie-banner">
+  <div class="cookie-text"><strong>🍪 Our cookie policy</strong> — NHS Finance Tool uses <strong>no tracking or advertising cookies</strong>. All calculations run entirely in your browser. <a onclick="showCookieInfo()">Learn more</a></div>
+  <div class="cookie-btns"><button class="cookie-btn-info" onclick="showCookieInfo()">More info</button><button class="cookie-btn-accept" onclick="acceptCookies()">Got it ✓</button></div>
+</div>
+<div id="cookie-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:520px;width:100%;font-family:'Nunito',sans-serif;">
+    <div style="background:#00843D;padding:18px 22px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:16px;font-weight:800;color:#fff;">🍪 Our Cookie Policy</div>
+      <button onclick="closeCookieInfo()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:22px;font-size:13px;color:#4A5568;line-height:1.7;">
+      No tracking, analytics or advertising cookies are used. We store one item in your browser (your preference to dismiss this notice) — nothing personal, nothing sent to a server. All calculations happen entirely on your device.
+      <button onclick="acceptCookies()" style="width:100%;padding:12px;background:#00843D;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px;">Got it — close ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo" style="text-decoration:none;">NHS<span>Finance</span>Tool</a>
+    <div class="nav-right">
+      <div class="nav-trust">
+        <div class="nav-trust-badge"><span>🏥</span> Built for NHS Staff</div>
+        <div class="nav-trust-badge"><span>🔒</span> Data never stored</div>
+      </div>
+      <a href="/privacy/" class="nav-home-btn" style="text-decoration:none;display:inline-block;">Disclaimer &amp; Privacy</a>
+    </div>
+  </div>
+</nav>
+<div class="page active">
+<div class="tool-header" style="background:linear-gradient(135deg,#EA580C,#C2410C);padding:44px 20px 36px;">
+  <button class="back-btn" onclick="showPage('home')">← Back to all NHS tools</button>
+  <h1>🤔 Should I Set Up a Limited Company?</h1>
+  <p>For NHS staff with private practice or locum income — the tax savings, the costs, the paperwork, and the Annual Allowance angle most people miss</p>
+</div>
+<div class="tool-body">
+<div style="max-width:760px;margin:0 auto;font-size:14px;color:var(--gray5);line-height:1.85;">
+
+<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:24px;font-size:12px;color:#92400E;line-height:1.6;"><strong>Guidance only — not financial, tax or legal advice.</strong> Whether to incorporate depends heavily on your personal circumstances. This page explains the general trade-offs; always get advice from a qualified accountant before setting one up.</div>
+
+<h2 style="color:var(--navy);font-size:19px;font-weight:900;margin-bottom:10px;">The short version</h2>
+<p>If you earn private practice, locum or other self-employed income on top of your NHS job, you can either receive it as a <strong>sole trader</strong> (simplest — it's just taxed as your personal income) or set up a <strong>limited company</strong> and have the income paid to the company instead, which then pays you.</p>
+<p>The tax saving from incorporating, on its own, is often smaller than people expect these days — Corporation Tax and dividend tax rates have moved closer to Income Tax rates over the years. But there's a second benefit that matters a lot for NHS staff specifically, and it's the one most people don't think about: <strong>keeping money in the company keeps it off your personal tax return, which keeps your personal income down for Annual Allowance tapering purposes.</strong> More on that below — it can be the deciding factor even when the raw tax saving is modest.</p>
+
+<h2 style="color:var(--navy);font-size:19px;font-weight:900;margin:28px 0 10px;padding-top:10px;border-top:2px solid var(--gray2);">How a Ltd company changes your tax</h2>
+<p>As a sole trader, private income simply gets added to your NHS salary and taxed as one lump at your marginal Income Tax rate, plus Class 2/4 National Insurance. There's no way to "smooth" it — every pound is taxed the year you earn it.</p>
+<p>Through a limited company, the income belongs to the company, not you personally. The company pays Corporation Tax on its profit, and then <em>you</em> only pay personal tax on whatever you actually draw out — as salary or dividends. Anything left inside the company is taxed once (Corporation Tax) and nothing more, until you eventually take it out.</p>
+<p>Run the numbers for your own situation on our <a href="/ltd-company-tax-calculator/" style="color:#EA580C;font-weight:700;">Ltd Company Tax Optimiser</a> — it compares several strategies side by side using your actual figures.</p>
+
+<h2 style="color:var(--navy);font-size:19px;font-weight:900;margin:28px 0 10px;padding-top:10px;border-top:2px solid var(--gray2);">⭐ The Annual Allowance angle — why this can matter more than the tax saving</h2>
+<div style="background:#F5F3FF;border:2px solid #C4B5FD;border-radius:12px;padding:18px 20px;margin-bottom:14px;">
+<p style="margin-bottom:10px;">Remember from our <a href="/pension-annual-allowance-calculator/" style="color:#5B21B6;font-weight:700;">Annual Allowance calculator</a>: your Annual Allowance starts shrinking once your <strong>adjusted income</strong> goes above £260,000, reducing by £1 for every £2 over that — down to a floor of £10,000. Adjusted income is based on your personal taxable income for the year.</p>
+<p style="margin-bottom:10px;"><strong>Here's the key point: profit left sitting inside your limited company does not count as your personal income.</strong> It's the company's money until you actually draw it out as salary or dividends. So if your NHS salary plus private income would otherwise push your adjusted income over £260,000 and taper your allowance, routing the private income through a Ltd company and <em>not</em> drawing it all out the same year can keep your personal income below the threshold — protecting your full £60,000 Annual Allowance and avoiding a tax charge that could easily be worth more than any Corporation Tax saving.</p>
+<p>In other words: even in years where incorporating barely reduces your overall tax bill directly, it can still be worth it purely for the flexibility to control when income lands on your personal tax return — which is exactly what Annual Allowance tapering cares about.</p>
+</div>
+<p style="font-size:13px;color:var(--gray4);font-style:italic;">This only works if you genuinely leave the money in the company rather than drawing it all out anyway — see "Retaining profit in the company" on the <a href="/ltd-company-tax-calculator/" style="color:#EA580C;">Ltd Company Tax Optimiser</a> page.</p>
+
+<h2 style="color:var(--navy);font-size:19px;font-weight:900;margin:28px 0 10px;padding-top:10px;border-top:2px solid var(--gray2);">The costs</h2>
+<ul style="margin:8px 0 14px 20px;">
+  <li><strong>Companies House registration:</strong> a one-off small fee to set the company up — the cheapest and easiest part.</li>
+  <li><strong>Accountancy fees:</strong> the main ongoing cost. A limited company needs annual accounts, a Corporation Tax return, and usually payroll if you take a salary — expect a genuine, ongoing accountant relationship rather than a DIY tax return. This is typically the single biggest cost of incorporating and needs to be weighed against the tax saved.</li>
+  <li><strong>Business bank account:</strong> most banks charge a small monthly fee, unlike a personal account.</li>
+  <li><strong>Possible extra software/bookkeeping costs:</strong> many accountants require or recommend cloud bookkeeping software (small monthly fee).</li>
+</ul>
+
+<h2 style="color:var(--navy);font-size:19px;font-weight:900;margin:28px 0 10px;padding-top:10px;border-top:2px solid var(--gray2);">The paperwork &amp; ongoing obligations</h2>
+<ul style="margin:8px 0 14px 20px;">
+  <li>Annual accounts filed with Companies House every year</li>
+  <li>A Corporation Tax return filed with HMRC every year</li>
+  <li>Confirmation statement to Companies House (a simple annual "still trading, here's who's involved" check)</li>
+  <li>PAYE payroll if you pay yourself a salary (even a small one)</li>
+  <li>Keeping business and personal money genuinely separate — mixing them causes real problems at tax time and can undermine the whole structure</li>
+</ul>
+
+<h2 style="color:var(--navy);font-size:19px;font-weight:900;margin:28px 0 10px;padding-top:10px;border-top:2px solid var(--gray2);">The liabilities &amp; risks</h2>
+<ul style="margin:8px 0 14px 20px;">
+  <li><strong>Limited liability</strong> — genuinely useful protection: if the company runs into debt or is sued, your personal assets (house, savings) are generally protected, unlike as a sole trader. Worth noting most doctors' private practice work carries low commercial risk, so this benefit is often smaller in practice than for, say, a business with premises or stock.</li>
+  <li><strong>IR35 / off-payroll working rules</strong> — if you provide locum services through your company to an organisation in a way that looks like disguised employment (fixed hours, told what to do and how, can't send a substitute), HMRC may decide IR35 applies, taxing the income as if it were employment anyway. This is a genuinely complex area for locum GPs and consultants specifically — get a specialist accountant's assessment of your actual working arrangements before assuming a Ltd company avoids this.</li>
+  <li><strong>Director's responsibilities</strong> — you take on legal duties as a company director (filing on time, acting in the company's interests, avoiding trading while insolvent). These are manageable with a decent accountant but are real obligations, not just paperwork.</li>
+  <li><strong>Director's loan risk</strong> — see our <a href="/ltd-company-tax-calculator/" style="color:#EA580C;font-weight:700;">Ltd Company Tax Optimiser</a> for what happens if you draw money out informally rather than as salary or dividend.</li>
+</ul>
+
+<h2 style="color:var(--navy);font-size:19px;font-weight:900;margin:28px 0 10px;padding-top:10px;border-top:2px solid var(--gray2);">So, is it worth it?</h2>
+<p>Roughly speaking, incorporating tends to make more sense the more private/locum income you have, the more of it you can afford to leave in the company rather than drawing out immediately, and the closer your personal income sits to the £100,000, £125,140 or £260,000 thresholds where extra income gets taxed particularly hard (personal allowance taper, 45% additional rate, and Annual Allowance tapering respectively). It tends to make less sense if the income is modest and you need to draw all of it out straight away for living costs — at that point the accountancy fees can outweigh what you save.</p>
+<p>Run your own numbers on the <a href="/ltd-company-tax-calculator/" style="color:#EA580C;font-weight:700;">Ltd Company Tax Optimiser</a>, and check your <a href="/pension-annual-allowance-calculator/" style="color:#EA580C;font-weight:700;">Annual Allowance headroom</a> — together they'll give you a genuinely useful starting picture before you speak to an accountant.</p>
+
+<p style="font-size:12px;color:var(--gray4);margin-top:24px;font-style:italic;">Last updated: July 2026</p>
+</div>
+<button class="back-btn-bottom" onclick="showPage('home')">← Back to all NHS tools</button>
+</div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

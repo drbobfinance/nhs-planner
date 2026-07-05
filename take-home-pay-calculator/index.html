@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NHS Take-Home Pay Calculator 2026 — AfC Bands, Consultants &amp; Trainees | NHS Finance Tool</title>
+<meta name="description" content="Free NHS take-home pay calculator covering Agenda for Change bands, consultant PAs, trainee nodal points, salary sacrifice and LTFT. Get your annual and monthly take-home pay in seconds.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/take-home-pay-calculator/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NHS Finance Tool">
+<meta property="og:title" content="NHS Take-Home Pay Calculator 2026 — AfC Bands, Consultants &amp; Trainees">
+<meta property="og:description" content="Free NHS take-home pay calculator covering Agenda for Change bands, consultant PAs, trainee nodal points, salary sacrifice and LTFT.">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/take-home-pay-calculator/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- ── LEAVING SITE MODAL ── -->
+<div id="leaving-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;font-family:'Nunito',sans-serif;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#00843D,#007B8A);padding:18px 22px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:15px;font-weight:800;color:#fff;">🔗 You're leaving NHS Finance Tool</div>
+      <button onclick="closeLeavingModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div style="padding:22px;">
+      <div style="display:flex;align-items:center;gap:12px;background:#F7F9FB;border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:28px;" id="leaving-icon">🔍</div>
+        <div><div style="font-size:14px;font-weight:800;color:#1A2331;" id="leaving-name">Partner site</div><div style="font-size:12px;color:#8A9BB0;" id="leaving-desc">Sponsored link</div></div>
+      </div>
+      <div style="font-size:13px;color:#4A5568;line-height:1.7;margin-bottom:16px;">You are leaving <strong>NHS Finance Tool</strong>. The destination site has its own privacy policy and may use cookies. We may earn a small commission if you apply — at no cost to you, and our calculator results are unaffected by this.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button onclick="closeLeavingModal()" style="padding:11px;background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;font-size:13px;font-weight:700;color:#4A5568;cursor:pointer;">← Stay here</button>
+        <button onclick="proceedToPartnerSite()" style="padding:11px;background:#00843D;border:none;border-radius:8px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;">Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── DISCLAIMER SPLASH ── -->
+<div id="disclaimer-splash" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:10002;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div style="background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;font-family:'Nunito',sans-serif;box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+    <div style="background:linear-gradient(135deg,#1A2E44,#007B8A);padding:22px 24px;border-radius:16px 16px 0 0;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;"><div style="font-size:28px;">🏥</div><div style="font-size:20px;font-weight:900;color:#fff;">NHS Finance Tool</div></div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.75);">Free NHS-specific calculators — please read before using this site</div>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#FEF2F2;border:2px solid #EF4444;border-radius:10px;padding:16px 18px;margin-bottom:18px;">
+        <div style="font-size:14px;font-weight:900;color:#991B1B;margin-bottom:8px;">⚠️ Not Financial Advice</div>
+        <div style="font-size:13px;color:#7F1D1D;line-height:1.7;">NHS Finance Tool is <strong>not authorised or regulated by the Financial Conduct Authority (FCA)</strong> and does not provide financial, tax or legal advice. Every result is an estimate for general information only. Always consult a qualified, FCA-authorised financial adviser or accountant before making decisions about pensions, tax or your Ltd company.</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:#1A2E44;margin-bottom:10px;">What NHS Finance Tool is:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🧮</div><strong>Free NHS calculators</strong><br>Take-home pay, pension Annual Allowance, Ltd company tax</div>
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🔒</div><strong>Completely private</strong><br>All calculations run in your browser — nothing is stored or sent anywhere</div>
+      </div>
+      <div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:#78350F;line-height:1.7;"><strong>What NHS Finance Tool is not:</strong> a financial adviser · an IFA · an accountant · FCA authorised or regulated. Figures are estimates and may differ from your actual payslip, Annual Benefit Statement or HMRC calculation.</div>
+      <div style="background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;padding:13px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+        <div id="splash-checkbox" onclick="toggleSplashCheck()" style="width:20px;height:20px;border:2px solid #D0D7DE;border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;"></div>
+        <div style="font-size:12px;color:#4A5568;line-height:1.6;" onclick="toggleSplashCheck()">I understand this tool provides general guidance only, not financial, tax or legal advice, and I will consult a qualified adviser before making decisions.</div>
+      </div>
+      <button id="splash-btn" disabled onclick="acceptDisclaimer()" style="width:100%;padding:13px;background:#D0D7DE;color:#8A9BB0;border:none;border-radius:9px;font-size:14px;font-weight:800;cursor:not-allowed;">Tick the box above to continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── COOKIE NOTICE ── -->
+<div id="cookie-banner">
+  <div class="cookie-text"><strong>🍪 Our cookie policy</strong> — NHS Finance Tool uses <strong>no tracking or advertising cookies</strong>. All calculations run entirely in your browser. <a onclick="showCookieInfo()">Learn more</a></div>
+  <div class="cookie-btns"><button class="cookie-btn-info" onclick="showCookieInfo()">More info</button><button class="cookie-btn-accept" onclick="acceptCookies()">Got it ✓</button></div>
+</div>
+<div id="cookie-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:520px;width:100%;font-family:'Nunito',sans-serif;">
+    <div style="background:#00843D;padding:18px 22px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:16px;font-weight:800;color:#fff;">🍪 Our Cookie Policy</div>
+      <button onclick="closeCookieInfo()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:22px;font-size:13px;color:#4A5568;line-height:1.7;">
+      No tracking, analytics or advertising cookies are used. We store one item in your browser (your preference to dismiss this notice) — nothing personal, nothing sent to a server. All calculations happen entirely on your device.
+      <button onclick="acceptCookies()" style="width:100%;padding:12px;background:#00843D;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px;">Got it — close ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo" style="text-decoration:none;">NHS<span>Finance</span>Tool</a>
+    <div class="nav-right">
+      <div class="nav-trust">
+        <div class="nav-trust-badge"><span>🏥</span> Built for NHS Staff</div>
+        <div class="nav-trust-badge"><span>🔒</span> Data never stored</div>
+      </div>
+      <a href="/privacy/" class="nav-home-btn" style="text-decoration:none;display:inline-block;">Disclaimer &amp; Privacy</a>
+    </div>
+  </div>
+</nav>
+<div class="page active">
+<div class="tool-header" style="background:linear-gradient(135deg,#00843D,#00A84F);padding:44px 20px 36px;">
+  <button class="back-btn" onclick="showPage('home')">← Back to all NHS tools</button>
+  <h1>💰 NHS Take-Home Pay Calculator</h1>
+  <p>Based on your actual band, grade or PA structure — not a generic salary calculator</p>
+</div>
+<div class="tool-body">
+
+<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong> This is an estimate. Your actual payslip may include other deductions (student loan, court orders) this tool doesn't cover. <strong>Do not base financial decisions on these figures alone.</strong></div>
+
+<div class="form-section"><h3><span>📅</span> Tax Year &amp; Residency</h3>
+  <div class="form-grid">
+    <div class="field"><label>Tax year</label>
+      <select id="th-tyear">
+        <option value="2023/24">2023/24</option>
+        <option value="2024/25" selected>2024/25 (current)</option>
+        <option value="2025/26">2025/26</option>
+        <option value="2026/27">2026/27</option>
+      </select>
+    </div>
+    <div class="field"><label>Scotland resident?</label>
+      <select id="th-scotland"><option value="">No — England / Wales / NI</option><option value="yes">Yes — Scotland</option></select>
+      <div class="hint">Scottish residents pay income tax at different rates. NI and NHS pension are unaffected.</div>
+    </div>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>🏥</span> NHS Salary</h3>
+  <div class="field field-full">
+    <label>NHS band or grade</label>
+    <select id="th-band" onchange="nhsftBandChange()">
+      <option value="">Select band or grade (auto-fills salary)…</option>
+      <option>Consultant Threshold 1 — £105,504</option>
+      <option>Consultant Threshold 8 — £139,882</option>
+      <option>Foundation Year 1 (F1) — £32,398</option>
+      <option>Foundation Year 2 (F2) — £37,935</option>
+      <option>Specialty Registrar (StR) — £51,017</option>
+      <option>GP (Salaried) — £71,504</option>
+      <option>Band 2 — £24,465</option>
+      <option>Band 3 (Entry) — £24,937</option>
+      <option>Band 3 (Top) — £26,598</option>
+      <option>Band 4 (Entry) — £27,485</option>
+      <option>Band 4 (Top) — £30,162</option>
+      <option>Band 5 (Entry) — £31,049</option>
+      <option>Band 5 (Top) — £37,796</option>
+      <option>Band 6 (Entry) — £38,682</option>
+      <option>Band 6 (Top) — £46,580</option>
+      <option>Band 7 (Entry) — £47,810</option>
+      <option>Band 7 (Top) — £54,710</option>
+      <option>Band 8a (Entry) — £55,690</option>
+      <option>Band 8a (Top) — £62,682</option>
+      <option>Band 8b (Entry) — £64,455</option>
+      <option>Band 8b (Top) — £74,896</option>
+      <option>Band 8c (Entry) — £76,965</option>
+      <option>Band 8c (Top) — £88,682</option>
+      <option>Band 8d (Entry) — £91,342</option>
+      <option>Band 8d (Top) — £105,337</option>
+      <option>Band 9 (Entry) — £109,179</option>
+      <option>Band 9 (Top) — £125,637</option>
+      <option selected>Other / enter manually</option>
+    </select>
+  </div>
+  <div class="form-grid">
+    <div class="field" id="th-consultant-row" style="display:none;"><label>Scheduled PAs in your job plan</label><input type="number" id="th-pas" min="1" max="10" step="0.5" value="10" oninput="nhsftBandRecalc()"><div class="hint">Full time = 10 PAs. Salary = full-time rate ÷ 10 × your PAs.</div></div>
+    <div class="field" id="th-band-row" style="display:none;"><label>Contracted hours per week</label><input type="number" id="th-hours" min="4" max="37.5" step="0.5" value="37.5" oninput="nhsftBandRecalc()"><div class="hint">Full time AfC = 37.5 hrs/week.</div></div>
+    <div class="field" id="th-trainee-row" style="display:none;"><label>LTFT % (100% if full time)</label><input type="number" id="th-ltft" min="40" max="100" step="10" value="100" oninput="nhsftBandRecalc()"><div class="hint">Rough guide only — replace the salary below with your actual payslip figure.</div></div>
+    <div class="field"><label>Annual NHS basic salary</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-salary"></div></div>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>🔁</span> Salary Sacrifice &amp; Pre-Tax Deductions</h3>
+  <div class="form-grid">
+    <div class="field"><label>Salary sacrifice / AVCs / childcare (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-salsac"></div></div>
+    <div class="field"><label>NHS car lease deduction (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-carlease"></div></div>
+    <div class="field"><label>Cycle to Work scheme (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-cycle"></div></div>
+    <div class="field"><label>Technology / other benefit scheme (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-tech"></div></div>
+    <div class="field"><label>Employer pension opt-out payment (monthly)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-optout"></div><div class="hint">Only if you've opted out and your trust pays you the employer contribution instead — this is taxable.</div></div>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>➕</span> Additional NHS &amp; Other Income</h3>
+  <div class="form-grid">
+    <div class="field"><label>Overtime / extra shifts (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-overtime"></div></div>
+    <div class="field"><label>Additional PAs / on-call payments (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-addpas"></div></div>
+    <div class="field"><label>On-call / CEA / NCIA awards (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-nciaamt"></div></div>
+    <div class="field"><label>Other NHS payroll extras (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-onclall"></div></div>
+    <div class="field"><label>Private practice / medical reports (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-private"></div></div>
+    <div class="field"><label>Other medical income (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-othermed"></div></div>
+    <div class="field"><label>Savings interest (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-interest"></div></div>
+    <div class="field"><label>Dividend income (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-dividend"></div></div>
+    <div class="field"><label>Buy-to-let profit (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-btl"></div></div>
+    <div class="field"><label>Other income (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="th-other"></div></div>
+  </div>
+</div>
+
+<button class="calc-btn" onclick="calcTakeHome()">Calculate My Take-Home Pay →</button>
+<div id="th-out"></div>
+
+<div class="disclaimer"><strong>Disclaimer:</strong> General guidance only. Not financial, tax or legal advice. Estimate based on published rates for the selected tax year — always check against your actual payslip. Trainee doctor pay in particular depends on rota, nodal point and local pay premia not covered by this calculator.</div>
+<button class="back-btn-bottom" onclick="showPage('home')">← Back to all NHS tools</button>
+
+</div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

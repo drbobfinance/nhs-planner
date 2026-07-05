@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NHS Doctor Ltd Company Tax Calculator — Private Practice &amp; Locum Income | NHS Finance Tool</title>
+<meta name="description" content="Free Ltd company tax optimiser for NHS doctors and consultants with private practice or locum income. Compares salary, dividend, pension and family income-splitting strategies side by side.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/ltd-company-tax-calculator/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NHS Finance Tool">
+<meta property="og:title" content="NHS Doctor Ltd Company Tax Calculator — Private Practice &amp; Locum Income">
+<meta property="og:description" content="Free Ltd company tax optimiser for NHS doctors with private practice or locum income — compares salary, dividend and pension strategies.">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/ltd-company-tax-calculator/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- ── LEAVING SITE MODAL ── -->
+<div id="leaving-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;font-family:'Nunito',sans-serif;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#00843D,#007B8A);padding:18px 22px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:15px;font-weight:800;color:#fff;">🔗 You're leaving NHS Finance Tool</div>
+      <button onclick="closeLeavingModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
+    </div>
+    <div style="padding:22px;">
+      <div style="display:flex;align-items:center;gap:12px;background:#F7F9FB;border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:28px;" id="leaving-icon">🔍</div>
+        <div><div style="font-size:14px;font-weight:800;color:#1A2331;" id="leaving-name">Partner site</div><div style="font-size:12px;color:#8A9BB0;" id="leaving-desc">Sponsored link</div></div>
+      </div>
+      <div style="font-size:13px;color:#4A5568;line-height:1.7;margin-bottom:16px;">You are leaving <strong>NHS Finance Tool</strong>. The destination site has its own privacy policy and may use cookies. We may earn a small commission if you apply — at no cost to you, and our calculator results are unaffected by this.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button onclick="closeLeavingModal()" style="padding:11px;background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;font-size:13px;font-weight:700;color:#4A5568;cursor:pointer;">← Stay here</button>
+        <button onclick="proceedToPartnerSite()" style="padding:11px;background:#00843D;border:none;border-radius:8px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;">Continue →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── DISCLAIMER SPLASH ── -->
+<div id="disclaimer-splash" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:10002;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div style="background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;font-family:'Nunito',sans-serif;box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+    <div style="background:linear-gradient(135deg,#1A2E44,#007B8A);padding:22px 24px;border-radius:16px 16px 0 0;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;"><div style="font-size:28px;">🏥</div><div style="font-size:20px;font-weight:900;color:#fff;">NHS Finance Tool</div></div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.75);">Free NHS-specific calculators — please read before using this site</div>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#FEF2F2;border:2px solid #EF4444;border-radius:10px;padding:16px 18px;margin-bottom:18px;">
+        <div style="font-size:14px;font-weight:900;color:#991B1B;margin-bottom:8px;">⚠️ Not Financial Advice</div>
+        <div style="font-size:13px;color:#7F1D1D;line-height:1.7;">NHS Finance Tool is <strong>not authorised or regulated by the Financial Conduct Authority (FCA)</strong> and does not provide financial, tax or legal advice. Every result is an estimate for general information only. Always consult a qualified, FCA-authorised financial adviser or accountant before making decisions about pensions, tax or your Ltd company.</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:#1A2E44;margin-bottom:10px;">What NHS Finance Tool is:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🧮</div><strong>Free NHS calculators</strong><br>Take-home pay, pension Annual Allowance, Ltd company tax</div>
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🔒</div><strong>Completely private</strong><br>All calculations run in your browser — nothing is stored or sent anywhere</div>
+      </div>
+      <div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:#78350F;line-height:1.7;"><strong>What NHS Finance Tool is not:</strong> a financial adviser · an IFA · an accountant · FCA authorised or regulated. Figures are estimates and may differ from your actual payslip, Annual Benefit Statement or HMRC calculation.</div>
+      <div style="background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;padding:13px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+        <div id="splash-checkbox" onclick="toggleSplashCheck()" style="width:20px;height:20px;border:2px solid #D0D7DE;border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;"></div>
+        <div style="font-size:12px;color:#4A5568;line-height:1.6;" onclick="toggleSplashCheck()">I understand this tool provides general guidance only, not financial, tax or legal advice, and I will consult a qualified adviser before making decisions.</div>
+      </div>
+      <button id="splash-btn" disabled onclick="acceptDisclaimer()" style="width:100%;padding:13px;background:#D0D7DE;color:#8A9BB0;border:none;border-radius:9px;font-size:14px;font-weight:800;cursor:not-allowed;">Tick the box above to continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── COOKIE NOTICE ── -->
+<div id="cookie-banner">
+  <div class="cookie-text"><strong>🍪 Our cookie policy</strong> — NHS Finance Tool uses <strong>no tracking or advertising cookies</strong>. All calculations run entirely in your browser. <a onclick="showCookieInfo()">Learn more</a></div>
+  <div class="cookie-btns"><button class="cookie-btn-info" onclick="showCookieInfo()">More info</button><button class="cookie-btn-accept" onclick="acceptCookies()">Got it ✓</button></div>
+</div>
+<div id="cookie-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:520px;width:100%;font-family:'Nunito',sans-serif;">
+    <div style="background:#00843D;padding:18px 22px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:16px;font-weight:800;color:#fff;">🍪 Our Cookie Policy</div>
+      <button onclick="closeCookieInfo()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:22px;font-size:13px;color:#4A5568;line-height:1.7;">
+      No tracking, analytics or advertising cookies are used. We store one item in your browser (your preference to dismiss this notice) — nothing personal, nothing sent to a server. All calculations happen entirely on your device.
+      <button onclick="acceptCookies()" style="width:100%;padding:12px;background:#00843D;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px;">Got it — close ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo" style="text-decoration:none;">NHS<span>Finance</span>Tool</a>
+    <div class="nav-right">
+      <div class="nav-trust">
+        <div class="nav-trust-badge"><span>🏥</span> Built for NHS Staff</div>
+        <div class="nav-trust-badge"><span>🔒</span> Data never stored</div>
+      </div>
+      <a href="/privacy/" class="nav-home-btn" style="text-decoration:none;display:inline-block;">Disclaimer &amp; Privacy</a>
+    </div>
+  </div>
+</nav>
+<div class="page active">
+<div class="tool-header" style="background:linear-gradient(135deg,#3B82F6,#2563EB);padding:44px 20px 36px;">
+  <button class="back-btn" onclick="showPage('home')">← Back to all NHS tools</button>
+  <h1>🏢 Ltd Company Tax Optimiser</h1>
+  <p>For private practice or locum income through a limited company — compares strategies side by side</p>
+</div>
+<div class="tool-body">
+
+<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial, tax or legal advice.</strong> Ltd company structuring and family income splitting carry real HMRC risk. Always get advice from a qualified accountant before implementing any strategy shown here.</div>
+
+<!-- ══ EDUCATIONAL: HOW THIS ALL WORKS ══ -->
+<div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;padding:20px 22px;margin-bottom:20px;">
+  <h2 style="font-size:16px;font-weight:900;color:#1E40AF;margin-bottom:12px;">📖 What these strategies actually mean, in plain English</h2>
+
+  <div style="margin-bottom:14px;">
+    <strong style="font-size:13px;color:#1E40AF;">Salary vs dividends — what's the difference?</strong>
+    <p style="font-size:13px;color:#4A5568;line-height:1.7;margin-top:4px;">As a director of your own company, you can pay yourself two ways. A <strong>salary</strong> is a wage — it's a company expense (reduces Corporation Tax) but has Income Tax and National Insurance taken off, both for you and the company. A <strong>dividend</strong> is a payment to shareholders out of profit that's <em>already been taxed</em> at the Corporation Tax rate — you then pay dividend tax on top, but at lower rates than Income Tax, and with no National Insurance at all. That's why most director-shareholders take a small salary (enough to count towards their state pension) and the rest as dividends.</p>
+  </div>
+
+  <div style="margin-bottom:14px;">
+    <strong style="font-size:13px;color:#1E40AF;">Corporation Tax</strong>
+    <p style="font-size:13px;color:#4A5568;line-height:1.7;margin-top:4px;">This is the tax your company pays on its profit, before anything is paid out to you. The rate depends on how much profit the company makes — smaller profits are taxed at a lower rate, larger ones at a higher rate, with a sliding scale in between.</p>
+  </div>
+
+  <div style="margin-bottom:14px;">
+    <strong style="font-size:13px;color:#1E40AF;">Retaining profit in the company</strong>
+    <p style="font-size:13px;color:#4A5568;line-height:1.7;margin-top:4px;">You don't have to take all the profit out every year. Anything left in the company (after Corporation Tax) is called <strong>retained profit</strong>. This can be useful for two reasons: you can extract it later in a year when your personal income is lower (paying less dividend tax on it), and — importantly for NHS staff — money left in the company doesn't count as your personal income at all, so it has no effect on your Annual Allowance tapering. See our guide on <a href="/should-i-set-up-a-limited-company/" style="color:#1E40AF;font-weight:700;">whether a Ltd company makes sense for you</a> for more on this.</p>
+  </div>
+
+  <div style="margin-bottom:14px;">
+    <strong style="font-size:13px;color:#1E40AF;">Spouse/family dividend splitting</strong>
+    <p style="font-size:13px;color:#4A5568;line-height:1.7;margin-top:4px;">If your spouse or an adult family member genuinely holds shares in the company, dividends can be paid to them too — using their tax-free allowance and lower tax bands instead of it all landing on your higher rate. This can save real money, but HMRC watches this closely (see the warning box further down) — it needs to be a genuine shareholding, not just a name on paper.</p>
+  </div>
+
+  <div style="margin-bottom:14px;">
+    <strong style="font-size:13px;color:#1E40AF;">Company pension contribution</strong>
+    <p style="font-size:13px;color:#4A5568;line-height:1.7;margin-top:4px;">Instead of paying yourself and then contributing to a pension personally, the company can pay directly into your SIPP. It's a company expense (reduces Corporation Tax), and nothing is deducted from it on the way in — but it still counts towards your Annual Allowance. See our <a href="/pension-annual-allowance-calculator/" style="color:#1E40AF;font-weight:700;">Annual Allowance calculator</a> to check your headroom first.</p>
+  </div>
+
+  <div>
+    <strong style="font-size:13px;color:#1E40AF;">Director's loan</strong>
+    <p style="font-size:13px;color:#4A5568;line-height:1.7;margin-top:4px;">If you take money out of the company that isn't salary, dividend or expenses, it's treated as a loan from the company to you. Small, short-term loans are fine, but over £10,000 they create a taxable "benefit in kind," and if not repaid within 9 months of the company's year end, the company faces an extra tax charge (called a "s455 charge") until it's repaid.</p>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>📅</span> Tax Year</h3>
+  <div class="field field-full"><label>Tax year</label>
+    <select id="ltd-tyear">
+      <option value="2023/24">2023/24</option>
+      <option value="2024/25" selected>2024/25 (current)</option>
+      <option value="2025/26">2025/26</option>
+      <option value="2026/27">2026/27</option>
+    </select>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>🏢</span> Company &amp; Personal Income</h3>
+  <div class="form-grid">
+    <div class="field"><label>Company gross profit (before tax, this year)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ltd-profit"></div></div>
+    <div class="field"><label>Your other personal income (NHS salary etc.)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ltd-otherincome"></div><div class="hint">Used to work out which tax band any dividends fall into.</div></div>
+    <div class="field"><label>Employer pension contribution from the company</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ltd-pension"></div><div class="hint">Leave blank to let the calculator suggest an amount.</div></div>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>👨‍👩‍👧</span> Spouse / Family Shareholding</h3>
+  <div class="field field-full">
+    <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="ltd-hasspouse" onchange="document.getElementById('ltd-spouse-row').style.display=this.checked?'block':'none'" style="width:18px;height:18px;"> My spouse holds shares in the company</label>
+  </div>
+  <div id="ltd-spouse-row" class="form-grid" style="display:none;">
+    <div class="field"><label>Spouse's other personal income</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ltd-spouseincome"></div></div>
+  </div>
+</div>
+
+<div class="form-section"><h3><span>💼</span> Director Loan &amp; Retained Profits</h3>
+  <div class="form-grid">
+    <div class="field"><label>Current director loan balance</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ltd-loan"></div><div class="hint">Loans over £10,000 trigger a taxable benefit-in-kind and possibly a s455 charge.</div></div>
+    <div class="field"><label>Retained profits brought forward</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ltd-retainedbf"></div><div class="hint">Profit already sitting in the company from previous years.</div></div>
+  </div>
+</div>
+
+<button class="calc-btn" onclick="calcLtdOptimiser()">Compare Tax Strategies →</button>
+<div id="ltd-out"></div>
+
+<div style="background:linear-gradient(135deg,#FFF7ED,#FED7AA);border:2px solid #FB923C;border-radius:14px;padding:18px 20px;margin-top:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+  <span style="font-size:28px;">🤔</span>
+  <div style="flex:1;min-width:200px;">
+    <div style="font-size:14px;font-weight:800;color:#9A3412;">Not sure a Ltd company is worth it at all?</div>
+    <div style="font-size:12px;color:#6B7280;">Costs, paperwork, liabilities — and the Annual Allowance angle most people miss.</div>
+  </div>
+  <a href="/should-i-set-up-a-limited-company/" style="background:#EA580C;color:#fff;text-decoration:none;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:800;white-space:nowrap;">Read the guide →</a>
+</div>
+
+<div class="disclaimer"><strong>Disclaimer:</strong> General guidance only. Not financial, tax or legal advice. Family income splitting carries real HMRC risk under the settlements legislation. Director loans over £10,000 trigger a s455 charge if not repaid. Always consult a qualified accountant before implementing any of these strategies.</div>
+<button class="back-btn-bottom" onclick="showPage('home')">← Back to all NHS tools</button>
+
+</div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
