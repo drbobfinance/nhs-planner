@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK vs The World – International Debt & Economy Comparison | UK-Debt.info</title>
+<meta name="description" content="How does UK debt, deficit, interest burden and growth compare to the G7 and other major economies? IMF data 2025/26.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#002244,#003d7a,#005cb8);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+/* COUNTRY TABLE */
+.ctable{width:100%;border-collapse:collapse;font-size:12px}
+.ctable th{background:var(--panel2);padding:8px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border);text-align:left}
+.ctable td{padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid)}
+.ctable td.mono{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700}
+.ctable tr.uk-row{background:var(--blue-light)}
+.ctable tr.uk-row td{font-weight:800}
+.flag{font-size:18px;margin-right:4px}
+/* BARS */
+.cbar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.cbar-label{width:100px;font-size:12px;font-weight:700;color:var(--ink-mid);flex-shrink:0}
+.cbar-track{flex:1;height:18px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.cbar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap}
+.cbar-val{width:65px;font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0;text-align:right}
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.green-box{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+@media(max-width:768px){
+  .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .top-nav::-webkit-scrollbar{display:none}
+  .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+  .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+  .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+  
+  .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="money-in-out.html" class="done">Money In & Out</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Public vs Private Employment</a>
+        <a href="pensions.html" class="done">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html" class="active">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>UK VS THE WORLD — INTERNATIONAL COMPARISON</h1>
+    <div class="subtitle">G7 Debt · Deficits · Growth · Interest Burden · Productivity · IMF World Economic Outlook 2025/26</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- G7 DEBT COMPARISON CHART -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">G7 Government Debt as % of GDP — 2025 (IMF World Economic Outlook)</div>
+    <canvas id="debtChart" height="260"></canvas>
+    <div class="info-box">
+      📋 Among advanced economies, average government debt stands near 113% of GDP, led by Japan (230%), Italy (137%), and the United States (124%). The UK at ~98% is below the G7 average — but this uses the narrow PSND measure. Including off-balance-sheet liabilities the picture is considerably worse. See our <a href="off-balance-sheet.html" style="color:var(--blue)">Off-Balance-Sheet Debt page</a> for the full picture.
+    </div>
+  </div>
+
+  <!-- FULL COMPARISON TABLE -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">G7 + Key Economies — Full Fiscal Scorecard 2025/26 (IMF Data)</div>
+    <div style="overflow-x:auto">
+      <table class="ctable">
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th>Debt % GDP</th>
+            <th>Deficit % GDP</th>
+            <th>Interest % Revenue</th>
+            <th>GDP Growth</th>
+            <th>CPI 2025</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="flag">🇯🇵</span>Japan</td><td class="mono" style="color:var(--red)">237%</td><td class="mono" style="color:var(--red)">-3.9%</td><td class="mono" style="color:var(--amber)">~8%</td><td class="mono" style="color:var(--green)">+1.1%</td><td class="mono">2.5%</td><td style="font-size:11px;font-weight:700;color:var(--red)">Extreme debt but own currency/buyers</td></tr>
+          <tr><td><span class="flag">🇮🇹</span>Italy</td><td class="mono" style="color:var(--red)">137%</td><td class="mono" style="color:var(--red)">-3.4%</td><td class="mono" style="color:var(--red)">~12%</td><td class="mono" style="color:var(--amber)">+0.6%</td><td class="mono">1.9%</td><td style="font-size:11px;font-weight:700;color:var(--red)">High risk — ECB support critical</td></tr>
+          <tr><td><span class="flag">🇺🇸</span>USA</td><td class="mono" style="color:var(--red)">124%</td><td class="mono" style="color:var(--red)">-6.5%</td><td class="mono" style="color:var(--amber)">~14%</td><td class="mono" style="color:var(--green)">+2.0%</td><td class="mono">2.9%</td><td style="font-size:11px;font-weight:700;color:var(--amber)">Reserve currency status provides buffer</td></tr>
+          <tr><td><span class="flag">🇫🇷</span>France</td><td class="mono" style="color:var(--amber)">112%</td><td class="mono" style="color:var(--red)">-5.1%</td><td class="mono" style="color:var(--amber)">~8%</td><td class="mono" style="color:var(--amber)">+0.7%</td><td class="mono">1.8%</td><td style="font-size:11px;font-weight:700;color:var(--red)">Rising fast — political paralysis</td></tr>
+          <tr class="uk-row"><td><span class="flag">🇬🇧</span><strong>UK</strong></td><td class="mono" style="color:var(--amber)">98%</td><td class="mono" style="color:var(--amber)">-4.5%</td><td class="mono" style="color:var(--red)">~8.5%</td><td class="mono" style="color:var(--amber)">+1.3%</td><td class="mono">3.5%</td><td style="font-size:11px;font-weight:700;color:var(--amber)">Interest burden highest in G7</td></tr>
+          <tr><td><span class="flag">🇨🇦</span>Canada</td><td class="mono" style="color:var(--green)">45%</td><td class="mono" style="color:var(--amber)">-1.8%</td><td class="mono" style="color:var(--green)">~5%</td><td class="mono" style="color:var(--green)">+1.2%</td><td class="mono">2.7%</td><td style="font-size:11px;font-weight:700;color:var(--green)">Best positioned G7 fiscally</td></tr>
+          <tr><td><span class="flag">🇩🇪</span>Germany</td><td class="mono" style="color:var(--green)">64%</td><td class="mono" style="color:var(--amber)">-2.0%</td><td class="mono" style="color:var(--green)">~4%</td><td class="mono" style="color:var(--amber)">+0.2%</td><td class="mono">2.6%</td><td style="font-size:11px;font-weight:700;color:var(--amber)">Debt brake abandoned — rising fast</td></tr>
+          <tr><td><span class="flag">🇦🇺</span>Australia</td><td class="mono" style="color:var(--green)">55%</td><td class="mono" style="color:var(--green)">-0.5%</td><td class="mono" style="color:var(--green)">~4%</td><td class="mono" style="color:var(--green)">+1.5%</td><td class="mono">3.2%</td><td style="font-size:11px;font-weight:700;color:var(--green)">Strong position, commodity wealth</td></tr>
+          <tr><td><span class="flag">🇳🇴</span>Norway</td><td class="mono" style="color:var(--green)">18%</td><td class="mono" style="color:var(--green)">+8%</td><td class="mono" style="color:var(--green)">&lt;2%</td><td class="mono" style="color:var(--green)">+2.0%</td><td class="mono">3.1%</td><td style="font-size:11px;font-weight:700;color:var(--green)">Oil fund — £1.4tn sovereign wealth</td></tr>
+          <tr><td><span class="flag">🇸🇪</span>Sweden</td><td class="mono" style="color:var(--green)">32%</td><td class="mono" style="color:var(--green)">-0.5%</td><td class="mono" style="color:var(--green)">&lt;3%</td><td class="mono" style="color:var(--green)">+0.5%</td><td class="mono">1.6%</td><td style="font-size:11px;font-weight:700;color:var(--green)">Model fiscal discipline</td></tr>
+          <tr><td><span class="flag">🇬🇷</span>Greece</td><td class="mono" style="color:var(--red)">162%</td><td class="mono" style="color:var(--green)">+0.5%</td><td class="mono" style="color:var(--amber)">~8%</td><td class="mono" style="color:var(--green)">+2.2%</td><td class="mono">3.0%</td><td style="font-size:11px;font-weight:700;color:var(--amber)">Improving after 2012 crisis</td></tr>
+          <tr><td><span class="flag">🇨🇳</span>China</td><td class="mono" style="color:var(--amber)">84%</td><td class="mono" style="color:var(--amber)">-4.7%</td><td class="mono" style="color:var(--amber)">~6%</td><td class="mono" style="color:var(--green)">+4.6%</td><td class="mono">0.5%</td><td style="font-size:11px;font-weight:700;color:var(--amber)">Local govt hidden debt concern</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-box">
+      ⚠️ <strong>The UK's distinctive problem is its interest burden, not its debt level.</strong> At ~8.5% of government revenue spent on debt interest, the UK has the highest interest-to-revenue ratio in the G7 — higher even than Italy and the US. This is because UK gilts have shorter average maturities and more index-linked bonds (sensitive to inflation) than comparable countries. High interest burden means less money for public services at any given tax level.
+    </div>
+  </div>
+
+  <!-- DEBT BAR CHART -->
+  <div class="panel amber-accent">
+    <div class="panel-label">Debt % GDP — G7 Countries vs UK (2025)</div>
+    <div style="margin-top:4px">
+      <div class="cbar-row">
+        <span class="cbar-label">🇯🇵 Japan</span>
+        <div class="cbar-track"><div class="cbar-fill" style="width:100%;background:#d40020">237%</div></div>
+        <span class="cbar-val" style="color:var(--red)">237%</span>
+      </div>
+      <div class="cbar-row">
+        <span class="cbar-label">🇮🇹 Italy</span>
+        <div class="cbar-track"><div class="cbar-fill" style="width:57.8%;background:#d40020">137%</div></div>
+        <span class="cbar-val" style="color:var(--red)">137%</span>
+      </div>
+      <div class="cbar-row">
+        <span class="cbar-label">🇺🇸 USA</span>
+        <div class="cbar-track"><div class="cbar-fill" style="width:52.3%;background:#c97000">124%</div></div>
+        <span class="cbar-val" style="color:var(--amber)">124%</span>
+      </div>
+      <div class="cbar-row">
+        <span class="cbar-label">🇫🇷 France</span>
+        <div class="cbar-track"><div class="cbar-fill" style="width:47.3%;background:#c97000">112%</div></div>
+        <span class="cbar-val" style="color:var(--amber)">112%</span>
+      </div>
+      <div class="cbar-row" style="background:var(--blue-light);border-radius:4px;padding:2px 0">
+        <span class="cbar-label" style="font-weight:800">🇬🇧 <strong>UK</strong></span>
+        <div class="cbar-track"><div class="cbar-fill" style="width:41.4%;background:#0060cc">98% — YOU ARE HERE</div></div>
+        <span class="cbar-val" style="color:var(--blue);font-weight:800">98%</span>
+      </div>
+      <div class="cbar-row">
+        <span class="cbar-label">🇩🇪 Germany</span>
+        <div class="cbar-track"><div class="cbar-fill" style="width:27%;background:#008844">64%</div></div>
+        <span class="cbar-val" style="color:var(--green)">64%</span>
+      </div>
+      <div class="cbar-row">
+        <span class="cbar-label">🇨🇦 Canada</span>
+        <div class="cbar-track"><div class="cbar-fill" style="width:19%;background:#008844">45%</div></div>
+        <span class="cbar-val" style="color:var(--green)">45%</span>
+      </div>
+    </div>
+    <div class="green-box">
+      ✅ The UK's debt level (98% GDP) is actually below the G7 average of ~113%. Japan at 237% and Italy at 137% both carry far higher ratios. However debt level alone doesn't tell the full story — the UK's interest burden, short gilt maturities, and large off-balance-sheet liabilities make its fiscal position more precarious than the headline number suggests.
+    </div>
+  </div>
+
+  <!-- GDP GROWTH COMPARISON -->
+  <div class="panel green-accent">
+    <div class="panel-label">GDP Growth Comparison — G7 2019–2025 (%)</div>
+    <canvas id="growthChart" height="300"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>UK</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>USA</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c97000"></div>Germany</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>France</div>
+    </div>
+    <div class="red-box">
+      🚨 <strong>The UK's growth problem:</strong> The UK grew just 0.4% in 2023 — the weakest G7 performance outside Germany. Since the 2008 financial crisis the UK has consistently underperformed its pre-crisis trend growth rate. Cumulative output is around 20-25% below the pre-2008 trend path. This persistent growth shortfall directly drives the fiscal problem — slower growth means less tax revenue and a higher debt/GDP ratio.
+    </div>
+  </div>
+
+  <!-- INTEREST BURDEN CHART -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">Interest Payments as % of Government Revenue — G7 + Comparators 2025</div>
+    <canvas id="interestChart" height="240"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Interest as % of Revenue (higher = worse)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>UK highlighted</div>
+    </div>
+    <div class="red-box">
+      🚨 This is the UK's most alarming international comparison. Despite having lower debt/GDP than Japan, Italy and the USA, the UK spends a <strong>higher share of tax revenues on interest</strong> than almost any other advanced economy. The reasons: shorter average gilt maturity (so more refinancing at high rates), large stock of index-linked gilts (which surged in cost during 2022 inflation), and a relatively narrow tax base compared to Scandinavian peers.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ Data from IMF World Economic Outlook October 2025. Figures are estimates and subject to revision. Not financial advice.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: IMF WEO Oct 2025 · OECD · World Bank · OBR</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+const countries=['🇯🇵 Japan','🇮🇹 Italy','🇺🇸 USA','🇫🇷 France','🇬🇧 UK','🇩🇪 Germany','🇦🇺 Australia','🇨🇦 Canada','🇸🇪 Sweden','🇳🇴 Norway'];
+const debtPct=[237,137,124,112,98,64,55,45,32,18];
+const colors=debtPct.map((v,i)=>countries[i].includes('UK')?'rgba(0,96,204,0.85)':v>120?'rgba(212,0,32,0.75)':v>80?'rgba(201,112,0,0.75)':'rgba(0,136,68,0.75)');
+
+new Chart(document.getElementById('debtChart'),{
+  type:'bar',
+  data:{labels:countries,datasets:[{data:debtPct,backgroundColor:colors,borderWidth:0}]},
+  options:{
+    indexAxis:'y',responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw}% of GDP`}}},
+    scales:{
+      x:{title:{display:true,text:'% of GDP',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'}},
+      y:{ticks:{color:'#2a3a50',font:{size:11,weight:'bold'}},grid:{display:false}}
+    }
+  }
+});
+
+const gYrs=['2019','2020','2021','2022','2023','2024','2025'];
+new Chart(document.getElementById('growthChart'),{
+  type:'line',
+  data:{
+    labels:gYrs,
+    datasets:[
+      {label:'UK',   data:[1.62,-10.3,8.58,4.84,0.40,1.10,1.31],borderColor:'#d40020',backgroundColor:'transparent',borderWidth:2.5,pointRadius:4,tension:0.3},
+      {label:'USA',  data:[2.58,-2.08,6.15,2.52,2.94,2.79,2.02],borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3},
+      {label:'Germany',data:[0.97,-4.13,3.91,1.81,-0.87,-0.50,0.19],borderColor:'#c97000',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3},
+      {label:'France',data:[2.09,-7.60,6.79,2.80,1.62,1.10,0.67],borderColor:'#008844',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3},
+    ]
+  },
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:11,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'GDP Growth %',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'},min:-13}
+    }
+  }
+});
+
+const iCountries=['🇺🇸 USA','🇬🇧 UK','🇮🇹 Italy','🇯🇵 Japan','🇫🇷 France','🇦🇺 Australia','🇩🇪 Germany','🇨🇦 Canada','🇸🇪 Sweden','🇳🇴 Norway'];
+const iData=[14,8.5,12,8,8,5,4,5,3,1.5];
+const iColors=iData.map((v,i)=>iCountries[i].includes('UK')?'rgba(0,96,204,0.85)':v>10?'rgba(212,0,32,0.75)':v>7?'rgba(201,112,0,0.75)':'rgba(0,136,68,0.75)');
+new Chart(document.getElementById('interestChart'),{
+  type:'bar',
+  data:{labels:iCountries,datasets:[{data:iData,backgroundColor:iColors,borderWidth:0}]},
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw}% of government revenue`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'% of Revenue',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who Successfully Reduced Their National Debt? Argentina, Greece, Ireland | UK-Debt.info</title>
+<meta name="description" content="Some countries have dramatically reduced their national debt. Argentina eliminated a 123-year deficit. Greece cut debt by 63 points in five years. Ireland went from bust to surplus. What did they do and can the UK learn from it?">
+<link rel="canonical" href="https://uk-debt.info/debt-reduction-success.html">
+<meta property="og:title" content="Who Successfully Reduced Their National Debt? Lessons for the UK">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{background:rgba(255,255,255,.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:11px 18px;font-size:14px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+.header{background:linear-gradient(135deg,#003300,#006600,#009900);padding:24px 40px 20px}
+.header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,5vw,28px);letter-spacing:3px;color:#fff;line-height:1.1}
+.header .sub{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.75);text-transform:uppercase;margin-top:4px;font-weight:600}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 40px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss{text-align:center}.ss .sv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}.ss .sl{font-size:12px;letter-spacing:1px;color:var(--ink-light);text-transform:uppercase;margin-top:4px;font-weight:700}
+.ss.green .sv{color:var(--green)}.ss.red .sv{color:var(--red)}.ss.amber .sv{color:var(--amber)}.ss.blue .sv{color:var(--blue)}
+.main{padding:20px 32px}
+.intro{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.intro p{font-size:17px;font-weight:600;color:var(--ink-mid);line-height:1.85}
+.case-study{background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.cs-header{padding:16px 20px;display:flex;align-items:center;gap:14px}
+.cs-header.green{background:linear-gradient(135deg,#003300,#006600)}
+.cs-header.blue{background:linear-gradient(135deg,#001a44,#003388)}
+.cs-header.amber{background:linear-gradient(135deg,#3d2000,#886600)}
+.cs-header.red{background:linear-gradient(135deg,#3d0000,#880000)}
+.cs-flag{font-size:40px}
+.cs-title-block .cs-country{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#fff}
+.cs-title-block .cs-subtitle{font-size:11px;color:rgba(255,255,255,.75);letter-spacing:1px;font-weight:600;margin-top:2px}
+.cs-badge{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:6px 12px;text-align:center}
+.cs-badge .bv{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:#fff}
+.cs-badge .bl{font-size:9px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.cs-body{padding:16px 20px}
+.cs-body p{font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:10px}
+.cs-body p:last-child{margin-bottom:0}
+.cs-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:12px 0}
+.cs-stat{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center}
+.cs-stat .sv{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700}
+.cs-stat .sl{font-size:9px;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;font-weight:700}
+.cs-stat.good .sv{color:var(--green)}.cs-stat.bad .sv{color:var(--red)}.cs-stat.warn .sv{color:var(--amber)}
+.callout{border-radius:6px;padding:14px 18px;font-size:15px;font-weight:600;line-height:1.75;margin:14px 0}
+.callout.green{background:var(--green-light);border:1px solid var(--green-mid);color:var(--ink-mid)}
+.callout.amber{background:var(--amber-light);border:1px solid var(--amber-mid);color:var(--ink-mid)}
+.callout.red{background:var(--red-light);border:1px solid var(--red-mid);color:var(--ink-mid)}
+.callout.blue{background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--ink-mid)}
+.lessons{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.lessons h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--ink);margin-bottom:12px}
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px}
+.lesson-card{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px}
+.lesson-card .li{font-size:22px;margin-bottom:5px}
+.lesson-card .lt{font-size:12px;font-weight:800;color:var(--green);margin-bottom:4px}
+.lesson-card .ld{font-size:11px;font-weight:600;color:var(--ink-mid);line-height:1.5}
+.uk-box{background:var(--panel);border:2px solid var(--red-mid);border-radius:8px;padding:20px;margin-bottom:14px}
+.uk-box h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--red);margin-bottom:10px}
+.uk-box p{font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:10px}
+.sources{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:11px;color:var(--ink-light);line-height:1.7}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+@media(max-width:768px){.top-nav{padding:0 8px;overflow-x:auto;flex-wrap:nowrap}.top-nav::-webkit-scrollbar{display:none}.nav-groups{flex-shrink:0;flex-wrap:nowrap}.nav-group-btn{padding:0 8px;font-size:10px;white-space:nowrap}.nav-brand span{font-size:16px;white-space:nowrap}.dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="fiscal-gap.html" class="done">True Fiscal Gap</a>
+        <a href="obr-spring-2026.html" class="done">OBR Spring Statement 2026</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money &amp; Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People &amp; Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Employment</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+        <a href="uk-wealth-decline.html" class="done">UK Wealth Decline</a>
+        <a href="jobs-data-accuracy.html" class="done">Jobs Data Accuracy</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="done">Historical Timeline</a>
+        <a href="obr-accuracy.html" class="done">OBR Accuracy</a>
+        <a href="debt-reduction-success.html" class="active">Who Reduced Their Debt?</a>
+        <a href="russia-economy-war.html" class="done">Russia War Economy</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>WHO SUCCESSFULLY REDUCED THEIR NATIONAL DEBT?</h1>
+  <div class="sub">Argentina · Greece · Ireland · Germany · What They Did · What the UK Can Learn</div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss green"><div class="sv">−63pp</div><div class="sl">Greece Debt/GDP Fall 2020-25</div></div>
+  <div class="ss green"><div class="sv">First in 123yrs</div><div class="sl">Argentina Surplus 2024</div></div>
+  <div class="ss green"><div class="sv">32.9%</div><div class="sl">Ireland Debt/GDP 2025</div></div>
+  <div class="ss green"><div class="sv">4.9%</div><div class="sl">Greece Primary Surplus 2025</div></div>
+  <div class="ss red"><div class="sv">95.1%</div><div class="sl">UK Debt/GDP Now</div></div>
+  <div class="ss amber"><div class="sv">25+ yrs</div><div class="sl">Since UK Last Had Surplus</div></div>
+</div>
+
+<div class="main">
+
+  <div class="intro">
+    <p>Most countries talk about reducing their debt. Very few actually do it. But some have — dramatically and against the odds. Argentina eliminated a 123-year deficit in one year. Greece cut its debt ratio by over 63 percentage points in five years. Ireland went from bailout to one of the lowest debt ratios in Europe. This page looks at how they did it, what it cost, and what lessons — if any — the UK might draw.</p>
+  </div>
+
+  <!-- ARGENTINA -->
+  <div class="case-study">
+    <div class="cs-header red">
+      <div class="cs-flag">🇦🇷</div>
+      <div class="cs-title-block">
+        <div class="cs-country">ARGENTINA — THE CHAINSAW APPROACH</div>
+        <div class="cs-subtitle">Javier Milei · December 2023 to present · Shock therapy</div>
+      </div>
+      <div class="cs-badge">
+        <div class="bv">1st surplus</div>
+        <div class="bl">in 123 years</div>
+      </div>
+    </div>
+    <div class="cs-body">
+      <div class="cs-stats">
+        <div class="cs-stat bad"><div class="sv">292%</div><div class="sl">Inflation Peak Apr 2024</div></div>
+        <div class="cs-stat good"><div class="sv">39%</div><div class="sl">Inflation by End 2024</div></div>
+        <div class="cs-stat good"><div class="sv">1.8%</div><div class="sl">Primary Surplus 2024</div></div>
+        <div class="cs-stat good"><div class="sv">1.4%</div><div class="sl">Primary Surplus 2025</div></div>
+        <div class="cs-stat good"><div class="sv">4.4%</div><div class="sl">GDP Growth 2025</div></div>
+        <div class="cs-stat bad"><div class="sv">32%</div><div class="sl">Still in Poverty 2025</div></div>
+      </div>
+      <p>When Javier Milei — a libertarian economist who kept five cloned dogs and described himself as an anarchocapitalist — took office in December 2023, Argentina was a case study in fiscal catastrophe. Inflation was running at over 200% annually. The government had not run a surplus in 14 years. Poverty was rising. The peso was collapsing.</p>
+      <p>Milei's prescription was radical: an immediate 54% devaluation of the peso, a 4.5% of GDP cut in government spending, elimination of subsidies for energy and transport, dissolution of several government ministries, and a freeze on public works. He called it "la motosierra" — the chainsaw. The IMF, which had been bailing out Argentina for years, was sceptical.</p>
+      <p>The results were genuinely dramatic. Argentina recorded a primary fiscal surplus of 1.8% of GDP in 2024 — the first in 14 years, and by some measures the first full fiscal surplus in 123 years. In 2025, the surplus continued at 1.4% of GDP, even as Milei cut taxes. Inflation fell from 292% at its peak in April 2024 to 39% by end-2024 and continued falling. GDP, after a sharp recession in early 2024, grew 4.4% in 2025. The poverty rate, which spiked to 52.9% in mid-2024, fell back to 32% by mid-2025.</p>
+      <p>The IMF, which had originally lent Argentina $20bn as part of its stabilisation programme, upgraded its assessment significantly. President Milei won the October 2025 midterm elections with 41% of the vote and doubled his congressional representation — suggesting the population endorsed the reform programme despite its initial pain.</p>
+      <div class="callout amber">⚠️ <strong>The honest caveats:</strong> Argentina's situation was so extreme — hyperinflation, 14 years of deficits, repeated defaults — that almost any change was likely to improve things. The surplus was partly achieved through delays in paying provinces, adjusting pensioner benefits, and deferring debt obligations — which the GIS Reports described as "cyclical rather than structural" changes. A September 2025 currency run that required emergency US intervention ($20bn bailout) showed fragility remains. Over 32% of Argentines are still in poverty. The structural reforms needed for permanent balance are still incomplete.</div>
+      <div class="callout green">✅ <strong>What it shows:</strong> Radical fiscal consolidation can work quickly. The belief that deficits are structurally permanent — that it is impossible to balance the books — was wrong. Argentina is proof. The cost was enormous short-term pain. Whether that was worth it, and whether it lasts, remains contested.</div>
+    </div>
+  </div>
+
+  <!-- GREECE -->
+  <div class="case-study">
+    <div class="cs-header green">
+      <div class="cs-flag">🇬🇷</div>
+      <div class="cs-title-block">
+        <div class="cs-country">GREECE — THE SLOWEST PATIENT RECOVERY</div>
+        <div class="cs-subtitle">From 209% debt/GDP in 2020 to 146% in 2025 · 63 percentage points in five years</div>
+      </div>
+      <div class="cs-badge">
+        <div class="bv">−63pp</div>
+        <div class="bl">Debt/GDP 2020-25</div>
+      </div>
+    </div>
+    <div class="cs-body">
+      <div class="cs-stats">
+        <div class="cs-stat bad"><div class="sv">209%</div><div class="sl">Debt/GDP 2020</div></div>
+        <div class="cs-stat warn"><div class="sv">146%</div><div class="sl">Debt/GDP 2025</div></div>
+        <div class="cs-stat good"><div class="sv">4.9%</div><div class="sl">Primary Surplus 2025</div></div>
+        <div class="cs-stat good"><div class="sv">2.1%</div><div class="sl">GDP Growth 2025</div></div>
+        <div class="cs-stat good"><div class="sv">−8pp</div><div class="sl">Debt Fall in 2025 alone</div></div>
+        <div class="cs-stat good"><div class="sv">3rd year</div><div class="sl">Consecutive Surplus</div></div>
+      </div>
+      <p>Greece's debt crisis in 2010-2012 was the worst financial collapse of any developed country in modern history. At its peak in 2020, Greek government debt stood at 209.4% of GDP — more than twice the size of its economy. The country had gone through three EU-IMF bailouts, severe austerity programmes that cut public services to the bone, and a restructuring of privately-held debt (the largest sovereign debt restructuring in history at the time).</p>
+      <p>The recovery since then has been one of the most remarkable fiscal turnarounds in European history. By 2025, Greek debt had fallen to 146.1% — a reduction of over 63 percentage points in five years. According to Alpha Bank analysis, Greece was the only eurozone country to achieve this scale of reduction, and alongside Ireland and Cyprus, one of only a handful to actually reduce its nominal debt outstanding during 2024-2025.</p>
+      <p>How did it happen? Three main mechanisms: First, Greece has run primary budget surpluses — spending less than it collects in taxes before debt interest — for three consecutive years, with the 2025 surplus reaching 4.9% of GDP. Second, GDP growth has been consistently above the eurozone average, driven by tourism, real estate, shipping and rising employment, which reduces the debt ratio by expanding the denominator. Third, structural improvements in tax collection — reduced evasion and increased digital payments — boosted revenues significantly.</p>
+      <p>The OBR projects Greece's debt will continue falling to 136.8% by 2026 and 130.3% by 2027. Greece is now cited by European institutions as the model for fiscal recovery — a remarkable reversal from being the continent's fiscal basket case fifteen years ago.</p>
+      <div class="callout amber">⚠️ <strong>The cost:</strong> Greece paid an enormous price for this recovery. A decade of severe austerity caused GDP to fall by 25%, unemployment peaked at 27%, a generation emigrated to find work, and public services were severely damaged. The recovery was painful and slow — it took 15 years. Greece's debt, at 146% of GDP, is still the highest in the eurozone.</div>
+      <div class="callout green">✅ <strong>What it shows:</strong> Even the most extreme debt position can be turned around with consistent primary surpluses and growth. But it requires political continuity, external support (the EU restructured Greece's bailout loans to very long maturities at very low rates — critical to making the numbers work), and a long time horizon that politicians find difficult to maintain.</div>
+    </div>
+  </div>
+
+  <!-- IRELAND -->
+  <div class="case-study">
+    <div class="cs-header blue">
+      <div class="cs-flag">🇮🇪</div>
+      <div class="cs-title-block">
+        <div class="cs-country">IRELAND — FROM BAILOUT TO LOWEST DEBT IN EUROPE</div>
+        <div class="cs-subtitle">2010 bailout → 32.9% debt/GDP by 2025 · Ireland now runs a surplus</div>
+      </div>
+      <div class="cs-badge">
+        <div class="bv">32.9%</div>
+        <div class="bl">Debt/GDP 2025</div>
+      </div>
+    </div>
+    <div class="cs-body">
+      <div class="cs-stats">
+        <div class="cs-stat bad"><div class="sv">123%</div><div class="sl">Debt/GDP 2013 Peak</div></div>
+        <div class="cs-stat good"><div class="sv">32.9%</div><div class="sl">Debt/GDP 2025</div></div>
+        <div class="cs-stat good"><div class="sv">1.8%</div><div class="sl">Budget Surplus 2025</div></div>
+        <div class="cs-stat good"><div class="sv">−5.4pp</div><div class="sl">Debt Fall in 2025</div></div>
+        <div class="cs-stat good"><div class="sv">~4%</div><div class="sl">GDP Growth 2025</div></div>
+        <div class="cs-stat warn"><div class="sv">21%</div><div class="sl">Corp Tax % Revenue</div></div>
+      </div>
+      <p>Ireland's banking crisis in 2010 forced it to accept a €67.5bn EU-IMF bailout — one of the largest relative to GDP in history. The country was effectively bankrupt, having guaranteed its entire banking system. Debt peaked at around 123% of GDP in 2013.</p>
+      <p>By 2025, Irish government debt was 32.9% of GDP — among the lowest in the EU and dramatically below its peak. Ireland has gone from bailout recipient to one of Europe's fiscally strongest economies in just over a decade. In 2025 it ran a budget surplus of 1.8% of GDP.</p>
+      <p>Three factors explain this remarkable transformation. First, Ireland maintained fiscal discipline through austerity in the early 2010s — cutting spending and raising taxes, which was politically painful but sustained. Second, GDP growth has been exceptionally strong — Ireland has consistently grown faster than the eurozone average, helped by its position as a European hub for US multinationals. Third, and most controversially, Ireland's 12.5% corporation tax rate has attracted enormous inflows of corporate tax revenue from multinationals including Apple, Google, Meta and Pfizer. Corporation tax now represents about 21% of Ireland's total revenue — an extraordinary concentration that creates significant vulnerability.</p>
+      <div class="callout amber">⚠️ <strong>The Irish model has a warning attached:</strong> Ireland's fiscal strength depends heavily on corporation tax revenues that could evaporate quickly. The OECD's global minimum tax of 15% has already begun to erode Ireland's competitive advantage. Several economists have warned that Ireland's headline debt figures understate its vulnerability because the corporate tax flows are volatile and could be relocated at relatively short notice. Ireland has acknowledged this by setting aside windfall corporate tax revenues in a sovereign wealth fund rather than spending them.</div>
+      <div class="callout green">✅ <strong>What it shows:</strong> A small open economy with a clear competitive advantage and a willingness to maintain fiscal discipline can recover from even a severe debt crisis relatively quickly. But Ireland's model is not easily replicable — most countries cannot attract a disproportionate share of multinational profits through low corporate tax.</div>
+    </div>
+  </div>
+
+  <!-- GERMANY -->
+  <div class="case-study">
+    <div class="cs-header amber">
+      <div class="cs-flag">🇩🇪</div>
+      <div class="cs-title-block">
+        <div class="cs-country">GERMANY — THE DEBT BRAKE MODEL</div>
+        <div class="cs-subtitle">Constitutional spending limit · Only G7 country with genuinely declining debt</div>
+      </div>
+      <div class="cs-badge">
+        <div class="bv">0.35%</div>
+        <div class="bl">Max structural deficit</div>
+      </div>
+    </div>
+    <div class="cs-body">
+      <p>Germany's approach to debt reduction is the most structural of any major economy. In 2009, Germany embedded a "Schuldenbremse" (debt brake) directly into its constitution, limiting the federal structural deficit to 0.35% of GDP and completely prohibiting deficits at state level.</p>
+      <p>The result over the following decade was a remarkable period of fiscal consolidation — Germany ran a balanced budget or surplus every year from 2012 to 2019, the only G7 country to do so. By 2019, federal government debt had fallen to around 59% of GDP from 82% in 2010. Germany became the only large economy to genuinely reduce its debt ratio through disciplined fiscal policy rather than GDP growth alone.</p>
+      <p>Covid broke the debt brake (it has an escape clause for exceptional circumstances), and Germany's debt rose again to around 66-68% of GDP. But it remains far below most European peers. In 2025, however, Germany suspended the debt brake again to finance a major defence and infrastructure investment package — a political decision that illustrated the limits of constitutional fiscal rules when governments decide to override them.</p>
+      <div class="callout blue">📋 <strong>The UK context:</strong> Germany's debt brake is the kind of structural rule the UK does not have. The UK's fiscal rules are set by the government itself and can be changed — as they have been repeatedly. A constitutionally-embedded fiscal constraint is politically impossible in the UK system without a written constitution, but the principle — making it legally harder to run deficits — is one some economists advocate.</div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--ink);margin-bottom:12px">DEBT/GDP COMPARISON — SUCCESS STORIES vs UK</div>
+    <canvas id="debtChart" height="220"></canvas>
+    <p style="font-size:11px;color:var(--ink-light);margin-top:8px">Note: Ireland's GDP figures are distorted by multinational balance sheets — modified GNI (GNI*) gives a more accurate picture of the domestic economy, at roughly double these headline figures. Sources: Eurostat, IMF, ONS.</p>
+  </div>
+
+  <!-- LESSONS FOR UK -->
+  <div class="lessons">
+    <h2>WHAT CAN THE UK LEARN?</h2>
+    <p>The UK's position — debt at 95% of GDP, rising to 96% before barely falling — is far more manageable than Argentina's hyperinflationary crisis or Greece's 209% peak. But the OBR's own projections show debt reaching 275% by the 2070s without structural reform. The case studies above suggest several lessons:</p>
+    <div class="lesson-grid">
+      <div class="lesson-card">
+        <div class="li">📊</div>
+        <div class="lt">Primary Surpluses Matter</div>
+        <div class="ld">Greece's 4.9% primary surplus in 2025 is what's driving its debt reduction. The UK has not run a primary surplus for over 25 years. Without one, debt can only fall if GDP grows faster than the debt interest rate.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="li">📈</div>
+        <div class="lt">Growth Is the Easiest Route</div>
+        <div class="ld">Ireland's debt fell partly because its economy grew so fast the denominator (GDP) expanded rapidly. The UK's 1.1% forecast growth is too slow to meaningfully reduce a 95% debt ratio through growth alone.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="li">⏱️</div>
+        <div class="lt">It Takes Time</div>
+        <div class="ld">Greece's 63-point improvement took five years and followed a decade of painful adjustment. Ireland's recovery took 12 years. Argentina's is incomplete. There are no quick fixes.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="li">🏛️</div>
+        <div class="lt">Political Will Is The Constraint</div>
+        <div class="ld">Every success story required sustained political commitment across multiple parliaments. The UK has changed fiscal rules with every change of government. Credibility requires consistency that is hard to maintain democratically.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="li">💸</div>
+        <div class="lt">External Help Matters</div>
+        <div class="ld">Greece's recovery was only possible because the EU restructured its bailout loans to very long maturities at near-zero interest rates — effectively debt relief. The UK, as a sovereign currency issuer, is in a different position but has no equivalent backstop.</div>
+      </div>
+      <div class="lesson-card">
+        <div class="li">⚠️</div>
+        <div class="lt">The Social Cost Is Real</div>
+        <div class="ld">Every country that successfully reduced debt paid a significant social price. Argentina saw poverty spike to 52.9%. Greece lost 25% of GDP and a generation emigrated. Ireland imposed austerity for years. There is no painless route.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="uk-box">
+    <h2>🇬🇧 THE UK'S POSITION — HONEST ASSESSMENT</h2>
+    <p>The UK is not in the same position as Argentina was (hyperinflation, currency collapse, 14-year deficit) or Greece was (209% debt, bailout dependency, complete loss of market access). It is a large, diverse economy with its own currency, deep financial markets and long debt maturities. These are significant structural advantages.</p>
+    <p>But the OBR's own analysis is clear: debt is not falling, borrowing remains elevated, and without structural change the long-term trajectory is unsustainable. The government's fiscal headroom against its own rules is thin. Early 2026/27 borrowing is already running above forecast.</p>
+    <p>The case studies suggest that reduction is possible but requires either: (a) sustained primary surpluses — spending less than you collect before debt interest; (b) faster economic growth than the UK is currently achieving; or (c) both simultaneously. The UK's recent history has delivered neither consistently.</p>
+    <div class="callout red">🚨 NIESR's assessment of the Spring 2026 forecast: "The public debt position remains fundamentally unsustainable and a serious medium-term plan to bring debt down as a share of the economy will be needed." The cases above show that such plans can work — but they require political courage and consistency that has been difficult to sustain across UK governments.</div>
+  </div>
+
+  <div class="sources">
+    <strong>Sources:</strong> Alpha Bank analysis on Greece debt reduction (May 2026) via tovima.com; Eurostat Government Finance Statistics (June 2026); Buenos Aires Times "Argentina posted fiscal surplus in 2025" (January 2026); Global Finance Magazine "Milei Ends Argentina's Deficit After 123 Years" (January 2025); Focus Economics "Argentina's Economy Outlook Under Milei" (December 2025); GIS Reports "Javier Milei's economic policy in Argentina" (October 2025); The Common Sense "Milei's Economic Gamble Delivers Results" (June 2026); Visual Capitalist "Mapped: European Union Debt-to-GDP by Country" (October 2025); NIESR "Standing Still on Debt as Risks Mount" (March 2026); OBR Economic and Fiscal Outlook March 2026. Ireland GDP distortion: CSO Ireland Modified Gross National Income (GNI*) documentation.
+  </div>
+</div>
+
+<div style="background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,.5)">
+  ⚠️ Independent analysis. Not financial advice. <a href="disclaimer.html" style="color:rgba(255,255,255,.7)">Disclaimer</a> · <a href="privacy.html" style="color:rgba(255,255,255,.7)">Privacy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: Eurostat · IMF · Alpha Bank · OBR · NIESR · Buenos Aires Times</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="uk-vs-world.html">UK vs World</a><a href="obr-spring-2026.html">OBR 2026</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(function(g){if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(function(g){g.classList.remove('open')})});
+
+new Chart(document.getElementById('debtChart'),{
+  type:'line',
+  data:{
+    labels:['2010','2012','2014','2016','2018','2020','2022','2025'],
+    datasets:[
+      {label:'Greece',data:[148,159,178,181,186,209,177,146],borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3},
+      {label:'Ireland',data:[85,120,105,75,63,58,44,33],borderColor:'#008844',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3},
+      {label:'Germany',data:[82,80,74,68,61,68,67,64],borderColor:'#c97000',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3},
+      {label:'UK 🇬🇧',data:[76,84,86,86,84,97,99,95],borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.08)',fill:true,borderWidth:3,pointRadius:3,tension:0.3},
+      {label:'60% Maastricht target',data:[60,60,60,60,60,60,60,60],borderColor:'rgba(0,0,0,0.2)',backgroundColor:'transparent',borderWidth:1,pointRadius:0,borderDash:[4,2]}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{labels:{color:'#2a3a50',font:{size:11,weight:'bold'},boxWidth:12}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'% GDP'}}}},scales:{x:{ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},y:{title:{display:true,text:'Govt Debt % GDP',color:'#2a3a50',font:{size:10,weight:'bold'}},ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'},callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.05)'}}}}
+});
+</script>
+</body>
+</html>

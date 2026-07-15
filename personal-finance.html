@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Personal Finance Dashboard – Average Debt, Savings & Mortgages | UK-Debt.info</title>
+<meta name="description" content="Average UK household mortgage debt, credit card balances, savings, wages and financial resilience. The complete personal finance picture for the average British person.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#004400,#006622,#009944);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(0,68,0,0.35)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss-item{text-align:center}.ss-item .sv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}.ss-item .sl{font-size:10px;letter-spacing:2px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.ss-item.red .sv{color:var(--red)}.ss-item.green .sv{color:var(--green)}.ss-item.amber .sv{color:var(--amber)}.ss-item.blue .sv{color:var(--blue)}.ss-item.purple .sv{color:var(--purple)}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat-box{padding:13px;border-radius:6px;border:1px solid transparent;text-align:center}
+.stat-box .sb-val{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}
+.stat-box .sb-lbl{font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;line-height:1.3}
+.stat-box.red{background:var(--red-light);border-color:var(--red-mid)}.stat-box.red .sb-val{color:var(--red)}
+.stat-box.green{background:var(--green-light);border-color:var(--green-mid)}.stat-box.green .sb-val{color:var(--green)}
+.stat-box.amber{background:var(--amber-light);border-color:var(--amber-mid)}.stat-box.amber .sb-val{color:var(--amber)}
+.stat-box.blue{background:var(--blue-light);border-color:var(--blue-mid)}.stat-box.blue .sb-val{color:var(--blue)}
+.stat-box.purple{background:var(--purple-light);border-color:var(--purple-mid)}.stat-box.purple .sb-val{color:var(--purple)}
+.budget-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:5px;border:1px solid transparent;margin-bottom:6px}
+.budget-row .br-label{font-size:13px;font-weight:700;color:var(--ink)}
+.budget-row .br-amount{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700}
+.budget-row .br-pct{font-size:11px;font-weight:700;width:45px;text-align:right}
+.budget-row.income{background:var(--green-light);border-color:var(--green-mid)}.budget-row.income .br-amount{color:var(--green)}
+.budget-row.essential{background:var(--red-light);border-color:var(--red-mid)}.budget-row.essential .br-amount{color:var(--red)}
+.budget-row.debt{background:var(--amber-light);border-color:var(--amber-mid)}.budget-row.debt .br-amount{color:var(--amber)}
+.budget-row.discretionary{background:var(--blue-light);border-color:var(--blue-mid)}.budget-row.discretionary .br-amount{color:var(--blue)}
+.budget-row.saving{background:var(--green-light);border-color:var(--green-mid)}.budget-row.saving .br-amount{color:var(--green)}
+.budget-row.deficit{background:#0d1520;border-color:#1a2535}.budget-row.deficit .br-label{color:#fff}.budget-row.deficit .br-amount{color:#ff6666}
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.green-box{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.resilience-bar{margin:8px 0}
+.rb-label-row{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink-mid);margin-bottom:4px}
+.rb-track{height:12px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.rb-fill{height:100%;border-radius:6px}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments History</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html" class="active">Personal Finance Dashboard</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>UK PERSONAL FINANCE DASHBOARD</h1>
+    <div class="subtitle">Average Household Debt · Mortgages · Credit Cards · Savings · Financial Resilience · BoE · ONS · Money Charity</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss-item red"><div class="sv">£66,892</div><div class="sl">Avg Total Household Debt</div></div>
+  <div class="ss-item red"><div class="sv">£197,811</div><div class="sl">Avg Outstanding Mortgage</div></div>
+  <div class="ss-item amber"><div class="sv">£2,601</div><div class="sl">Avg Credit Card Debt</div></div>
+  <div class="ss-item blue"><div class="sv">£17,800</div><div class="sl">Avg Household Savings</div></div>
+  <div class="ss-item red"><div class="sv">4.1m</div><div class="sl">Adults in Problem Debt</div></div>
+</div>
+
+<div class="main">
+
+  <!-- AVERAGE HOUSEHOLD BREAKDOWN -->
+  <div class="panel full-width green-accent">
+    <div class="panel-label">Average UK Household Financial Position (2025/26)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <div class="panel-label" style="margin-top:4px">What We Owe</div>
+        <div class="stat-grid">
+          <div class="stat-box red"><div class="sb-val">£197,811</div><div class="sb-lbl">Mortgage Outstanding (avg, those with mortgage)</div></div>
+          <div class="stat-box red"><div class="sb-val">£2,601</div><div class="sb-lbl">Credit Card Balance</div></div>
+          <div class="stat-box amber"><div class="sb-val">£5,703</div><div class="sb-lbl">Personal Loans</div></div>
+          <div class="stat-box amber"><div class="sb-val">£10,088</div><div class="sb-lbl">Student Loans (avg)</div></div>
+          <div class="stat-box red"><div class="sb-val">£66,892</div><div class="sb-lbl">Total Debt per Household</div></div>
+          <div class="stat-box red"><div class="sb-val">£35,053</div><div class="sb-lbl">Total Debt per Adult</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel-label" style="margin-top:4px">What We Have</div>
+        <div class="stat-grid">
+          <div class="stat-box green"><div class="sb-val">£17,800</div><div class="sb-lbl">Average Savings (household)</div></div>
+          <div class="stat-box green"><div class="sb-val">£39,039</div><div class="sb-lbl">Median Annual Salary (FT, 2025)</div></div>
+          <div class="stat-box blue"><div class="sb-val">£285,000</div><div class="sb-lbl">Average House Price</div></div>
+          <div class="stat-box amber"><div class="sb-val">£2,227</div><div class="sb-lbl">Annual Interest Payments (avg)</div></div>
+          <div class="stat-box green"><div class="sb-val">64.5%</div><div class="sb-lbl">Home Ownership Rate</div></div>
+          <div class="stat-box red"><div class="sb-val">16.7%</div><div class="sb-lbl">Have Zero Savings</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="red-box" style="margin-top:14px">
+      🚨 <strong>The UK's personal debt crisis in numbers:</strong> Average total household debt of £66,892 represents 93% of average annual earnings. Non-mortgage household debt has <strong>doubled in a decade</strong> to £18,392. Credit card debt is growing at 12.4% per year — the fastest of any consumer credit type. Total UK personal debt reached £1.9 trillion at end-2025, up £54bn in a single year.
+    </div>
+  </div>
+
+  <!-- AVERAGE HOUSEHOLD BUDGET -->
+  <div class="panel amber-accent">
+    <div class="panel-label">Average Monthly Household Budget (2025/26)</div>
+    <div class="budget-row income">
+      <span class="br-label">💰 Take-Home Pay (2 earners, median)</span>
+      <span class="br-amount">+£4,200/mo</span>
+      <span class="br-pct" style="color:var(--green)">100%</span>
+    </div>
+    <div style="font-size:10px;font-weight:700;color:var(--ink-light);letter-spacing:1px;text-transform:uppercase;margin:8px 0 4px;padding-left:4px">Essential Outgoings</div>
+    <div class="budget-row essential">
+      <span class="br-label">🏠 Housing (mortgage/rent)</span>
+      <span class="br-amount">-£1,050/mo</span>
+      <span class="br-pct" style="color:var(--red)">25%</span>
+    </div>
+    <div class="budget-row essential">
+      <span class="br-label">⚡ Energy & Utilities</span>
+      <span class="br-amount">-£240/mo</span>
+      <span class="br-pct" style="color:var(--red)">5.7%</span>
+    </div>
+    <div class="budget-row essential">
+      <span class="br-label">🛒 Food & Groceries</span>
+      <span class="br-amount">-£530/mo</span>
+      <span class="br-pct" style="color:var(--red)">12.6%</span>
+    </div>
+    <div class="budget-row essential">
+      <span class="br-label">🚗 Transport</span>
+      <span class="br-amount">-£320/mo</span>
+      <span class="br-pct" style="color:var(--red)">7.6%</span>
+    </div>
+    <div class="budget-row debt">
+      <span class="br-label">💳 Debt Repayments</span>
+      <span class="br-amount">-£380/mo</span>
+      <span class="br-pct" style="color:var(--amber)">9.0%</span>
+    </div>
+    <div class="budget-row discretionary">
+      <span class="br-label">📱 Subscriptions & Comms</span>
+      <span class="br-amount">-£120/mo</span>
+      <span class="br-pct" style="color:var(--blue)">2.9%</span>
+    </div>
+    <div class="budget-row discretionary">
+      <span class="br-label">🍽️ Eating Out & Leisure</span>
+      <span class="br-amount">-£280/mo</span>
+      <span class="br-pct" style="color:var(--blue)">6.7%</span>
+    </div>
+    <div class="budget-row saving">
+      <span class="br-label">💰 Savings / Investments</span>
+      <span class="br-amount">-£180/mo</span>
+      <span class="br-pct" style="color:var(--green)">4.3%</span>
+    </div>
+    <div class="budget-row essential">
+      <span class="br-label">👶 Childcare / Education</span>
+      <span class="br-amount">-£320/mo</span>
+      <span class="br-pct" style="color:var(--red)">7.6%</span>
+    </div>
+    <div class="budget-row deficit">
+      <span class="br-label">Remaining (discretionary buffer)</span>
+      <span class="br-amount">+£780/mo</span>
+      <span class="br-pct" style="color:rgba(255,255,255,0.7)">18.6%</span>
+    </div>
+    <div class="warn-box">
+      ⚠️ This budget assumes 2 median earners with no children. Single-parent or single-earner households face a sharply different picture. Citizens Advice data shows that households in financial difficulty face an average monthly shortfall of <strong>£396</strong> between income and essential spending.
+    </div>
+  </div>
+
+  <!-- FINANCIAL RESILIENCE -->
+  <div class="panel red-accent">
+    <div class="panel-label">Financial Resilience — How Vulnerable Are UK Households?</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+      <div class="resilience-bar">
+        <div class="rb-label-row"><span>Have 3+ months emergency savings</span><span style="color:var(--green);font-family:'Share Tech Mono',monospace">36%</span></div>
+        <div class="rb-track"><div class="rb-fill" style="width:36%;background:linear-gradient(90deg,#60d0a0,#008844)"></div></div>
+      </div>
+      <div class="resilience-bar">
+        <div class="rb-label-row"><span>Have 1–3 months savings</span><span style="color:var(--amber);font-family:'Share Tech Mono',monospace">24%</span></div>
+        <div class="rb-track"><div class="rb-fill" style="width:24%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+      </div>
+      <div class="resilience-bar">
+        <div class="rb-label-row"><span>Less than 1 month savings</span><span style="color:var(--red);font-family:'Share Tech Mono',monospace">23%</span></div>
+        <div class="rb-track"><div class="rb-fill" style="width:23%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+      </div>
+      <div class="resilience-bar">
+        <div class="rb-label-row"><span>Zero savings at all</span><span style="color:var(--red);font-family:'Share Tech Mono',monospace">17%</span></div>
+        <div class="rb-track"><div class="rb-fill" style="width:17%;background:#d40020"></div></div>
+      </div>
+      <div class="resilience-bar">
+        <div class="rb-label-row"><span>In problem debt (4.1m adults)</span><span style="color:var(--red);font-family:'Share Tech Mono',monospace">8%</span></div>
+        <div class="rb-track"><div class="rb-fill" style="width:8%;background:#880000"></div></div>
+      </div>
+      <div class="resilience-bar">
+        <div class="rb-label-row"><span>Can cover 1 month expenses if job lost</span><span style="color:var(--amber);font-family:'Share Tech Mono',monospace">40%</span></div>
+        <div class="rb-track"><div class="rb-fill" style="width:40%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+      </div>
+    </div>
+    <div class="red-box">
+      🚨 40% of UK adults could not cover one month's essential expenses if they lost their income. 4.1 million adults are in problem debt. Insolvencies reached 126,240 in 2025 — the highest since 2010. The combination of elevated interest rates, high rents and squeezed real wages has left a significant minority of UK households financially exposed.
+    </div>
+  </div>
+
+  <!-- DEBT GROWTH CHART -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">Total UK Household Debt Over Time (£bn) — 2010 to 2026</div>
+    <canvas id="debtChart" height="240"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Mortgage Debt (£bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c97000"></div>Consumer Credit (£bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>Student Loans (£bn)</div>
+    </div>
+    <div class="warn-box">
+      ⚠️ Total household debt reached <strong>£1.9 trillion</strong> at end-March 2025 — up £54bn in a single year. The OBR forecasts this will reach £2.93 trillion by 2030, with average debt per household rising to ~£98,000. The fastest growing component is credit card debt at +12.4% per year.
+    </div>
+  </div>
+
+  <!-- MORTGAGE STRESS TEST -->
+  <div class="panel amber-accent">
+    <div class="panel-label">Mortgage Affordability Stress — How Many Are At Risk?</div>
+    <div class="stat-grid">
+      <div class="stat-box red"><div class="sb-val">10.88m</div><div class="sb-lbl">Households with Mortgage</div></div>
+      <div class="stat-box red"><div class="sb-val">6.59%</div><div class="sb-lbl">Average Mortgage Rate (Feb 2026)</div></div>
+      <div class="stat-box amber"><div class="sb-val">~2.1m</div><div class="sb-lbl">Remortgaging in 2026</div></div>
+      <div class="stat-box red"><div class="sb-val">7.7×</div><div class="sb-lbl">House Price / Earnings Ratio</div></div>
+    </div>
+    <div class="info-box" style="margin-top:12px">
+      📋 Many homeowners who fixed their mortgages in 2021–22 at rates of 1–2% are remortgaging in 2025–26 onto rates of 4–6%. A household with a £250,000 mortgage remortgaging from 1.5% to 5.5% sees their monthly payment rise from ~£998 to ~£1,531 — an extra £533/month or £6,400/year.
+    </div>
+    <div style="margin-top:14px">
+      <canvas id="mortgageRateChart" height="200"></canvas>
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Average 2-yr Fixed Mortgage Rate (%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>BoE Base Rate (%)</div>
+    </div>
+  </div>
+
+  <!-- PERSONAL DEBT VS NATIONAL DEBT -->
+  <div class="panel full-width purple-accent">
+    <div class="panel-label">Personal Debt in Context — How It Compares to the National Debt</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px">
+      <div style="background:var(--red-light);border:2px solid var(--red-mid);border-radius:6px;padding:14px;text-align:center">
+        <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">National Debt (PSND)</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;color:var(--red)">£2.92tn</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:4px">Government / public sector</div>
+      </div>
+      <div style="background:var(--amber-light);border:2px solid var(--amber-mid);border-radius:6px;padding:14px;text-align:center">
+        <div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Total Household Debt</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;color:var(--amber)">£1.90tn</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:4px">All UK households combined</div>
+      </div>
+      <div style="background:var(--blue-light);border:2px solid var(--blue-mid);border-radius:6px;padding:14px;text-align:center">
+        <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Corporate Debt</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;color:var(--blue)">~£1.80tn</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:4px">UK non-financial corporates</div>
+      </div>
+      <div style="background:#0d1520;border:2px solid #1a2535;border-radius:6px;padding:14px;text-align:center">
+        <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Total UK Debt (all sectors)</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;color:#ff6666">~£6.6tn</div>
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);margin-top:4px">~222% of GDP</div>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:14px">
+      📋 The UK's total debt across all sectors — government, households and corporates — is approximately £6.6 trillion, around 222% of GDP. This is one of the highest ratios in the developed world, reflecting decades of credit expansion, rising house prices and government borrowing. The household and corporate debt is mostly not a fiscal problem (it is owed between private parties) but it does create systemic financial stability risk.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ All figures are estimates from official sources. Individual circumstances vary significantly from averages.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: Bank of England · ONS · Money Charity May 2025 · NimbleFins · FCA · StepChange</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+new Chart(document.getElementById('debtChart'),{
+  type:'bar',
+  data:{
+    labels:['2010','2012','2014','2016','2018','2020','2022','2023','2024','2025','2026e'],
+    datasets:[
+      {label:'Mortgage Debt',data:[1200,1230,1280,1360,1460,1500,1580,1620,1680,1710,1740],backgroundColor:'rgba(212,0,32,0.75)',stack:'a'},
+      {label:'Consumer Credit',data:[160,165,175,195,215,200,210,215,222,230,238],backgroundColor:'rgba(201,112,0,0.75)',stack:'a'},
+      {label:'Student Loans',data:[40,65,90,130,160,190,210,220,232,237,242],backgroundColor:'rgba(102,0,204,0.75)',stack:'a'}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>`${ctx.dataset.label}: £${ctx.raw}bn`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{stacked:true,title:{display:true,text:'£bn',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+new Chart(document.getElementById('mortgageRateChart'),{
+  type:'line',
+  data:{
+    labels:['2020','2021','2022 Q1','2022 Q4','2023 Q1','2023 Q3','2024 Q1','2024 Q4','2025 Q2','2025 Q4','2026 Q1'],
+    datasets:[
+      {label:'2yr Fixed Rate',data:[1.97,1.80,2.35,5.80,5.50,5.70,5.00,4.90,4.80,4.75,4.70],borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.08)',borderWidth:2.5,fill:true,tension:0.3,pointRadius:3},
+      {label:'BoE Base Rate', data:[0.10,0.10,0.25,3.00,4.00,5.25,5.25,4.75,4.25,4.00,3.75],borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:2,tension:0.3,pointRadius:2,borderDash:[4,2]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:9,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'Rate (%)',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'},min:0,max:7}
+    }
+  }
+});
+</script>
+</body>
+</html>

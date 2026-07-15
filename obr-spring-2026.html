@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBR Spring Statement 2026 — What It Means for You | UK-Debt.info</title>
+<meta name="description" content="Plain-English guide to the OBR Spring 2026 forecast. Debt rising to 96% GDP. Borrowing falling but still £129bn. Growth cut to 1.1%. What Rachel Reeves said vs what the numbers show.">
+<link rel="canonical" href="https://uk-debt.info/obr-spring-2026.html">
+<meta property="og:title" content="OBR Spring Statement 2026 — What It Really Means">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{background:rgba(255,255,255,.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:11px 18px;font-size:14px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+.header{background:linear-gradient(135deg,#001a44,#003388,#0055cc);padding:24px 40px 20px}
+.header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(20px,5vw,30px);letter-spacing:3px;color:#fff;line-height:1.1}
+.header .sub{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.75);text-transform:uppercase;margin-top:4px;font-weight:600}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss{text-align:center}.ss .sv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}.ss .sl{font-size:12px;letter-spacing:1px;color:var(--ink-light);text-transform:uppercase;margin-top:4px;font-weight:700}
+.ss.red .sv{color:var(--red)}.ss.green .sv{color:var(--green)}.ss.amber .sv{color:var(--amber)}.ss.blue .sv{color:var(--blue)}
+.main{padding:20px 32px}
+.intro{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.intro p{font-size:17px;font-weight:600;color:var(--ink-mid);line-height:1.85}
+.section{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:28px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sn{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--blue);font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.section h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:var(--ink);margin-bottom:12px}
+.section p{font-size:16px;font-weight:600;color:var(--ink-mid);line-height:1.85;margin-bottom:12px}
+.section p:last-child{margin-bottom:0}
+.callout{border-radius:6px;padding:14px 18px;font-size:15px;font-weight:600;line-height:1.75;margin:14px 0}
+.callout.red{background:var(--red-light);border:1px solid var(--red-mid);color:var(--ink-mid)}
+.callout.green{background:var(--green-light);border:1px solid var(--green-mid);color:var(--ink-mid)}
+.callout.amber{background:var(--amber-light);border:1px solid var(--amber-mid);color:var(--ink-mid)}
+.callout.blue{background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--ink-mid)}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.vs-box{border-radius:8px;padding:14px;border:2px solid}
+.vs-box.said{background:var(--green-light);border-color:var(--green-mid)}
+.vs-box.reality{background:var(--red-light);border-color:var(--red-mid)}
+.vs-box h3{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.vs-box.said h3{color:var(--green)}.vs-box.reality h3{color:var(--red)}
+.vs-box li{font-size:12px;font-weight:600;color:var(--ink-mid);margin-bottom:5px;line-height:1.5;margin-left:14px}
+.forecast-table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+.forecast-table th{background:var(--panel2);padding:8px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border);text-align:left}
+.forecast-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid)}
+.forecast-table td.mono{font-family:'Share Tech Mono',monospace;font-weight:700}
+.forecast-table td.bad{color:var(--red)}.forecast-table td.ok{color:var(--green)}.forecast-table td.warn{color:var(--amber)}
+.sources{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:11px;color:var(--ink-light);line-height:1.7;margin-top:8px}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+@media(max-width:768px){.top-nav{padding:0 8px;overflow-x:auto;flex-wrap:nowrap}.top-nav::-webkit-scrollbar{display:none}.nav-groups{flex-shrink:0;flex-wrap:nowrap}.nav-group-btn{padding:0 8px;font-size:10px;white-space:nowrap}.nav-brand span{font-size:16px;white-space:nowrap}.dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}.vs-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="money-in-out.html" class="done">Money In &amp; Out</a>
+        <a href="fiscal-gap.html" class="done">True Fiscal Gap</a>
+        <a href="obr-spring-2026.html" class="active">OBR Spring Statement 2026</a>
+        <a href="save-the-uk.html" class="done">Can You Save the UK?</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money &amp; Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 &amp; GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People &amp; Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Public vs Private Employment</a>
+        <a href="pensions.html" class="done">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+        <a href="uk-wealth-decline.html" class="done">UK Wealth Decline</a>
+        <a href="jobs-data-accuracy.html" class="done">Jobs Data — How Accurate?</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="done">Historical Timeline</a>
+        <a href="cost-of-living.html" class="done">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+        <a href="debt-reduction-success.html" class="done">Who Reduced Their Debt?</a>
+        <a href="russia-economy-war.html" class="done">Russia's War Economy</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>OBR SPRING STATEMENT 2026 — WHAT IT ACTUALLY MEANS</h1>
+  <div class="sub">3 March 2026 · Rachel Reeves · Plain English · Independent Analysis</div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss blue"><div class="sv">3 Mar 2026</div><div class="sl">Spring Statement Date</div></div>
+  <div class="ss red"><div class="sv">95.1% GDP</div><div class="sl">Debt Now (May 2026)</div></div>
+  <div class="ss red"><div class="sv">96%</div><div class="sl">OBR Peak Forecast 2028/29</div></div>
+  <div class="ss green"><div class="sv">£129bn</div><div class="sl">2025/26 Borrowing (Actual)</div></div>
+  <div class="ss amber"><div class="sv">1.1%</div><div class="sl">GDP Growth Forecast 2026</div></div>
+  <div class="ss amber"><div class="sv">5.2%</div><div class="sl">Unemployment Rate</div></div>
+</div>
+
+<div class="main">
+
+  <div class="intro">
+    <p>On 3 March 2026, Chancellor Rachel Reeves presented the Spring Statement alongside the OBR's updated economic and fiscal forecast. The Chancellor said the plan was working. The OBR's own numbers told a more complicated story. This page explains what was actually announced, what the numbers show, and what it means for the public finances over the next five years.</p>
+  </div>
+
+  <div class="section">
+    <div class="sn">01</div>
+    <h2>What the Chancellor Said vs What the Numbers Show</h2>
+    <div class="vs-grid">
+      <div class="vs-box said">
+        <h3>✅ What the Chancellor Said</h3>
+        <ul>
+          <li>"Inflation is down, borrowing is down, living standards are up"</li>
+          <li>Borrowing lowest in six years</li>
+          <li>Falling below G7 average for first time in 22 years</li>
+          <li>GDP per person to grow 5.6% over the Parliament</li>
+          <li>Inflation returning to 2% target in late 2026</li>
+          <li>People will be over £1,000/yr better off after inflation</li>
+        </ul>
+      </div>
+      <div class="vs-box reality">
+        <h3>⚠️ What the Numbers Show</h3>
+        <ul>
+          <li>Debt still rising — from 93% to 96% of GDP by 2028/29</li>
+          <li>Borrowing still £129bn — sixth highest ever in any year</li>
+          <li>GDP growth cut from 1.4% to 1.1% — below even modest expectations</li>
+          <li>Unemployment risen to 5.2% — highest in nearly five years</li>
+          <li>Fiscal rules only met with 54% probability margin</li>
+          <li>Early 2026/27 borrowing already £8bn above OBR forecast</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout amber">⚠️ Both things can be true simultaneously. Borrowing is genuinely lower than it was — falling from £153bn in 2024/25 to £129bn in 2025/26. But the debt-to-GDP ratio is still rising, not falling. Reducing the deficit is not the same as reducing the debt. You reduce the deficit by borrowing less than you did last year. You only reduce the debt by borrowing nothing at all, or running a surplus. The UK is nowhere near either.</div>
+  </div>
+
+  <div class="section">
+    <div class="sn">02</div>
+    <h2>The Full OBR Forecast in Plain Numbers</h2>
+    <table class="forecast-table">
+      <thead><tr><th>Year</th><th>Borrowing</th><th>Borrowing % GDP</th><th>Debt % GDP</th><th>GDP Growth</th><th>CPI</th></tr></thead>
+      <tbody>
+        <tr><td>2024/25 (actual)</td><td class="mono bad">£153bn</td><td class="mono bad">5.2%</td><td class="mono bad">93%</td><td class="mono warn">1.4%</td><td class="mono warn">3.4%</td></tr>
+        <tr><td>2025/26 (actual)</td><td class="mono warn">£129bn</td><td class="mono warn">4.3%</td><td class="mono bad">95.1%</td><td class="mono warn">1.1%</td><td class="mono warn">2.3%</td></tr>
+        <tr><td>2026/27 (forecast)</td><td class="mono warn">£108bn</td><td class="mono warn">3.5%</td><td class="mono bad">95.7%</td><td class="mono ok">1.4%</td><td class="mono ok">2.0%</td></tr>
+        <tr><td>2027/28 (forecast)</td><td class="mono warn">£90bn</td><td class="mono warn">2.8%</td><td class="mono bad">96.1%</td><td class="mono ok">1.6%</td><td class="mono ok">2.0%</td></tr>
+        <tr><td>2028/29 (forecast)</td><td class="mono warn">£78bn</td><td class="mono warn">2.3%</td><td class="mono bad">96.0%</td><td class="mono ok">1.6%</td><td class="mono ok">2.0%</td></tr>
+        <tr><td>2029/30 (forecast)</td><td class="mono ok">£68bn</td><td class="mono ok">1.9%</td><td class="mono bad">95.7%</td><td class="mono ok">1.6%</td><td class="mono ok">2.0%</td></tr>
+        <tr><td>2030/31 (forecast)</td><td class="mono ok">£59bn</td><td class="mono ok">1.6%</td><td class="mono bad">95.2%</td><td class="mono ok">1.6%</td><td class="mono ok">2.0%</td></tr>
+      </tbody>
+    </table>
+    <div class="callout blue">📋 The core message: borrowing falls every year to 2030/31. But debt as a share of the economy stays at around 95-96% throughout the forecast — barely moving. The UK will still owe roughly the same proportion of GDP in 2031 as it does today. The OBR's own long-term projection (unchanged from previous) shows debt rising to 275% of GDP by the 2070s without fundamental structural reform.</div>
+  </div>
+
+  <div class="section">
+    <div class="sn">03</div>
+    <h2>The Growth Downgrade — Why It Matters</h2>
+    <p>The OBR cut its 2026 GDP growth forecast from 1.4% to 1.1% — a reduction of 0.3 percentage points that might sound small but compounds significantly over a five-year forecast. The causes cited were: weaker than expected GDP data in late 2025, a looser labour market (unemployment up to 5.2%), and subdued business survey data.</p>
+    <p>The growth downgrade matters for public finances because slower growth means lower tax revenues. Around four-fifths of the projected improvement in borrowing over the next five years depends on rising tax receipts rather than spending cuts. If growth disappoints, that four-fifths improvement doesn't materialise.</p>
+    <canvas id="growthChart" height="200" style="margin-top:12px"></canvas>
+    <div class="callout amber">⚠️ The OBR's growth assumption of 1.6% from 2027 onwards requires productivity to "gradually rise" — but UK productivity has disappointed for over a decade. NIESR described the assumption as "optimistic" and noted that the equilibrium unemployment rate is likely closer to 5% than the OBR's 4.1% target, suggesting the labour market improvement will be slower than forecast.</div>
+  </div>
+
+  <div class="section">
+    <div class="sn">04</div>
+    <h2>The Fiscal Rules — What They Are and Whether They're Being Met</h2>
+    <p>The government has two fiscal rules:</p>
+    <p><strong>Rule 1 — Stability rule:</strong> Day-to-day spending must be covered by tax revenues (no borrowing for day-to-day costs) by 2029/30.</p>
+    <p><strong>Rule 2 — Investment rule:</strong> Public sector net financial liabilities (PSNFL) must be falling as a share of GDP in 2029/30.</p>
+    <p>The OBR confirmed at the Spring Statement that both rules are being met — but only just. The headroom against the stability rule is £9.9bn — less than half the £21bn average fourth-year pre-measures revision over the past ten forecasts. The OBR estimates the probability of meeting the rules at around 54% — barely above a coin flip.</p>
+    <div class="callout red">🚨 In plain English: the fiscal rules are technically being met but by a margin so thin that a single significant surprise — a growth disappointment, an unexpected spending pressure, a global shock — would require emergency action. The OBR explicitly noted the fiscal rules were not formally assessed at this statement since they are now only assessed annually. The next full assessment will be at the Autumn Budget 2026.</div>
+  </div>
+
+  <div class="section">
+    <div class="sn">05</div>
+    <h2>The Middle East Risk — What the OBR Didn't Include</h2>
+    <p>The OBR's March 2026 forecast was finalised before the escalation of US-Israeli strikes on Iran on 28 February 2026 and subsequent events. The OBR explicitly stated this could have "very significant impacts on the global and UK economies."</p>
+    <p>Oil prices rose from around $70 to $85 a barrel in the days around the Spring Statement, before rising further. Higher oil prices would: push up UK inflation (delaying the return to the 2% target), increase the energy import bill, reduce consumer spending, and potentially force the Bank of England to keep rates higher for longer — which would increase the government's debt interest costs.</p>
+    <p>NIESR estimated that a "prolonged conflict in the Middle East" could add significantly to borrowing, through a combination of higher energy costs and slower growth. They concluded the OBR forecast would likely require upward revision at the Autumn Budget.</p>
+    <div class="callout red">🚨 Early 2026/27 data already suggests the Middle East risk is materialising. Government borrowing in April and May 2026 — the first two months of the new financial year — was £46bn, around £8bn above the OBR's forecast for that period. If this pace continues, full-year borrowing for 2026/27 will overshoot the OBR forecast by a significant margin.</div>
+  </div>
+
+  <div class="section">
+    <div class="sn">06</div>
+    <h2>What Was Actually Announced — The Policy Measures</h2>
+    <p>The Spring Statement deliberately contained no major new tax or spending announcements. The Chancellor explicitly said she wants the autumn Budget to be the single annual fiscal event. What was announced:</p>
+    <p><strong>Local authority support:</strong> £1.4bn to support councils in 2026-27 — largely covering the inherited SEND (Special Educational Needs and Disabilities) funding crisis in which many councils ran deficits on their SEND budgets.</p>
+    <p><strong>SEND spending:</strong> £4bn per year in additional departmental spending for SEND across the final three years of the forecast — a significant commitment that adds to medium-term spending pressures.</p>
+    <p><strong>Devolved governments:</strong> An additional £1.8bn through the Barnett formula to Scotland, Wales and Northern Ireland — including an exceptional Barnett consequential on the SEND write-off grants.</p>
+    <p><strong>Cost of living:</strong> The £150 energy bill reduction and freeze on rail fares confirmed to remain — cited by OBR as specifically reducing CPI by 0.4 percentage points in 2026-27.</p>
+    <div class="callout blue">📋 These measures raised borrowing by an average of £4.3bn a year from 2027 onwards compared to the pre-measures baseline. In other words, the spending decisions made at this statement slightly worsened the borrowing picture that the OBR's economic improvements slightly helped.</div>
+  </div>
+
+  <div class="section">
+    <div class="sn">07</div>
+    <h2>The Long-Term Picture — Unchanged and Alarming</h2>
+    <p>The OBR's long-term projections, last updated in full in 2024 and referenced again at the Spring Statement, remain deeply concerning. On unchanged government policy, debt could rise to around 275% of GDP by the 2070s — driven mainly by the ageing population increasing spending on pensions, health and social care.</p>
+    <p>In a scenario where the economy also faces significant shocks every nine years (consistent with recent experience: 2008, 2020, 2022 were all nine-year-or-less intervals), debt could rise to 325% of GDP by the 2070s.</p>
+    <p>The OBR noted that "over the past two decades, UK public sector debt as a share of GDP has nearly tripled" and is "nearly double the advanced-economy average on a comparable basis." Successive governments have set plans to reduce borrowing that were subsequently pushed back by shocks and policy decisions.</p>
+    <div class="callout red">🚨 NIESR's assessment at the Spring Statement was stark: "It is clear from this forecast that the public debt position remains fundamentally unsustainable and that a serious medium-term plan to bring debt down as a share of the economy will be needed in the autumn." The government has not managed to run a primary surplus for a quarter of a century, and with the equilibrium real interest rate higher than the trend growth rate, the debt ratio will not stabilise without one.</div>
+  </div>
+
+  <canvas id="borrowingChart" height="220" style="margin:0 0 14px"></canvas>
+
+  <div class="sources">
+    <strong>Sources:</strong> OBR Economic and Fiscal Outlook March 2026 (obr.uk, 3 March 2026); House of Commons Library Research Briefing CBP-10495 "2026 spring forecast: A summary" (June 2026); NIESR "Standing Still on Debt as Risks Mount" (March 2026); London Datastore "The 2026 Spring Statement: Overview and Potential Implications for London" (March 2026); ONS "Public sector finances, UK: April 2026" (May 2026); ONS "Public sector finances: May 2026" (June 2026); House of Commons Library "Public finances: Economic indicators" (July 2026); GOV.UK "Spring Forecast 2026: The right economic plan for Britain" (March 2026).
+  </div>
+</div>
+
+<div style="background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,.5);letter-spacing:1px">
+  ⚠️ Independent analysis. Not financial advice. <a href="disclaimer.html" style="color:rgba(255,255,255,.7)">Disclaimer</a> · <a href="privacy.html" style="color:rgba(255,255,255,.7)">Privacy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: OBR · ONS · House of Commons Library · NIESR</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="fiscal-trajectory.html">Fiscal Trajectory</a><a href="obr-accuracy.html">OBR Accuracy</a><a href="disclaimer.html">Disclaimer</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(function(g){if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(function(g){g.classList.remove('open')})});
+
+new Chart(document.getElementById('growthChart'),{
+  type:'bar',
+  data:{
+    labels:['2024','2025','2026','2027','2028','2029','2030'],
+    datasets:[
+      {label:'Nov 2025 forecast',data:[1.4,2.0,1.4,1.5,1.5,1.6,1.6],backgroundColor:'rgba(0,96,204,0.3)',borderColor:'#0060cc',borderWidth:1.5},
+      {label:'Mar 2026 forecast',data:[1.4,1.4,1.1,1.6,1.6,1.6,1.6],backgroundColor:'rgba(212,0,32,0.5)',borderColor:'#d40020',borderWidth:1.5}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{labels:{color:'#2a3a50',font:{size:11,weight:'bold'},boxWidth:12}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{x:{ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'}},grid:{display:false}},y:{title:{display:true,text:'Real GDP Growth %',color:'#2a3a50',font:{size:10,weight:'bold'}},ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'},callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.05)'}}}}
+});
+
+new Chart(document.getElementById('borrowingChart'),{
+  type:'line',
+  data:{
+    labels:['2019/20','2020/21','2021/22','2022/23','2023/24','2024/25','2025/26','2026/27','2027/28','2028/29','2029/30','2030/31'],
+    datasets:[
+      {label:'Borrowing £bn',data:[57,323,183,133,120,153,129,108,90,78,68,59],borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.08)',fill:true,borderWidth:2.5,pointRadius:3,tension:0.3,
+       segment:{borderDash:function(ctx){return ctx.p0DataIndex>=5?[6,3]:[]}}},
+      {label:'Forecast (from 2025/26)',data:[null,null,null,null,null,null,129,108,90,78,68,59],borderColor:'rgba(212,0,32,0.5)',backgroundColor:'transparent',borderWidth:2,pointRadius:3,borderDash:[6,3],tension:0.3}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{labels:{color:'#2a3a50',font:{size:11,weight:'bold'},boxWidth:12}},tooltip:{callbacks:{label:function(c){return c.raw?'£'+c.raw+'bn':null}}}},scales:{x:{ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'},maxRotation:45},grid:{color:'rgba(0,0,0,0.04)'}},y:{title:{display:true,text:'Borrowing £bn',color:'#2a3a50',font:{size:10,weight:'bold'}},ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'},callback:function(v){return '£'+v+'bn'}},grid:{color:'rgba(0,0,0,0.05)'}}}}
+});
+</script>
+</body>
+</html>

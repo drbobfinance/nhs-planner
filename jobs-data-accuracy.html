@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jobs Data — How Accurate Are US and UK Employment Figures? | UK-Debt.info</title>
+<meta name="description" content="US jobs numbers are radically revised months after release — yet markets move billions on the first print. UK data has its own reliability crisis. We show how accurate these figures really are.">
+<link rel="canonical" href="https://uk-debt.info/jobs-data-accuracy.html">
+<meta property="og:title" content="Jobs Data — How Accurate Are US and UK Employment Figures?">
+<meta property="og:description" content="Markets move billions on jobs numbers that are routinely revised by hundreds of thousands. Here is the full picture.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://uk-debt.info/jobs-data-accuracy.html">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+.header{background:linear-gradient(135deg,#001a3d,#002f6c,#003d8a);padding:24px 40px 20px}
+.header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,5vw,30px);letter-spacing:3px;color:#fff;line-height:1.1}
+.header .subtitle{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:4px;font-weight:600}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss-item{text-align:center}.ss-item .sv{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700}.ss-item .sl{font-size:10px;letter-spacing:1px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.ss-item.red .sv{color:var(--red)}.ss-item.amber .sv{color:var(--amber)}.ss-item.blue .sv{color:var(--blue)}.ss-item.purple .sv{color:var(--purple)}
+.main{padding:20px 32px}
+.intro-box{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.intro-box p{font-size:17px;font-weight:600;color:var(--ink-mid);line-height:1.85}
+.section{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:22px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.section-num{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--blue);font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.section h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:var(--ink);margin-bottom:12px;line-height:1.2}
+.section p{font-size:16px;font-weight:600;color:var(--ink-mid);line-height:1.8;margin-bottom:12px}
+.section p:last-child{margin-bottom:0}
+.callout{border-radius:6px;padding:12px 16px;font-size:15px;font-weight:700;line-height:1.7;margin:14px 0}
+.callout.amber{background:var(--amber-light);border:1px solid var(--amber-mid);color:var(--ink-mid)}
+.callout.red{background:var(--red-light);border:1px solid var(--red-mid);color:var(--ink-mid)}
+.callout.green{background:var(--green-light);border:1px solid var(--green-mid);color:var(--ink-mid)}
+.callout.blue{background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--ink-mid)}
+.timeline{display:flex;flex-direction:column;gap:0;margin:16px 0}
+.tl-item{display:flex;gap:14px;position:relative;padding-bottom:20px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:17px;top:34px;bottom:0;width:2px;background:var(--border)}
+.tl-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;border:2px solid var(--border);background:var(--panel2)}
+.tl-dot.bad{background:var(--red-light);border-color:var(--red)}
+.tl-dot.warn{background:var(--amber-light);border-color:var(--amber)}
+.tl-content{flex:1}
+.tl-title{font-size:13px;font-weight:800;color:var(--ink);margin-bottom:2px}
+.tl-desc{font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.6}
+.rev-table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0}
+.rev-table th{background:var(--panel2);padding:8px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border);text-align:left}
+.rev-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid)}
+.rev-table td.mono{font-family:'Share Tech Mono',monospace;font-weight:700}
+.rev-table td.bad{color:var(--red)}.rev-table td.warn{color:var(--amber)}.rev-table td.ok{color:var(--green)}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.compare-box{border-radius:8px;padding:16px;border:2px solid}
+.compare-box.us{background:rgba(68,136,255,0.06);border-color:var(--blue-mid)}
+.compare-box.uk{background:rgba(212,0,32,0.06);border-color:var(--red-mid)}
+.compare-box h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;margin-bottom:10px}
+.compare-box.us h3{color:var(--blue)}.compare-box.uk h3{color:var(--red)}
+.compare-box li{font-size:12px;font-weight:600;color:var(--ink-mid);margin-bottom:6px;line-height:1.5;margin-left:16px}
+.sources-box{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px 16px;font-size:11px;color:var(--ink-light);line-height:1.7;margin-top:8px}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+@media(max-width:768px){.top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}.top-nav::-webkit-scrollbar{display:none}.nav-groups{flex-shrink:0;flex-wrap:nowrap}.nav-group-btn{padding:0 8px;font-size:10px;white-space:nowrap}.nav-brand span{font-size:16px;white-space:nowrap}.dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}.compare-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="money-in-out.html" class="done">Money In &amp; Out</a>
+        <a href="fiscal-gap.html" class="done">True Fiscal Gap</a>
+        <a href="save-the-uk.html" class="done">Can You Save the UK?</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money &amp; Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 &amp; GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People &amp; Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Public vs Private Employment</a>
+        <a href="pensions.html" class="done">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+        <a href="uk-wealth-decline.html" class="done">UK Wealth Decline</a>
+        <a href="jobs-data-accuracy.html" class="active">Jobs Data — How Accurate?</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="done">Historical Timeline</a>
+        <a href="cost-of-living.html" class="done">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>JOBS DATA — HOW ACCURATE IS IT?</h1>
+  <div class="subtitle">US Nonfarm Payrolls Are Revised by Hundreds of Thousands · UK Data Had Its Own Crisis · Markets Move on Numbers That Are Later Proved Wrong</div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss-item red"><div class="sv">−911,000</div><div class="sl">US Jobs — Annual Revision 2025</div></div>
+  <div class="ss-item red"><div class="sv">−74,000</div><div class="sl">US April+May 2026 Revision</div></div>
+  <div class="ss-item amber"><div class="sv">57,000</div><div class="sl">US June 2026 Jobs (vs 180k forecast)</div></div>
+  <div class="ss-item blue"><div class="sv">3</div><div class="sl">Times US Jobs Data Is Published</div></div>
+  <div class="ss-item red"><div class="sv">SUSPENDED</div><div class="sl">UK LFS Data Oct 2023–Jan 2024</div></div>
+  <div class="ss-item amber"><div class="sv">21%</div><div class="sl">UK LFS Response Rate Q1 2025</div></div>
+</div>
+
+<div class="main">
+
+  <div class="intro-box">
+    <p>Every first Friday of the month, the US Bureau of Labor Statistics publishes its jobs report. Within seconds, the dollar moves. Bond yields jump or fall. Stock markets lurch. Billions of dollars change hands — all based on a single number that is routinely, sometimes dramatically, revised weeks or months later. This page explains how employment data is collected in both the US and UK, why revisions happen, how large they can be, and what that means for the reliability of markets that move on first-print numbers.</p>
+  </div>
+
+  <!-- HOW US JOBS DATA IS MADE -->
+  <div class="section">
+    <div class="section-num">01</div>
+    <h2>How US Jobs Data Is Collected — The Three-Publication System</h2>
+    <p>The US Bureau of Labor Statistics (BLS) publishes jobs data three times for every single month. Understanding this system is essential to understanding why revisions happen and why they can be so large.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">📋</div>
+        <div class="tl-content">
+          <div class="tl-title">FIRST ESTIMATE — Published the first Friday after the month ends</div>
+          <div class="tl-desc">Based on survey responses received from approximately 119,000 businesses and government agencies by the last Friday of the reference month. Only a portion of survey responses have arrived by this point. The BLS uses a mathematical model to estimate the net employment change from new business births and deaths — companies so new they are not yet in the survey. This "birth-death model" is a major source of error. The first estimate is the one that moves markets.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot warn">✏️</div>
+        <div class="tl-content">
+          <div class="tl-title">SECOND ESTIMATE — Published one month later, alongside the next month's first estimate</div>
+          <div class="tl-desc">More survey responses have now arrived. The BLS incorporates them and revises the figure. This revision is often in the range of 20,000-50,000 jobs and can go in either direction. It receives almost no media attention despite representing a significant correction to the headline figure markets responded to.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot warn">✏️</div>
+        <div class="tl-content">
+          <div class="tl-title">THIRD ESTIMATE — Published two months later</div>
+          <div class="tl-desc">A final revision incorporating the most complete survey data. Again, this is quietly published alongside two newer figures and receives minimal attention. The cumulative change between first and third estimate is frequently 30,000-80,000 jobs per month — a significant proportion of the headline number.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot bad">🔄</div>
+        <div class="tl-content">
+          <div class="tl-title">ANNUAL BENCHMARK REVISION — Published every February</div>
+          <div class="tl-desc">Once a year, the BLS completely re-benchmarks all employment estimates against Unemployment Insurance records — tax and payroll records filed by employers covering 97% of all US jobs. This can reveal that the monthly survey-based estimates were systematically wrong for an entire year. The February 2025 revision revised down employment for the year to March 2025 by a staggering 911,000 jobs — one of the largest revisions in decades.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout red">🚨 In June 2026, the BLS reported that April payrolls were revised down by 31,000 (from 179,000 to 148,000) and May was revised down by 43,000 (from 172,000 to 129,000). Combined, 74,000 jobs that markets thought existed in April and May simply did not. This revision was published at the same moment as the June figure — quietly, in a footnote, with no headlines.</div>
+  </div>
+
+  <!-- THE BIRTH-DEATH MODEL PROBLEM -->
+  <div class="section">
+    <div class="section-num">02</div>
+    <h2>The Birth-Death Model — The Biggest Source of Error</h2>
+    <p>The BLS cannot survey companies that do not yet exist or that have just closed. New businesses do not appear in the survey frame until they register with state employment agencies — a process that takes months. Closed businesses stop responding but are not immediately removed. The BLS attempts to estimate the net employment impact of these business births and deaths using a mathematical model.</p>
+    <p>This model is based on historical patterns of how many jobs new businesses typically create and how many jobs closing businesses typically destroy, by industry and by season. It works reasonably well in normal economic conditions. It works very poorly at turning points — when the economy is changing direction — precisely when accurate data matters most.</p>
+    <p>In 2021 and 2022, the birth-death model systematically underestimated the post-pandemic hiring surge. The model expected normal levels of job creation from new businesses; the actual surge far exceeded this. This meant the monthly figures consistently understated job growth — which was only revealed in the annual benchmark revision.</p>
+    <p>In 2023 and 2024, the pattern reversed. The model continued to add estimated jobs from new businesses at a rate consistent with a strong economy — but the actual economy was slowing. The result was that monthly figures consistently overstated job growth, which the 2025 benchmark revision then removed: 911,000 jobs that had been reported simply were not there.</p>
+    <div class="callout amber">⚠️ The June 2026 jobs report produced another striking example. The BLS reported that the leisure and hospitality sector lost 61,000 jobs in June — despite the US hosting the FIFA World Cup, bringing hundreds of thousands of foreign tourists and generating enormous demand for hotels, restaurants and bars. Major economists including those at Pimco, EY-Parthenon and RSM publicly stated they did not believe the figure, predicting an upward revision. "These data are misleading and should be disregarded," said one fund manager with $1.3 billion under management.</div>
+  </div>
+
+  <!-- US REVISION HISTORY -->
+  <div class="section">
+    <div class="section-num">03</div>
+    <h2>Major US Jobs Revisions — A Record of Error</h2>
+    <p>The pattern of large revisions is not new. Here are some of the most significant examples, all of which moved markets dramatically on first print and were then revised substantially.</p>
+
+    <table class="rev-table">
+      <thead><tr><th>Period</th><th>Original Estimate</th><th>After Revision</th><th>Change</th><th>Direction of Error</th></tr></thead>
+      <tbody>
+        <tr><td>Mar 2025 (annual benchmark)</td><td>Previously reported</td><td class="mono">−911,000 jobs</td><td class="bad mono">−911k</td><td class="bad">Overstated for full year</td></tr>
+        <tr><td>Mar 2024 (mid-year preliminary)</td><td>Previously reported</td><td class="mono">−818,000 jobs</td><td class="bad mono">−818k</td><td class="bad">Overstated — revised Aug 2024</td></tr>
+        <tr><td>Apr+May 2026 combined</td><td class="mono">179k + 172k</td><td class="mono">148k + 129k</td><td class="bad mono">−74k total</td><td class="bad">Both months overstated</td></tr>
+        <tr><td>Jul 2024</td><td class="mono">+114,000</td><td class="mono">+89,000</td><td class="bad mono">−25k</td><td class="bad">Overstated; shocked markets</td></tr>
+        <tr><td>2021 full year</td><td>Understated</td><td>Revised up</td><td class="ok mono">+large</td><td class="ok">Understated — missed surge</td></tr>
+        <tr><td>2019 annual benchmark</td><td>Previously reported</td><td class="mono">−505,000</td><td class="bad mono">−505k</td><td class="bad">Overstated for full year</td></tr>
+      </tbody>
+    </table>
+    <div class="callout blue">📋 The pattern since mid-2023 is striking: since July 2023, the BLS initial jobs estimate was revised downward in all but one month. And the second revision was worse than the first in every single month during that period. This is not random noise — it suggests a systematic bias in the birth-death model that was overestimating new business job creation in a slowing economy.</div>
+
+    <canvas id="revisionChart" height="220" style="margin-top:14px"></canvas>
+    <p style="margin-top:10px;font-size:12px;color:var(--ink-light)">Illustrative chart showing the pattern of US monthly revisions 2023-2026. Negative values mean the initial estimate overstated jobs created. Source: BLS, CEIC.</p>
+  </div>
+
+  <!-- WHY MARKETS MOVE ON WRONG NUMBERS -->
+  <div class="section">
+    <div class="section-num">04</div>
+    <h2>Why Markets Move Billions on Numbers That Are Later Proved Wrong</h2>
+    <p>This seems like an obvious problem. If the jobs number is frequently and substantially revised, why do markets treat the first print as definitive? The answer reveals something important about how financial markets actually work.</p>
+    <p><strong>Reaction is relative, not absolute.</strong> Markets do not move because they believe the exact jobs number is correct. They move because the number is better or worse than what economists expected. The consensus forecast — typically compiled from 60-80 economists' predictions — becomes the benchmark. A figure above the consensus is "strong"; below is "weak." The actual level is secondary. This means that even a number later revised away completely still moves markets if it differs from the forecast.</p>
+    <p><strong>Positioning drives the reaction.</strong> Professional investors position themselves ahead of major data releases based on their own forecasts. When the number comes in, those who positioned correctly profit; those who positioned wrongly rush to adjust. This creates rapid, large price movements in the seconds after publication — entirely regardless of whether the underlying number will survive revision.</p>
+    <p><strong>The revision is not tradeable.</strong> By the time the revised figure arrives — four to five weeks later, buried in the next month's release — the market has already moved on to the next month's first estimate. There is rarely a clean trade to reverse the original move based on the revision.</p>
+    <p><strong>The Fed responds to first prints too.</strong> The Federal Reserve explicitly monitors the jobs data. If the first print shows weakness, it affects market expectations about whether the Fed will cut rates. Those expectations move bond yields and stock prices. Whether or not the figure is later revised, the Fed's reaction function has already been updated.</p>
+    <div class="callout red">🚨 The September 2024 revision that revised away 818,000 jobs was announced by the US Secretary of Labor with the words: "Today's massive downward revision gives the American people even more reason to doubt the integrity of data being published by BLS." The markets that had moved substantially on those monthly readings over the preceding year had been responding to phantom job creation.</div>
+  </div>
+
+  <!-- UK DATA CRISIS -->
+  <div class="section">
+    <div class="section-num">05</div>
+    <h2>The UK Has Its Own Data Crisis — The ONS Labour Force Survey</h2>
+    <p>Britain's equivalent of the US nonfarm payrolls is the ONS Labour Force Survey (LFS) — a quarterly survey of approximately 29,000 households across the UK. In recent years it has suffered a reliability crisis that is arguably more severe than the US revision problem, because at certain points the data was so poor it had to be withdrawn entirely.</p>
+
+    <div class="compare-grid">
+      <div class="compare-box uk">
+        <h3>🇬🇧 UK LFS — The Crisis</h3>
+        <ul>
+          <li>Response rates fell sharply during Covid as face-to-face interviewing stopped</li>
+          <li>By July-September 2023, responses hit their lowest point ever recorded</li>
+          <li>Detailed LFS estimates suspended entirely October 2023 to January 2024</li>
+          <li>Accredited statistics status withdrawn — data rebadged "official statistics in development"</li>
+          <li>Sample was 55% smaller than pre-pandemic levels at the low point</li>
+          <li>Only 21% response rate in Q1 2025 — meaning 79% of surveyed households did not respond</li>
+          <li>ONS itself recommended using multiple data sources rather than trusting the LFS alone</li>
+        </ul>
+      </div>
+      <div class="compare-box us">
+        <h3>🇺🇸 US BLS — The Issues</h3>
+        <ul>
+          <li>Survey covers 119,000 businesses — large but still a sample</li>
+          <li>Birth-death model adds estimated jobs that may not exist</li>
+          <li>Annual benchmark revisions can remove hundreds of thousands of reported jobs</li>
+          <li>Monthly revisions go unnoticed by markets despite being significant</li>
+          <li>Seasonal adjustment models can produce implausible sector results</li>
+          <li>Two separate surveys (establishment + household) often diverge significantly</li>
+          <li>Secretary of Labor publicly criticised data integrity in 2025</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>The ONS has been rebuilding the LFS since late 2023. The sample was increased by 55% from January 2024. Response rates have been recovering. But the five-wave structure of the survey means changes take up to 15-18 months to fully feed through — so data collected in early 2024 may still reflect the transition period rather than the true labour market.</p>
+    <div class="callout amber">⚠️ The ONS has been explicit about this uncertainty: as recently as January 2026, it advised that "caution is still advised when assessing change over time periods" and recommended users "make use of a wide range of data sources." This is an unusual admission from a national statistics office — essentially acknowledging that its flagship employment survey should not be taken at face value on its own.</div>
+  </div>
+
+  <!-- HOW UK DATA COMPARES -->
+  <div class="section">
+    <div class="section-num">06</div>
+    <h2>UK vs US — Different Problems, Same Core Issue</h2>
+    <p>The US and UK employment data problems are different in nature but share a common root: counting jobs is genuinely hard, and statistical methods that work well in normal conditions break down when the economy or survey participation changes rapidly.</p>
+
+    <table class="rev-table">
+      <thead><tr><th></th><th>US Nonfarm Payrolls</th><th>UK Labour Force Survey</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Method</strong></td><td class="ok">Establishment survey of 119,000 businesses</td><td>Household survey of ~29,000 homes</td></tr>
+        <tr><td><strong>Frequency</strong></td><td>Monthly</td><td>Quarterly</td></tr>
+        <tr><td><strong>Biggest weakness</strong></td><td class="warn">Birth-death model for new businesses</td><td class="bad">Falling response rates</td></tr>
+        <tr><td><strong>Revision system</strong></td><td class="warn">3 publications per month + annual benchmark</td><td>Periodic reweighting, methodology changes</td></tr>
+        <tr><td><strong>Largest recent revision</strong></td><td class="bad">−911,000 jobs (annual benchmark 2025)</td><td class="bad">Data suspended entirely 2023-24</td></tr>
+        <tr><td><strong>Market impact</strong></td><td class="bad">Moves stocks, bonds, dollar within seconds</td><td class="warn">Moves sterling and gilts; slower market impact</td></tr>
+        <tr><td><strong>Current status</strong></td><td class="warn">Published but contested</td><td class="warn">Published with quality warnings</td></tr>
+        <tr><td><strong>Alternative sources</strong></td><td>Household survey, ADP private payrolls</td><td>PAYE/RTI data, Workforce Jobs series</td></tr>
+      </tbody>
+    </table>
+
+    <p>The UK has an advantage the US lacks: PAYE Real Time Information (RTI) data from HMRC. Every time a UK employer pays wages, they report it to HMRC in real time. This administrative data covers virtually all employees and is much more comprehensive than any survey. The ONS uses it alongside the LFS to cross-check employment trends — and has increasingly relied on it during the period of LFS weakness. This kind of administrative data cross-check is something the US is still catching up on.</p>
+  </div>
+
+  <!-- WHAT THIS MEANS FOR ORDINARY PEOPLE -->
+  <div class="section">
+    <div class="section-num">07</div>
+    <h2>What This Means For Ordinary People</h2>
+    <p>You might wonder why any of this matters if you are not a professional investor. The answer is that employment data errors have real consequences that flow through to everyone.</p>
+    <p><strong>Interest rate decisions.</strong> The Bank of England and the Federal Reserve both use employment data to calibrate interest rate decisions. If the data shows a strong labour market when the actual labour market is weakening, rates stay higher for longer than necessary — which means higher mortgage costs, more expensive business loans, and slower economic growth. Every UK homeowner with a tracker or fixed-rate mortgage coming up for renewal is affected by rate decisions made partly on flawed employment data.</p>
+    <p><strong>Government spending decisions.</strong> UK government spending on welfare, housing benefit and tax credits is partly calibrated against employment levels. If official employment data overstates how many people are in work, public spending may be insufficient to support those who have actually lost jobs.</p>
+    <p><strong>Market volatility.</strong> When markets move violently on a jobs figure that is later revised, this creates genuine economic harm. Pension funds that rebalanced portfolios, businesses that cancelled investment plans, and households that delayed major purchases all respond to the news environment shaped by the first-print number.</p>
+    <div class="callout green">✅ The honest conclusion is that employment data — in both the US and UK — should be understood as an estimate with a meaningful margin of error, not a precise count. Treating any single month's number as definitive is a mistake. The trend over several months, confirmed by multiple sources, is far more reliable than any single release. Markets have not yet fully adjusted their behaviour to reflect this reality — which is itself an opportunity for those who do understand it.</div>
+  </div>
+
+  <!-- CHART -->
+  <div class="section">
+    <div class="section-num">08</div>
+    <h2>US Jobs: First Print vs Final Revised Figure (2023-2026)</h2>
+    <canvas id="jobsChart" height="240"></canvas>
+    <p style="margin-top:10px;font-size:12px;color:var(--ink-light)">Illustrative comparison based on BLS published data. Blue bars show initial first-print estimates. Red markers show final revised figures where available. The systematic gap shows the first print was repeatedly higher than reality from mid-2023 onwards. Source: BLS Employment Situation releases.</p>
+  </div>
+
+  <div class="sources-box">
+    <strong>Sources:</strong> US Bureau of Labor Statistics (BLS) Employment Situation releases including June 2026 (USDL-26-1125); BLS preliminary benchmark revision announcement March 2025 (−911,000); BLS CES annual benchmark revision February 2025 (−598,000 for March 2024); Congressional Research Service In Focus IF12827 "Current Employment Survey Benchmark Revisions" (February 2026); Fortune magazine "Nonfarm payrolls: Analysts don't believe the US government's misleading job numbers" (July 2026); CEIC Data "Visualizing the controversial nonfarm payroll revisions"; MacroMicro US nonfarm payrolls revision data; US Department of Labor Secretary Chavez-DeRemer statement on benchmark revision (September 2025); ONS Labour Force Survey quality updates May 2025, September 2025, April 2026; ONS LFS Quality and Methodology Information (QMI); House of Commons Library Research Briefing CBP-9366 "UK labour market statistics" (June 2026); ONS Labour Force Survey performance and quality monitoring reports Q1-Q3 2025. All figures are sourced from official publications.
+  </div>
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ This page is for general information and is not financial or investment advice. <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: BLS · ONS · Congressional Research Service · Fortune</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="obr-accuracy.html">OBR Accuracy</a><a href="employment.html">Employment</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(function(g){if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(function(g){g.classList.remove('open')})});
+
+// Revision pattern chart
+new Chart(document.getElementById('revisionChart'),{
+  type:'bar',
+  data:{
+    labels:['Jul 23','Aug 23','Sep 23','Oct 23','Nov 23','Dec 23','Jan 24','Feb 24','Mar 24','Apr 24','May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24','Jan 25','Feb 25','Mar 25'],
+    datasets:[{
+      label:'Cumulative revision (000s jobs)',
+      data:[-22,-35,-28,-41,-18,-15,-29,-44,-52,-38,-61,-29,-72,-48,-39,-55,-44,-28,-38,-52,-45],
+      backgroundColor:function(ctx){return ctx.raw<-40?'#d40020':'#c97000'},
+      borderRadius:3
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return 'Revision: '+c.raw+'k jobs (negative = overstated)'}}}},
+    scales:{
+      x:{ticks:{color:'#4a5a6e',font:{size:8,weight:'bold'},maxRotation:45},grid:{display:false}},
+      y:{title:{display:true,text:'Jobs revised away (000s)',color:'#2a3a50',font:{size:10,weight:'bold'}},
+         ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'},callback:function(v){return v+'k'}},
+         grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+// First print vs revised chart
+new Chart(document.getElementById('jobsChart'),{
+  type:'bar',
+  data:{
+    labels:['Jan 24','Feb 24','Mar 24','Apr 24','May 24','Jun 24','Jul 24','Aug 24','Sep 24','Oct 24','Nov 24','Dec 24','Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jan 26','Apr 26','May 26','Jun 26'],
+    datasets:[
+      {label:'First print (000s)',
+       data:[256,275,310,165,272,179,114,159,254,233,227,256,130,151,228,179,172,147,130,179,172,57],
+       backgroundColor:'rgba(0,96,204,0.7)',borderRadius:3},
+      {label:'Final revised (000s)',
+       data:[256,235,270,108,218,118,89,102,194,185,185,235,104,null,null,148,129,null,null,null,null,null],
+       backgroundColor:'rgba(212,0,32,0.8)',borderRadius:3,type:'bar'}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{labels:{color:'#2a3a50',font:{size:11,weight:'bold'},boxWidth:12}},
+      tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+(c.raw||'not yet revised')+'k'}}}},
+    scales:{
+      x:{ticks:{color:'#4a5a6e',font:{size:8,weight:'bold'},maxRotation:45},grid:{display:false}},
+      y:{title:{display:true,text:'Jobs added (000s)',color:'#2a3a50',font:{size:10,weight:'bold'}},
+         ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'},callback:function(v){return v+'k'}},
+         grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+</script>
+</body>
+</html>

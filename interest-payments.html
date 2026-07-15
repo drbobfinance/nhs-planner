@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Government Interest Payments – Historical & Forecast | UK-Debt.info</title>
+<meta name="description" content="UK government debt interest payments from 1990 to 2031. Historical data, OBR forecasts, and analysis of how debt servicing costs are crowding out public spending.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--border-bright:#a0bcd8;
+  --red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;
+  --green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;
+  --amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;
+  --blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;
+  --purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;
+  --ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+
+/* NAV — identical across all pages */
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+
+/* PAGE HEADER */
+.header{background:linear-gradient(135deg,#6600cc,#8833ee,#aa55ff);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(102,0,204,0.3)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+
+/* HERO STATS STRIP */
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:16px 28px;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-around}
+.strip-stat{text-align:center;padding:8px 16px}
+.strip-stat .ss-val{font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700}
+.strip-stat .ss-label{font-size:10px;letter-spacing:2px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.strip-stat.red .ss-val{color:var(--red)}
+.strip-stat.amber .ss-val{color:var(--amber)}
+.strip-stat.purple .ss-val{color:var(--purple)}
+.strip-stat.blue .ss-val{color:var(--blue)}
+
+/* MAIN */
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:var(--panel2);padding:9px 12px;text-align:left;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border)}
+.data-table td{padding:8px 12px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid)}
+.data-table tr:hover td{background:var(--blue-light)}
+.data-table td.val{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700}
+.data-table td.red{color:var(--red)}
+.data-table td.amber{color:var(--amber)}
+.data-table td.green{color:var(--green)}
+.data-table td.purple{color:var(--purple)}
+.data-table td.forecast{background:rgba(102,0,204,0.04);font-style:italic}
+.forecast-badge{display:inline-flex;align-items:center;gap:5px;background:var(--purple-light);border:1px solid var(--purple-mid);padding:3px 10px;border-radius:12px;font-size:10px;color:var(--purple);font-weight:700;letter-spacing:1px}
+
+/* COMPARISON BARS */
+.comp-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.comp-row{display:flex;align-items:center;gap:10px}
+.comp-label{width:120px;font-size:12px;font-weight:700;color:var(--ink-mid);text-align:right;flex-shrink:0}
+.comp-track{flex:1;height:18px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.comp-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.comp-val{width:65px;font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0}
+
+/* WARN BOX */
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+
+/* LEGEND */
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* FOOTER */
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="active">Interest Payments History</a>
+        <a href="future-interest.html">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html">Off-Balance-Sheet Debt</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html">Personal Finance Dashboard</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-title">
+    <h1>UK GOVERNMENT INTEREST PAYMENTS</h1>
+    <div class="subtitle">Historical 1990–2026 · OBR Forecast to 2031 · Sources: ONS · OBR · House of Commons Library</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="strip-stat red">
+    <div class="ss-val">£110bn</div>
+    <div class="ss-label">2025/26 Interest Bill</div>
+  </div>
+  <div class="strip-stat purple">
+    <div class="ss-val">8.1%</div>
+    <div class="ss-label">Of Total Public Spending</div>
+  </div>
+  <div class="strip-stat amber">
+    <div class="ss-val">3.6%</div>
+    <div class="ss-label">Of GDP</div>
+  </div>
+  <div class="strip-stat red">
+    <div class="ss-val">£3,487</div>
+    <div class="ss-label">Per Second (Interest Only)</div>
+  </div>
+  <div class="strip-stat blue">
+    <div class="ss-val">~50yr High</div>
+    <div class="ss-label">Relative to Spending</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- MAIN CHART -->
+  <div class="panel full-width purple-accent">
+    <div class="panel-label">Annual Debt Interest Payments 1990–2031 (£bn)</div>
+    <canvas id="mainChart" height="280"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>Historical (£bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(102,0,204,0.3);border:2px dashed #6600cc"></div>OBR Forecast (£bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>As % of GDP (right axis)</div>
+    </div>
+    <div class="warn-box">
+      ⚠️ <strong>2025/26 interest payments of £110bn are among the highest in 50 years</strong> as a share of public spending — driven by the surge in index-linked gilt payments during the 2022–23 inflation spike and higher Bank Rate increasing QE costs. The OBR forecasts this will gradually ease but remain historically elevated through to 2031.
+    </div>
+  </div>
+
+  <!-- HISTORICAL TABLE -->
+  <div class="panel purple-accent">
+    <div class="panel-label">Historical Annual Interest Payments</div>
+    <div style="overflow-x:auto;max-height:420px;overflow-y:auto">
+      <table class="data-table">
+        <thead><tr><th>Year</th><th>Interest (£bn)</th><th>% of GDP</th><th>% of Spending</th></tr></thead>
+        <tbody>
+          <tr><td>1990/91</td><td class="val amber">£19bn</td><td>3.1%</td><td>7.0%</td></tr>
+          <tr><td>1993/94</td><td class="val amber">£24bn</td><td>3.5%</td><td>8.1%</td></tr>
+          <tr><td>1996/97</td><td class="val amber">£27bn</td><td>3.2%</td><td>7.9%</td></tr>
+          <tr><td>2000/01</td><td class="val green">£22bn</td><td>2.2%</td><td>5.9%</td></tr>
+          <tr><td>2003/04</td><td class="val green">£24bn</td><td>2.0%</td><td>5.6%</td></tr>
+          <tr><td>2006/07</td><td class="val green">£30bn</td><td>2.1%</td><td>5.7%</td></tr>
+          <tr><td>2007/08</td><td class="val green">£31bn</td><td>2.0%</td><td>5.6%</td></tr>
+          <tr><td>2008/09</td><td class="val amber">£32bn</td><td>2.2%</td><td>5.3%</td></tr>
+          <tr><td>2009/10</td><td class="val amber">£31bn</td><td>2.2%</td><td>4.7%</td></tr>
+          <tr><td>2010/11</td><td class="val amber">£46bn</td><td>3.0%</td><td>6.8%</td></tr>
+          <tr><td>2011/12</td><td class="val amber">£48bn</td><td>3.0%</td><td>7.1%</td></tr>
+          <tr><td>2012/13</td><td class="val amber">£51bn</td><td>3.1%</td><td>7.3%</td></tr>
+          <tr><td>2013/14</td><td class="val amber">£52bn</td><td>3.0%</td><td>7.4%</td></tr>
+          <tr><td>2014/15</td><td class="val amber">£53bn</td><td>2.9%</td><td>7.4%</td></tr>
+          <tr><td>2015/16</td><td class="val amber">£49bn</td><td>2.6%</td><td>7.0%</td></tr>
+          <tr><td>2016/17</td><td class="val amber">£49bn</td><td>2.5%</td><td>6.9%</td></tr>
+          <tr><td>2017/18</td><td class="val amber">£49bn</td><td>2.3%</td><td>6.7%</td></tr>
+          <tr><td>2018/19</td><td class="val amber">£52bn</td><td>2.3%</td><td>6.9%</td></tr>
+          <tr><td>2019/20</td><td class="val amber">£52bn</td><td>2.2%</td><td>6.2%</td></tr>
+          <tr><td>2020/21</td><td class="val green">£46bn</td><td>2.1%</td><td>4.1%</td></tr>
+          <tr><td>2021/22</td><td class="val amber">£69bn</td><td>2.8%</td><td>5.8%</td></tr>
+          <tr><td>2022/23</td><td class="val red">£116bn</td><td>4.4%</td><td>9.3%</td></tr>
+          <tr><td>2023/24</td><td class="val red">£105bn</td><td>3.8%</td><td>8.5%</td></tr>
+          <tr><td>2024/25</td><td class="val red">£100bn</td><td>3.5%</td><td>8.0%</td></tr>
+          <tr><td><strong>2025/26</strong></td><td class="val red"><strong>£110bn</strong></td><td><strong>3.6%</strong></td><td><strong>8.1%</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FORECAST TABLE -->
+  <div class="panel purple-accent">
+    <div class="panel-label">OBR Forecast 2026–2031 <span class="forecast-badge">◐ Forecast</span></div>
+    <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead><tr><th>Year</th><th>Interest (£bn)</th><th>% of GDP</th><th>% of Spending</th></tr></thead>
+        <tbody>
+          <tr class="forecast"><td>2026/27</td><td class="val purple">~£105bn</td><td>~3.3%</td><td>~7.8%</td></tr>
+          <tr class="forecast"><td>2027/28</td><td class="val purple">~£102bn</td><td>~3.1%</td><td>~7.5%</td></tr>
+          <tr class="forecast"><td>2028/29</td><td class="val purple">~£100bn</td><td>~3.0%</td><td>~7.2%</td></tr>
+          <tr class="forecast"><td>2029/30</td><td class="val purple">~£98bn</td><td>~2.9%</td><td>~7.0%</td></tr>
+          <tr class="forecast"><td>2030/31</td><td class="val purple">~£96bn</td><td>~2.8%</td><td>~6.8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-box">
+      📋 OBR forecasts are based on current gilt yields, Bank Rate assumptions and RPI inflation projections. A sustained 1% rise in gilt yields would add approximately <strong>£20–25bn</strong> per year to the interest bill within 5 years as gilts mature and are refinanced at higher rates.
+    </div>
+    <div class="warn-box" style="margin-top:10px">
+      ⚠️ Forecasts made prior to the escalation of Middle East conflict in Feb/Mar 2026. Higher energy prices and inflation could significantly worsen the outlook. See our <a href="future-interest.html" style="color:var(--amber)">Future Interest Scenarios page →</a>
+    </div>
+  </div>
+
+  <!-- WHAT COULD IT BUY -->
+  <div class="panel full-width amber-accent">
+    <div class="panel-label">What £110bn Per Year Could Buy — The Opportunity Cost</div>
+    <div class="comp-list">
+      <div class="comp-row">
+        <span class="comp-label">NHS England</span>
+        <div class="comp-track"><div class="comp-fill" style="width:57%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <span class="comp-val" style="color:var(--red)">£192bn total</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">All Schools (Eng)</span>
+        <div class="comp-track"><div class="comp-fill" style="width:100%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+        <span class="comp-val" style="color:var(--amber)">£77bn · 1.4×</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Defence Budget</span>
+        <div class="comp-track"><div class="comp-fill" style="width:100%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <span class="comp-val" style="color:var(--blue)">£54bn · 2×</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Police (England)</span>
+        <div class="comp-track"><div class="comp-fill" style="width:100%;background:linear-gradient(90deg,#60d0a0,#008844)"></div></div>
+        <span class="comp-val" style="color:var(--green)">£16bn · 6.9×</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Roads & Transport</span>
+        <div class="comp-track"><div class="comp-fill" style="width:100%;background:linear-gradient(90deg,#d4b0f8,#6600cc)"></div></div>
+        <span class="comp-val" style="color:var(--purple)">£20bn · 5.5×</span>
+      </div>
+    </div>
+    <div class="red-box" style="margin-top:14px">
+      🚨 <strong>The UK now spends more on debt interest alone (£110bn) than on all secondary and primary education in England (£77bn).</strong> Every pound paid in interest is a pound that cannot be spent on public services. Interest payments are the third-largest item of government expenditure — behind only welfare and health.
+    </div>
+  </div>
+
+  <!-- WHO OWNS THE DEBT -->
+  <div class="panel blue-accent">
+    <div class="panel-label">Who Receives the Interest Payments?</div>
+    <div style="margin-top:4px">
+      <canvas id="holdersChart" height="220"></canvas>
+    </div>
+    <div class="info-box" style="margin-top:12px">
+      📋 The Bank of England holds gilts purchased under QE and remits the interest to HM Treasury — however, as rates rose, the BoE began making net losses on its QE portfolio, requiring taxpayer compensation payments instead. See the <a href="boe-bonds.html" style="color:var(--blue)">BoE Bond Programme page →</a>
+    </div>
+  </div>
+
+  <!-- INDEX-LINKED EXPLAINED -->
+  <div class="panel amber-accent">
+    <div class="panel-label">Why Did Interest Payments Surge in 2022/23?</div>
+    <div style="margin-top:4px">
+      <canvas id="linkedChart" height="220"></canvas>
+    </div>
+    <div class="warn-box" style="margin-top:12px">
+      ⚠️ Around <strong>25% of UK gilts are index-linked</strong> — their interest payments rise with RPI inflation. When RPI hit 14.2% in 2022, this triggered an extra £60bn+ in payments. This is structurally unlike most other G7 nations and makes the UK uniquely exposed to inflation shocks. The share of index-linked debt is gradually being reduced by the Debt Management Office.
+    </div>
+  </div>
+
+
+  <!-- RATE SENSITIVITY CHART -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">Interest Rate Sensitivity — Impact of +1%, +2%, +3% and +4% Rise in Gilt Yields</div>
+    <canvas id="sensitivityChart" height="280"></canvas>
+    <div class="chart-legend" style="margin-top:10px">
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>OBR Base Case (current rates)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>+1% on all new gilt issuance</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c97000"></div>+2% on all new gilt issuance</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>+3% on all new gilt issuance</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#880088"></div>+4% on all new gilt issuance</div>
+    </div>
+    <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+      <div style="background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700;color:var(--blue)">+£22bn</div>
+        <div style="font-size:11px;font-weight:700;color:var(--ink-mid);margin-top:3px;text-transform:uppercase;letter-spacing:1px">Extra/yr by 2031<br>at +1% gilt yields</div>
+      </div>
+      <div style="background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700;color:var(--amber)">+£44bn</div>
+        <div style="font-size:11px;font-weight:700;color:var(--ink-mid);margin-top:3px;text-transform:uppercase;letter-spacing:1px">Extra/yr by 2031<br>at +2% gilt yields</div>
+      </div>
+      <div style="background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700;color:var(--red)">+£66bn</div>
+        <div style="font-size:11px;font-weight:700;color:var(--ink-mid);margin-top:3px;text-transform:uppercase;letter-spacing:1px">Extra/yr by 2031<br>at +3% gilt yields</div>
+      </div>
+      <div style="background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:6px;padding:12px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700;color:var(--purple)">+£88bn</div>
+        <div style="font-size:11px;font-weight:700;color:var(--ink-mid);margin-top:3px;text-transform:uppercase;letter-spacing:1px">Extra/yr by 2031<br>at +4% gilt yields</div>
+      </div>
+    </div>
+    <div class="red-box" style="margin-top:14px">
+      🚨 <strong>How this works:</strong> With an average gilt maturity of ~15 years, roughly 6–7% of the total gilt stock (~£180–200bn) matures and must be re-issued every year at current market rates. A sustained 1% rise in yields therefore adds ~£2bn to the annual bill per year of refinancing — building to ~£22bn extra per year after 5 years. At +4%, the additional annual cost by 2031 would exceed the entire UK defence budget.
+    </div>
+    <div class="warn-box" style="margin-top:10px">
+      ⚠️ <strong>Key assumption:</strong> Rate rises are sustained and apply to all new issuance from 2026. The impact builds gradually as old lower-rate gilts mature and are replaced — the full effect takes ~12–15 years to fully flow through. Index-linked gilts (25% of the stock) add further exposure if inflation also rises simultaneously.
+    </div>
+  </div>
+
+  <!-- INTERNATIONAL COMPARISON -->
+  <div class="panel full-width green-accent">
+    <div class="panel-label">International Comparison — Debt Interest as % of GDP (2025)</div>
+    <div class="comp-list" style="margin-top:8px">
+      <div class="comp-row">
+        <span class="comp-label" style="color:var(--red);font-weight:800">🇬🇧 UK</span>
+        <div class="comp-track"><div class="comp-fill" style="width:94.7%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <span class="comp-val" style="color:var(--red)">3.6%</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">🇺🇸 USA</span>
+        <div class="comp-track"><div class="comp-fill" style="width:84.2%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <span class="comp-val" style="color:var(--blue)">~3.2%</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">🇫🇷 France</span>
+        <div class="comp-track"><div class="comp-fill" style="width:50%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+        <span class="comp-val" style="color:var(--amber)">~1.9%</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">🇩🇪 Germany</span>
+        <div class="comp-track"><div class="comp-fill" style="width:31.6%;background:linear-gradient(90deg,#60d0a0,#008844)"></div></div>
+        <span class="comp-val" style="color:var(--green)">~1.2%</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">🇯🇵 Japan</span>
+        <div class="comp-track"><div class="comp-fill" style="width:42.1%;background:linear-gradient(90deg,#d4b0f8,#6600cc)"></div></div>
+        <span class="comp-val" style="color:var(--purple)">~1.6%</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">🇮🇹 Italy</span>
+        <div class="comp-track"><div class="comp-fill" style="width:100%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <span class="comp-val" style="color:var(--red)">~3.8%</span>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:12px">
+      📊 The UK's interest burden is high by G7 standards — partly due to the large index-linked gilt stock and partly due to the high overall level of debt. Germany, which kept debt much lower and has no index-linked gilt programme, pays roughly a third of what the UK pays as a share of GDP.
+    </div>
+  </div>
+
+</div>
+
+<!-- DISCLAIMER & FOOTER -->
+<div class="disclaimer-strip">
+  ⚠️ All figures are estimates based on publicly available official data. Forecasts are OBR projections and subject to change. Not financial advice. Not affiliated with any government body.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: ONS · OBR Economic & Fiscal Outlook March 2026 · House of Commons Library · HM Treasury</span>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+
+<script>
+// Nav
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+
+// Clock
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+// MAIN CHART
+const years=['1990','1993','1996','2000','2003','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030','2031'];
+const historical=[19,24,27,22,24,30,31,32,31,46,48,51,52,53,49,49,49,52,52,46,69,116,105,100,110,null,null,null,null,null,null];
+const forecast=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,110,105,102,100,98,96,null];
+const pctGDP=[3.1,3.5,3.2,2.2,2.0,2.1,2.0,2.2,2.2,3.0,3.0,3.1,3.0,2.9,2.6,2.5,2.3,2.3,2.2,2.1,2.8,4.4,3.8,3.5,3.6,3.3,3.1,3.0,2.9,2.8,null];
+
+new Chart(document.getElementById('mainChart'),{
+  type:'bar',
+  data:{
+    labels:years,
+    datasets:[
+      {label:'Historical (£bn)',data:historical,backgroundColor:years.map((_,i)=>i<=24?'rgba(102,0,204,0.75)':'transparent'),borderColor:'#6600cc',borderWidth:1,yAxisID:'y'},
+      {label:'OBR Forecast (£bn)',data:forecast,backgroundColor:'rgba(102,0,204,0.25)',borderColor:'#6600cc',borderWidth:2,borderDash:[4,3],yAxisID:'y',type:'bar'},
+      {label:'% of GDP',data:pctGDP,type:'line',borderColor:'#d40020',backgroundColor:'transparent',borderWidth:2.5,pointRadius:2,yAxisID:'y2',tension:0.3}
+    ]
+  },
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{if(ctx.datasetIndex===2)return' % GDP: '+ctx.raw+'%';return ctx.raw?(' £'+ctx.raw+'bn'):''}}}},
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{color:'#2a3a50',font:{size:9,weight:'bold'}}},
+      y:{position:'left',title:{display:true,text:'£ Billions',color:'#6600cc',font:{size:11,weight:'bold'}},ticks:{color:'#6600cc',font:{size:10,weight:'bold'}},grid:{color:'rgba(102,0,204,0.06)'}},
+      y2:{position:'right',title:{display:true,text:'% of GDP',color:'#d40020',font:{size:11,weight:'bold'}},ticks:{color:'#d40020',font:{size:10,weight:'bold'}},grid:{display:false},min:0,max:6}
+    }
+  }
+});
+
+// GILT HOLDERS PIE
+new Chart(document.getElementById('holdersChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Overseas Investors','UK Insurance & Pensions','Bank of England (QE)','UK Banks','Other UK'],
+    datasets:[{data:[28,25,23,14,10],backgroundColor:['#0060cc','#008844','#6600cc','#c97000','#d40020'],borderWidth:2,borderColor:'#fff'}]
+  },
+  options:{responsive:true,plugins:{legend:{position:'right',labels:{font:{size:11,weight:'bold'},color:'#2a3a50',padding:10}},tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw}%`}}}}
+});
+
+// INDEX-LINKED vs CONVENTIONAL
+new Chart(document.getElementById('linkedChart'),{
+  type:'bar',
+  data:{
+    labels:['2019','2020','2021','2022','2023','2024','2025'],
+    datasets:[
+      {label:'Conventional Gilt Interest',data:[38,34,46,52,58,62,68],backgroundColor:'rgba(0,96,204,0.7)',stack:'a'},
+      {label:'Index-Linked Gilt Interest',data:[14,12,23,64,47,38,42],backgroundColor:'rgba(212,0,32,0.7)',stack:'a'}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{labels:{font:{size:11,weight:'bold'},color:'#2a3a50'}}},
+    scales:{
+      x:{stacked:true,ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}}},
+      y:{stacked:true,title:{display:true,text:'£bn',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}}}
+    }
+  }
+});
+
+// RATE SENSITIVITY CHART
+// Base: OBR forecast interest (£bn) 2026-2031
+// ~£185bn of gilts mature/issued per year (6.6% of ~£2.8tn stock)
+// Each 1% rate rise on new issuance adds ~£1.85bn per year of refinancing
+// After 5 years of sustained rise: year1*1.85 + year2*1.85 + ... cumulative
+const sensYears = ['2025/26\n(Actual)','2026/27','2027/28','2028/29','2029/30','2030/31'];
+const baseCase  = [110, 105, 102, 100, 98, 96];
+// Each scenario: base + cumulative uplift building each year
+// +1%: adds ~£4.4bn yr1, £8.8bn yr2, £13.2bn yr3, £17.6bn yr4, £22bn yr5
+const plus1 = baseCase.map((v,i) => i===0 ? v : +(v + (i * 4.4)).toFixed(1));
+const plus2 = baseCase.map((v,i) => i===0 ? v : +(v + (i * 8.8)).toFixed(1));
+const plus3 = baseCase.map((v,i) => i===0 ? v : +(v + (i * 13.2)).toFixed(1));
+const plus4 = baseCase.map((v,i) => i===0 ? v : +(v + (i * 17.6)).toFixed(1));
+
+new Chart(document.getElementById('sensitivityChart'), {
+  type: 'line',
+  data: {
+    labels: sensYears,
+    datasets: [
+      {
+        label: 'OBR Base Case',
+        data: baseCase,
+        borderColor: '#6600cc',
+        backgroundColor: 'rgba(102,0,204,0.08)',
+        borderWidth: 3,
+        pointRadius: 5,
+        pointBackgroundColor: '#6600cc',
+        fill: false,
+        tension: 0.3,
+        order: 1
+      },
+      {
+        label: '+1% Gilt Yields',
+        data: plus1,
+        borderColor: '#0060cc',
+        backgroundColor: 'transparent',
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointBackgroundColor: '#0060cc',
+        fill: false,
+        tension: 0.3,
+        borderDash: [6,3]
+      },
+      {
+        label: '+2% Gilt Yields',
+        data: plus2,
+        borderColor: '#c97000',
+        backgroundColor: 'transparent',
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointBackgroundColor: '#c97000',
+        fill: false,
+        tension: 0.3,
+        borderDash: [6,3]
+      },
+      {
+        label: '+3% Gilt Yields',
+        data: plus3,
+        borderColor: '#d40020',
+        backgroundColor: 'transparent',
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointBackgroundColor: '#d40020',
+        fill: false,
+        tension: 0.3,
+        borderDash: [6,3]
+      },
+      {
+        label: '+4% Gilt Yields',
+        data: plus4,
+        borderColor: '#880088',
+        backgroundColor: 'rgba(136,0,136,0.05)',
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointBackgroundColor: '#880088',
+        fill: false,
+        tension: 0.3,
+        borderDash: [4,2]
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.dataset.label}: £${ctx.raw}bn`,
+          afterBody: (items) => {
+            const base = items[0]?.raw;
+            return items.map(item => {
+              if(item.datasetIndex === 0) return '';
+              const extra = (item.raw - base).toFixed(1);
+              return ` Extra vs base: +£${extra}bn`;
+            }).filter(Boolean);
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        ticks: { color: '#2a3a50', font: { size: 11, weight: 'bold' } }
+      },
+      y: {
+        title: { display: true, text: 'Annual Interest Payments (£bn)', color: '#2a3a50', font: { size: 12, weight: 'bold' } },
+        ticks: {
+          color: '#2a3a50',
+          font: { size: 11, weight: 'bold' },
+          callback: v => '£' + v + 'bn'
+        },
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        min: 80,
+        max: 290
+      }
+    }
+  }
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK National Debt Clock – UK-Debt.info</title>
+<meta name="description" content="Live UK national debt clock showing real-time public sector net debt, borrowing per second, debt per person, and full fiscal snapshot based on ONS and OBR data.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--border-bright:#a0bcd8;
+  --red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;
+  --green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;
+  --amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;
+  --blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;
+  --gold:#b8860b;--gold-light:#fffbea;--gold-mid:#f5d87a;
+  --purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;
+  --ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+
+/* NAV */
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s;letter-spacing:0.5px}
+.dropdown a:hover{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.donate-btn:hover{opacity:0.85}
+
+/* TICKER */
+.ticker-bar{background:var(--red);padding:9px 24px;display:flex;align-items:center;gap:24px;font-family:'Share Tech Mono',monospace;box-shadow:0 2px 8px rgba(212,0,32,0.25)}
+.ticker-label{color:#fff;font-size:10px;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;font-weight:700}
+.ticker-items{display:flex;gap:28px;flex-wrap:wrap}
+.ticker-item{display:flex;flex-direction:column}
+.ticker-item .t-label{color:rgba(255,255,255,0.9);font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:600}
+.ticker-item .t-val{color:#fff;font-size:15px;font-weight:700;letter-spacing:1px}
+.ticker-pulse{width:9px;height:9px;background:#fff;border-radius:50%;flex-shrink:0;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.7)}}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:20px 28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 3px 12px rgba(0,47,108,0.2)}
+.header-left{display:flex;align-items:center;gap:18px}
+.union-jack{width:56px;height:34px;flex-shrink:0;border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,0.3)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:22px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:3px}
+
+/* MAIN GRID */
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+
+/* PANELS */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:10px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* DEBT DISPLAY */
+.debt-display{display:flex;flex-direction:column;align-items:center;padding:20px 0 14px}
+.debt-prefix{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--red);letter-spacing:2px;align-self:flex-start;margin-left:10%;opacity:0.8}
+.debt-number{font-family:'Share Tech Mono',monospace;font-size:clamp(30px,5.5vw,68px);color:var(--red);letter-spacing:2px;line-height:1;font-weight:700}
+.debt-suffix{font-size:12px;letter-spacing:2px;color:var(--ink-mid);text-transform:uppercase;margin-top:6px;font-weight:700}
+.debt-subrow{display:flex;gap:16px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.debt-sub{text-align:center;background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:10px 16px}
+.debt-sub .ds-val{font-family:'Share Tech Mono',monospace;font-size:19px;color:var(--amber);font-weight:700}
+.debt-sub .ds-label{font-size:11px;letter-spacing:1px;color:var(--ink-mid);text-transform:uppercase;margin-top:3px;font-weight:700}
+.update-badge{display:inline-flex;align-items:center;gap:7px;background:var(--amber-light);border:1px solid var(--amber-mid);padding:5px 12px;border-radius:20px;font-size:11px;color:var(--amber);font-weight:700}
+.update-badge .dot{width:6px;height:6px;background:var(--amber);border-radius:50%}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat-item{padding:13px;border-radius:6px;border:1px solid transparent}
+.stat-item .si-label{font-size:12px;letter-spacing:0.5px;color:var(--ink-mid);text-transform:uppercase;margin-bottom:5px;line-height:1.3;font-weight:700}
+.stat-item .si-val{font-family:'Share Tech Mono',monospace;font-size:21px;font-weight:700}
+.stat-item .si-sub{font-size:11px;color:var(--ink-mid);margin-top:3px;font-weight:600}
+.stat-item.red{background:var(--red-light);border-color:var(--red-mid)}.stat-item.red .si-val{color:var(--red)}
+.stat-item.green{background:var(--green-light);border-color:var(--green-mid)}.stat-item.green .si-val{color:var(--green)}
+.stat-item.amber{background:var(--amber-light);border-color:var(--amber-mid)}.stat-item.amber .si-val{color:var(--amber)}
+.stat-item.blue{background:var(--blue-light);border-color:var(--blue-mid)}.stat-item.blue .si-val{color:var(--blue)}
+
+/* GAUGE */
+.gauge-wrap{margin-top:12px}
+.gauge-label-row{display:flex;justify-content:space-between;font-size:12px;color:var(--ink);margin-bottom:5px;font-weight:700}
+.gauge-track{height:10px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.gauge-fill{height:100%;transition:width 1s ease;border-radius:6px}
+.gauge-fill.red{background:linear-gradient(90deg,#ff8090,var(--red))}
+.gauge-fill.amber{background:linear-gradient(90deg,#ffd070,var(--amber))}
+.gauge-fill.green{background:linear-gradient(90deg,#60d0a0,var(--green))}
+
+/* BREAKDOWN */
+.breakdown-list{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.bk-row{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;border-radius:5px;border:1px solid transparent}
+.bk-row .bk-name{color:var(--ink);letter-spacing:0.5px;font-weight:700;font-size:13px}
+.bk-row .bk-val{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700}
+.bk-row.red{background:var(--red-light);border-color:var(--red-mid)}.bk-row.red .bk-val{color:var(--red)}
+.bk-row.amber{background:var(--amber-light);border-color:var(--amber-mid)}.bk-row.amber .bk-val{color:var(--amber)}
+.bk-row.blue{background:var(--blue-light);border-color:var(--blue-mid)}.bk-row.blue .bk-val{color:var(--blue)}
+.bk-row.green{background:var(--green-light);border-color:var(--green-mid)}.bk-row.green .bk-val{color:var(--green)}
+
+/* BAR CHART */
+.bar-chart{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-row .br-label{width:82px;color:var(--ink);font-size:11px;letter-spacing:0.5px;text-align:right;flex-shrink:0;font-weight:700}
+.bar-row .br-track{flex:1;height:16px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.bar-row .br-fill{height:100%;background:linear-gradient(90deg,#ff8090,var(--red));border-radius:4px}
+.bar-row .br-val{width:68px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--ink);font-weight:700;flex-shrink:0}
+
+/* POP GRID */
+.pop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.pop-item{background:var(--panel2);border:1px solid var(--border);padding:12px;text-align:center;border-radius:6px}
+.pop-item .pi-val{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:700}
+.pop-item .pi-label{font-size:10px;letter-spacing:1px;color:var(--ink-mid);text-transform:uppercase;margin-top:4px;font-weight:700}
+.pop-item.red{background:var(--red-light);border-color:var(--red-mid)}.pop-item.red .pi-val{color:var(--red)}
+.pop-item.green{background:var(--green-light);border-color:var(--green-mid)}.pop-item.green .pi-val{color:var(--green)}
+.pop-item.amber{background:var(--amber-light);border-color:var(--amber-mid)}.pop-item.amber .pi-val{color:var(--amber)}
+.pop-item.blue{background:var(--blue-light);border-color:var(--blue-mid)}.pop-item.blue .pi-val{color:var(--blue)}
+
+/* ADMIN */
+.admin-overlay{display:none;position:fixed;inset:0;background:rgba(26,37,53,0.7);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.admin-overlay.open{display:flex}
+.admin-box{background:#fff;border:1px solid var(--border);border-radius:10px;padding:32px;width:min(620px,95vw);max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+.admin-box h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--blue);margin-bottom:4px}
+.admin-sub{font-size:11px;letter-spacing:2px;color:var(--ink-light);margin-bottom:22px;text-transform:uppercase}
+.admin-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.admin-form .full{grid-column:1/-1}
+.field-group label{display:block;font-size:10px;letter-spacing:2px;color:var(--ink-mid);text-transform:uppercase;margin-bottom:5px;font-weight:600}
+.field-group input{width:100%;background:var(--panel2);border:1.5px solid var(--border);color:var(--ink);padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;transition:border-color 0.2s;border-radius:5px}
+.field-group input:focus{border-color:var(--blue)}
+.admin-section-title{grid-column:1/-1;font-size:10px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;padding-top:14px;border-top:1px solid var(--border);margin-top:4px;font-weight:700}
+.admin-actions{display:flex;gap:12px;margin-top:20px}
+.btn-save{background:var(--blue);border:none;color:#fff;padding:10px 28px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;border-radius:5px}
+.btn-save:hover{opacity:0.85}
+.btn-cancel{background:var(--panel2);border:1.5px solid var(--border);color:var(--ink-mid);padding:10px 20px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;border-radius:5px}
+.save-msg{display:none;color:var(--green);font-size:11px;letter-spacing:2px;margin-top:8px;text-transform:uppercase;font-weight:600}
+.login-wrap{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.login-wrap label{font-size:10px;letter-spacing:2px;color:var(--ink-mid);text-transform:uppercase;font-weight:600}
+.login-wrap input{background:var(--panel2);border:1.5px solid var(--border);color:var(--ink);padding:9px 14px;font-family:'Share Tech Mono',monospace;font-size:16px;outline:none;width:240px;border-radius:5px}
+.login-wrap input:focus{border-color:var(--blue)}
+.btn-login{background:var(--blue);border:none;color:#fff;padding:9px 24px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;border-radius:5px}
+.login-err{color:var(--red);font-size:11px;letter-spacing:1px;display:none;font-weight:600}
+.close-admin{position:absolute;top:14px;right:18px;background:transparent;border:none;color:var(--ink-light);font-size:22px;cursor:pointer}
+.close-admin:hover{color:var(--ink)}
+
+/* DISCLAIMER & FOOTER */
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+.admin-btn{background:var(--ink);border:none;color:#fff;padding:7px 16px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;text-transform:uppercase;border-radius:4px}
+.admin-btn:hover{background:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg">
+      <rect width="44" height="27" fill="#012169"/>
+      <line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/>
+      <line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/>
+      <line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/>
+      <line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/>
+      <rect x="0" y="10" width="44" height="7" fill="white"/>
+      <rect x="19" y="0" width="6" height="27" fill="white"/>
+      <rect x="0" y="11" width="44" height="5" fill="#C8102E"/>
+      <rect x="20" y="0" width="4" height="27" fill="#C8102E"/>
+    </svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="debt-clock.html" class="done active">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html">Interest Payments History</a>
+        <a href="future-interest.html">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html">Off-Balance-Sheet Debt</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html">Personal Finance Dashboard</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-pulse"></div>
+  <div class="ticker-label">🇬🇧 LIVE BORROWING</div>
+  <div class="ticker-items">
+    <div class="ticker-item"><span class="t-label">Per Second</span><span class="t-val" id="tick-sec">£0</span></div>
+    <div class="ticker-item"><span class="t-label">Per Minute</span><span class="t-val" id="tick-min">£0</span></div>
+    <div class="ticker-item"><span class="t-label">Per Hour</span><span class="t-val" id="tick-hr">£0</span></div>
+    <div class="ticker-item"><span class="t-label">Today So Far</span><span class="t-val" id="tick-today">£0</span></div>
+    <div class="ticker-item"><span class="t-label">This Year So Far</span><span class="t-val" id="tick-yr">£0</span></div>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="header">
+  <div class="header-left">
+    <svg class="union-jack" viewBox="0 0 56 34" xmlns="http://www.w3.org/2000/svg">
+      <rect width="56" height="34" fill="#012169"/>
+      <line x1="0" y1="0" x2="56" y2="34" stroke="white" stroke-width="7"/>
+      <line x1="56" y1="0" x2="0" y2="34" stroke="white" stroke-width="7"/>
+      <line x1="0" y1="0" x2="56" y2="34" stroke="#C8102E" stroke-width="4.5"/>
+      <line x1="56" y1="0" x2="0" y2="34" stroke="#C8102E" stroke-width="4.5"/>
+      <rect x="0" y="13" width="56" height="8" fill="white"/>
+      <rect x="24" y="0" width="8" height="34" fill="white"/>
+      <rect x="0" y="14" width="56" height="6" fill="#C8102E"/>
+      <rect x="25" y="0" width="6" height="34" fill="#C8102E"/>
+    </svg>
+    <div class="header-title">
+      <h1>UK NATIONAL DEBT CLOCK</h1>
+      <div class="subtitle">Public Sector Net Debt · Real-Time Estimate · ONS / OBR Data · Updated Monthly</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- MAIN COUNTER -->
+  <div class="panel red-accent full-width">
+    <div class="panel-label">Public Sector Net Debt (PSND excl. Bank of England)</div>
+    <div class="debt-display">
+      <div class="debt-prefix">£</div>
+      <div class="debt-number" id="main-debt">0</div>
+      <div class="debt-suffix">Ticking in real time · Based on OBR annual borrowing forecast ÷ seconds per year</div>
+    </div>
+    <div class="debt-subrow">
+      <div class="debt-sub"><div class="ds-val" id="debt-per-person">£0</div><div class="ds-label">Per Person</div></div>
+      <div class="debt-sub"><div class="ds-val" id="debt-pct-gdp">0%</div><div class="ds-label">% of GDP</div></div>
+      <div class="debt-sub"><div class="ds-val" id="annual-interest">£0bn</div><div class="ds-label">Annual Interest</div></div>
+      <div class="debt-sub"><div class="ds-val" id="interest-per-sec">£0</div><div class="ds-label">Interest / Second</div></div>
+    </div>
+    <div style="text-align:center;margin-top:14px">
+      <span class="update-badge"><span class="dot"></span><span id="last-update-label">Last ONS Release: APR 2026 · £24.3Bn</span></span>
+    </div>
+  </div>
+
+  <!-- FISCAL SNAPSHOT -->
+  <div class="panel amber-accent">
+    <div class="panel-label">Fiscal Snapshot</div>
+    <div class="stat-grid">
+      <div class="stat-item amber">
+        <div class="si-label">Annual Borrowing 25/26</div>
+        <div class="si-val" id="annual-borrowing-val">£0bn</div>
+        <div class="si-sub">Full year revised</div>
+      </div>
+      <div class="stat-item red">
+        <div class="si-label">Welfare Bill</div>
+        <div class="si-val" id="welfare-val">£0bn</div>
+        <div class="si-sub">DWP annual expenditure</div>
+      </div>
+      <div class="stat-item red">
+        <div class="si-label">NHS Budget</div>
+        <div class="si-val">£192bn</div>
+        <div class="si-sub">2025/26 allocation</div>
+      </div>
+      <div class="stat-item amber">
+        <div class="si-label">Debt as % of GDP</div>
+        <div class="si-val" id="debt-gdp-stat">0%</div>
+        <div class="si-sub">PSND excl. BoE</div>
+      </div>
+    </div>
+    <div class="gauge-wrap">
+      <div class="gauge-label-row"><span>Debt / GDP Ratio</span><span id="gauge-label-debt">0%</span></div>
+      <div class="gauge-track"><div class="gauge-fill red" id="gauge-debt" style="width:0%"></div></div>
+    </div>
+    <div class="gauge-wrap" style="margin-top:10px">
+      <div class="gauge-label-row"><span>Budget Deficit (% of GDP)</span><span id="gauge-label-deficit">0%</span></div>
+      <div class="gauge-track"><div class="gauge-fill amber" id="gauge-deficit" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- ECONOMIC INDICATORS -->
+  <div class="panel blue-accent">
+    <div class="panel-label">Economic Indicators</div>
+    <div class="stat-grid">
+      <div class="stat-item blue">
+        <div class="si-label">GDP (Annual)</div>
+        <div class="si-val" id="gdp-val">£0tn</div>
+        <div class="si-sub">Current prices estimate</div>
+      </div>
+      <div class="stat-item green">
+        <div class="si-label">BoE Base Rate</div>
+        <div class="si-val" id="boe-rate">0%</div>
+        <div class="si-sub">Bank of England</div>
+      </div>
+      <div class="stat-item amber">
+        <div class="si-label">CPI Inflation</div>
+        <div class="si-val" id="cpi-val">0%</div>
+        <div class="si-sub">12-month rate</div>
+      </div>
+      <div class="stat-item red">
+        <div class="si-label">Unemployment</div>
+        <div class="si-val" id="unemp-val">0%</div>
+        <div class="si-sub">LFS measure</div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="panel-label">Govt Spending Breakdown (est. 2025/26)</div>
+      <div class="bar-chart">
+        <div class="bar-row"><span class="br-label">WELFARE</span><div class="br-track"><div class="br-fill" style="width:33%"></div></div><span class="br-val">£287bn</span></div>
+        <div class="bar-row"><span class="br-label">HEALTH</span><div class="br-track"><div class="br-fill" style="width:22%"></div></div><span class="br-val">£192bn</span></div>
+        <div class="bar-row"><span class="br-label">INTEREST</span><div class="br-track"><div class="br-fill" style="width:10%"></div></div><span class="br-val" id="bar-interest">£88bn</span></div>
+        <div class="bar-row"><span class="br-label">EDUCATION</span><div class="br-track"><div class="br-fill" style="width:9%"></div></div><span class="br-val">£77bn</span></div>
+        <div class="bar-row"><span class="br-label">DEFENCE</span><div class="br-track"><div class="br-fill" style="width:6%"></div></div><span class="br-val">£54bn</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNFUNDED LIABILITIES -->
+  <div class="panel red-accent">
+    <div class="panel-label">Unfunded Liabilities &amp; Off-Balance-Sheet</div>
+    <div class="breakdown-list">
+      <div class="bk-row red"><span class="bk-name">STATE PENSION LIABILITY</span><span class="bk-val">~£6.0tn</span></div>
+      <div class="bk-row red"><span class="bk-name">CIVIL SERVICE PENSIONS</span><span class="bk-val">~£2.6tn</span></div>
+      <div class="bk-row amber"><span class="bk-name">PFI / PPP COMMITMENTS</span><span class="bk-val">~£310bn</span></div>
+      <div class="bk-row amber"><span class="bk-name">STUDENT LOAN BOOK</span><span class="bk-val">~£237bn</span></div>
+      <div class="bk-row blue"><span class="bk-name">NETWORK RAIL DEBT</span><span class="bk-val">~£54bn</span></div>
+      <div class="bk-row red"><span class="bk-name">TOTAL (INCL. PENSIONS)</span><span class="bk-val">~£9.0tn+</span></div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--ink-mid);background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:5px;padding:10px 12px;line-height:1.7;font-weight:600">
+      ⚠️ Unfunded liabilities are not included in the official PSND figure above. These represent future obligations not yet on the balance sheet. <a href="off-balance-sheet.html" style="color:var(--amber)">Full breakdown →</a>
+    </div>
+  </div>
+
+  <!-- POPULATION -->
+  <div class="panel green-accent">
+    <div class="panel-label">Population &amp; Workforce</div>
+    <div class="pop-grid">
+      <div class="pop-item blue"><div class="pi-val" id="pop-total">0</div><div class="pi-label">UK Population</div></div>
+      <div class="pop-item green"><div class="pi-val" id="pop-workers">0</div><div class="pi-label">In Employment</div></div>
+      <div class="pop-item red"><div class="pi-val" id="pop-unemp">0</div><div class="pi-label">Unemployed</div></div>
+      <div class="pop-item amber"><div class="pi-val" id="pop-inactive">0</div><div class="pi-label">Economically Inactive</div></div>
+      <div class="pop-item blue"><div class="pi-val" id="debt-per-worker">£0</div><div class="pi-label">Debt Per Worker</div></div>
+      <div class="pop-item amber"><div class="pi-val" id="debt-per-taxpayer">£0</div><div class="pi-label">Debt Per Taxpayer</div></div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="panel-label">Net Migration (Est. Annual)</div>
+      <div class="breakdown-list">
+        <div class="bk-row green"><span class="bk-name">ARRIVALS</span><span class="bk-val" id="migration-in">0</span></div>
+        <div class="bk-row amber"><span class="bk-name">DEPARTURES</span><span class="bk-val" id="migration-out">0</span></div>
+        <div class="bk-row blue"><span class="bk-name">NET MIGRATION</span><span class="bk-val" id="migration-net">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORICAL CHART -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">Historical Debt Context (% of GDP)</div>
+    <div style="display:flex;gap:8px;align-items:flex-end;height:90px;margin-top:12px;padding:0 8px">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;background:linear-gradient(0deg,#4090e0,#0060cc);border-radius:3px 3px 0 0" id="bar-2010"></div><span style="font-size:9px;color:var(--ink-light);font-weight:700">2010</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;background:linear-gradient(0deg,#4090e0,#0060cc);border-radius:3px 3px 0 0" id="bar-2013"></div><span style="font-size:9px;color:var(--ink-light);font-weight:700">2013</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;background:linear-gradient(0deg,#4090e0,#0060cc);border-radius:3px 3px 0 0" id="bar-2016"></div><span style="font-size:9px;color:var(--ink-light);font-weight:700">2016</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;background:linear-gradient(0deg,#4090e0,#0060cc);border-radius:3px 3px 0 0" id="bar-2019"></div><span style="font-size:9px;color:var(--ink-light);font-weight:700">2019</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;background:linear-gradient(0deg,#ff8090,#d40020);border-radius:3px 3px 0 0" id="bar-2020"></div><span style="font-size:9px;color:var(--red);font-weight:700">2020</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;background:linear-gradient(0deg,#ff8090,#d40020);border-radius:3px 3px 0 0" id="bar-2022"></div><span style="font-size:9px;color:var(--red);font-weight:700">2022</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;background:linear-gradient(0deg,#ff8090,#d40020);border-radius:3px 3px 0 0" id="bar-2024"></div><span style="font-size:9px;color:var(--red);font-weight:700">2024</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;background:linear-gradient(0deg,#ffd070,#c97000);border-radius:3px 3px 0 0" id="bar-now"></div><span style="font-size:9px;color:var(--amber);font-weight:700">NOW</span></div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap;padding:8px 10px;background:var(--panel2);border-radius:5px;border:1px solid var(--border)">
+      <span style="font-size:11px;color:var(--blue);font-weight:700">🔵 2010: 65% · 2013: 77% · 2016: 84% · 2019: 85%</span>
+      <span style="font-size:11px;color:var(--red);font-weight:700">🔴 2020: 99% (COVID) · 2022: 95% · 2024: 98%</span>
+      <span style="font-size:11px;color:var(--amber);font-weight:700">🟡 2025/26: 95.1% (ONS Apr 2026)</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- DISCLAIMER STRIP -->
+<div class="disclaimer-strip">
+  ⚠️ All figures are estimates based on publicly available official data. Not financial advice. Not affiliated with HM Treasury, ONS, OBR or any government body.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Independent · Non-partisan · No advertising · Sources: ONS · OBR · HM Treasury · Bank of England</span>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="footer-links">
+      <a href="disclaimer.html">Disclaimer</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="mailto:info@uk-debt.info">Contact</a>
+    </div>
+    <button class="admin-btn" onclick="openAdmin()">⚙ ADMIN</button>
+  </div>
+</div>
+
+<!-- ADMIN OVERLAY -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-box">
+    <button class="close-admin" onclick="closeAdmin()">✕</button>
+    <div id="loginPanel">
+      <h2>ADMIN ACCESS</h2>
+      <div class="admin-sub">Enter password to update figures</div>
+      <div class="login-wrap">
+        <label>Password</label>
+        <input type="password" id="pwInput" placeholder="••••••••">
+        <button class="btn-login" onclick="doLogin()">ENTER</button>
+        <div class="login-err" id="loginErr">Incorrect password</div>
+      </div>
+    </div>
+    <div id="adminPanel" style="display:none">
+      <h2>UPDATE FIGURES</h2>
+      <div class="admin-sub">Changes save locally and persist on reload</div>
+      <div class="admin-form">
+        <div class="admin-section-title">DEBT &amp; BORROWING</div>
+        <div class="field-group"><label>PSND Base (£ billions)</label><input type="number" id="a_debtBase" placeholder="e.g. 2796"></div>
+        <div class="field-group"><label>Annual Borrowing Forecast (£ billions)</label><input type="number" id="a_annualBorrow" placeholder="e.g. 129"></div>
+        <div class="field-group full"><label>Last ONS Release Label</label><input type="text" id="a_updateLabel" placeholder="e.g. APR 2026 · £24.3Bn"></div>
+        <div class="admin-section-title">FISCAL</div>
+        <div class="field-group"><label>GDP (£ billions)</label><input type="number" id="a_gdp" placeholder="e.g. 2968"></div>
+        <div class="field-group"><label>Annual Interest Bill (£ billions)</label><input type="number" id="a_interest" placeholder="e.g. 88"></div>
+        <div class="field-group"><label>Welfare Bill (£ billions)</label><input type="number" id="a_welfare" placeholder="e.g. 287"></div>
+        <div class="field-group"><label>BoE Base Rate (%)</label><input type="number" step="0.01" id="a_boe" placeholder="e.g. 3.75"></div>
+        <div class="admin-section-title">ECONOMIC</div>
+        <div class="field-group"><label>CPI Inflation (%)</label><input type="number" step="0.01" id="a_cpi" placeholder="e.g. 3.5"></div>
+        <div class="field-group"><label>Unemployment Rate (%)</label><input type="number" step="0.01" id="a_unemp" placeholder="e.g. 4.5"></div>
+        <div class="admin-section-title">POPULATION</div>
+        <div class="field-group"><label>UK Population</label><input type="number" id="a_population" placeholder="e.g. 68400000"></div>
+        <div class="field-group"><label>In Employment</label><input type="number" id="a_employed" placeholder="e.g. 33500000"></div>
+        <div class="field-group"><label>Unemployed</label><input type="number" id="a_unemployed" placeholder="e.g. 1540000"></div>
+        <div class="field-group"><label>Economically Inactive</label><input type="number" id="a_inactive" placeholder="e.g. 9400000"></div>
+        <div class="field-group"><label>Net Migration Arrivals (annual)</label><input type="number" id="a_migIn" placeholder="e.g. 860000"></div>
+        <div class="field-group"><label>Net Migration Departures (annual)</label><input type="number" id="a_migOut" placeholder="e.g. 500000"></div>
+        <div class="admin-section-title">SECURITY</div>
+        <div class="field-group"><label>New Password (blank = keep current)</label><input type="password" id="a_newpw1" placeholder="New password"></div>
+        <div class="field-group"><label>Confirm New Password</label><input type="password" id="a_newpw2" placeholder="Confirm password"></div>
+      </div>
+      <div class="admin-actions">
+        <button class="btn-save" onclick="saveAdmin()">SAVE &amp; UPDATE</button>
+        <button class="btn-cancel" onclick="closeAdmin()">CANCEL</button>
+      </div>
+      <div class="save-msg" id="adminSaveMsg">✓ Figures updated successfully</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULTS={debtBase:2796,annualBorrow:129,annualInterest:88,welfare:287,gdp:2968,boeRate:3.75,cpi:3.5,unemp:4.5,population:68400000,employed:33500000,unemployed:1540000,inactive:9400000,migIn:860000,migOut:500000,updateLabel:'APR 2026 · £24.3Bn',password:'UKDebt2026',debtBaseDate:new Date('2026-05-01').getTime()};
+let CFG={};
+function loadCfg(){try{const s=localStorage.getItem('ukdebt_cfg_v2');CFG=s?{...DEFAULTS,...JSON.parse(s)}:{...DEFAULTS}}catch(e){CFG={...DEFAULTS}}}
+function saveCfg(){localStorage.setItem('ukdebt_cfg_v2',JSON.stringify(CFG))}
+function fmt(n,d=0){return n.toLocaleString('en-GB',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function fmtShort(n){if(n>=1e9)return'£'+(n/1e9).toFixed(2)+'bn';if(n>=1e6)return'£'+(n/1e6).toFixed(2)+'m';if(n>=1e3)return'£'+(n/1e3).toFixed(1)+'k';return'£'+fmt(n,2)}
+function updateClock(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function update(){
+  updateClock();
+  const now=Date.now();
+  const elapsed=(now-(CFG.debtBaseDate||DEFAULTS.debtBaseDate))/1000;
+  const ab=CFG.annualBorrow*1e9,ai=CFG.annualInterest*1e9,db=CFG.debtBase*1e9,gdp=CFG.gdp*1e9,spy=31536000;
+  const bps=ab/spy,cur=db+(bps*elapsed);
+  const secNow=new Date(),dayStart=new Date(secNow.getFullYear(),secNow.getMonth(),secNow.getDate()).getTime();
+  const secsToday=(now-dayStart)/1000,secsYr=(now-new Date(secNow.getFullYear(),0,1).getTime())/1000;
+  document.getElementById('tick-sec').textContent=fmtShort(bps);
+  document.getElementById('tick-min').textContent=fmtShort(bps*60);
+  document.getElementById('tick-hr').textContent=fmtShort(bps*3600);
+  document.getElementById('tick-today').textContent=fmtShort(bps*secsToday);
+  document.getElementById('tick-yr').textContent=fmtShort(bps*secsYr);
+  document.getElementById('main-debt').textContent=fmt(Math.round(cur));
+  const dpp=cur/CFG.population,dpg=(cur/gdp)*100,ips=ai/spy;
+  document.getElementById('debt-per-person').textContent='£'+fmt(Math.round(dpp));
+  document.getElementById('debt-pct-gdp').textContent=dpg.toFixed(1)+'%';
+  document.getElementById('annual-interest').textContent='£'+CFG.annualInterest+'bn';
+  document.getElementById('interest-per-sec').textContent=fmtShort(ips);
+  document.getElementById('last-update-label').textContent='Last ONS Release: '+CFG.updateLabel;
+  document.getElementById('annual-borrowing-val').textContent='£'+CFG.annualBorrow+'bn';
+  document.getElementById('welfare-val').textContent='£'+CFG.welfare+'bn';
+  document.getElementById('debt-gdp-stat').textContent=dpg.toFixed(1)+'%';
+  document.getElementById('bar-interest').textContent='£'+CFG.annualInterest+'bn';
+  document.getElementById('gauge-debt').style.width=(Math.min(dpg,130)/130*100)+'%';
+  document.getElementById('gauge-label-debt').textContent=dpg.toFixed(1)+'%';
+  const def=(ab/gdp)*100;
+  document.getElementById('gauge-deficit').style.width=(Math.min(def,12)/12*100)+'%';
+  document.getElementById('gauge-label-deficit').textContent=def.toFixed(1)+'%';
+  document.getElementById('gdp-val').textContent='£'+(CFG.gdp/1000).toFixed(2)+'tn';
+  document.getElementById('boe-rate').textContent=CFG.boeRate.toFixed(2)+'%';
+  document.getElementById('cpi-val').textContent=CFG.cpi.toFixed(1)+'%';
+  document.getElementById('unemp-val').textContent=CFG.unemp.toFixed(1)+'%';
+  document.getElementById('pop-total').textContent=fmt(CFG.population);
+  document.getElementById('pop-workers').textContent=fmt(CFG.employed);
+  document.getElementById('pop-unemp').textContent=fmt(CFG.unemployed);
+  document.getElementById('pop-inactive').textContent=fmt(CFG.inactive);
+  document.getElementById('debt-per-worker').textContent='£'+fmt(Math.round(cur/CFG.employed));
+  document.getElementById('debt-per-taxpayer').textContent='£'+fmt(Math.round(cur/(CFG.employed*0.74)));
+  document.getElementById('migration-in').textContent=fmt(CFG.migIn);
+  document.getElementById('migration-out').textContent=fmt(CFG.migOut);
+  document.getElementById('migration-net').textContent=fmt(CFG.migIn-CFG.migOut);
+  [{id:'bar-2010',p:65},{id:'bar-2013',p:77},{id:'bar-2016',p:84},{id:'bar-2019',p:85},{id:'bar-2020',p:99},{id:'bar-2022',p:95},{id:'bar-2024',p:98},{id:'bar-now',p:dpg}].forEach(d=>{const el=document.getElementById(d.id);if(el)el.style.height=Math.round((d.p/130)*80)+'px'});
+}
+function openAdmin(){document.getElementById('adminOverlay').classList.add('open');document.getElementById('loginPanel').style.display='';document.getElementById('adminPanel').style.display='none';document.getElementById('loginErr').style.display='none';document.getElementById('pwInput').value=''}
+function closeAdmin(){document.getElementById('adminOverlay').classList.remove('open')}
+function doLogin(){if(document.getElementById('pwInput').value===CFG.password){document.getElementById('loginPanel').style.display='none';document.getElementById('adminPanel').style.display='';populateAdminFields()}else{document.getElementById('loginErr').style.display='block'}}
+function populateAdminFields(){const m={a_debtBase:'debtBase',a_annualBorrow:'annualBorrow',a_gdp:'gdp',a_interest:'annualInterest',a_welfare:'welfare',a_boe:'boeRate',a_cpi:'cpi',a_unemp:'unemp',a_population:'population',a_employed:'employed',a_unemployed:'unemployed',a_inactive:'inactive',a_migIn:'migIn',a_migOut:'migOut'};for(const[id,k]of Object.entries(m))document.getElementById(id).value=CFG[k];document.getElementById('a_updateLabel').value=CFG.updateLabel}
+function saveAdmin(){const m={a_debtBase:'debtBase',a_annualBorrow:'annualBorrow',a_gdp:'gdp',a_interest:'annualInterest',a_welfare:'welfare',a_boe:'boeRate',a_cpi:'cpi',a_unemp:'unemp',a_population:'population',a_employed:'employed',a_unemployed:'unemployed',a_inactive:'inactive',a_migIn:'migIn',a_migOut:'migOut'};for(const[id,k]of Object.entries(m)){const el=document.getElementById(id);if(el&&el.value!=='')CFG[k]=parseFloat(el.value)}const l=document.getElementById('a_updateLabel').value;if(l)CFG.updateLabel=l;CFG.debtBaseDate=Date.now();const p1=document.getElementById('a_newpw1').value,p2=document.getElementById('a_newpw2').value;if(p1&&p1===p2){CFG.password=p1;document.getElementById('a_newpw1').value='';document.getElementById('a_newpw2').value=''}saveCfg();const msg=document.getElementById('adminSaveMsg');msg.style.display='block';setTimeout(()=>msg.style.display='none',3000);update()}
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+document.getElementById('adminOverlay').addEventListener('click',function(e){if(e.target===this)closeAdmin()});
+loadCfg();setInterval(update,100);update();
+</script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Wealth Decline — Why Britons Are 23% Poorer Since 2020 | UK-Debt.info</title>
+<meta name="description" content="The average Briton is 23% poorer in real terms than in 2020 — the worst wealth decline of any rich nation. We explain exactly why: inflation, energy, housing and more.">
+<link rel="canonical" href="https://uk-debt.info/uk-wealth-decline.html">
+<meta property="og:title" content="UK Wealth Decline — Why Britons Are 23% Poorer Since 2020">
+<meta property="og:description" content="The worst wealth decline in the developed world. We explain every cause behind the UBS figures.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://uk-debt.info/uk-wealth-decline.html">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+.header{background:linear-gradient(135deg,#3d0000,#660000,#aa0000);padding:24px 40px 20px}
+.header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,5vw,32px);letter-spacing:3px;color:#fff;line-height:1.1}
+.header .subtitle{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:4px;font-weight:600}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss-item{text-align:center}.ss-item .sv{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700}.ss-item .sl{font-size:10px;letter-spacing:1px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.ss-item.red .sv{color:var(--red)}.ss-item.green .sv{color:var(--green)}.ss-item.amber .sv{color:var(--amber)}.ss-item.blue .sv{color:var(--blue)}
+.main{padding:20px 32px}
+.intro-box{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.intro-box p{font-size:17px;font-weight:600;color:var(--ink-mid);line-height:1.85}
+.section{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:22px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.section-num{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--red);font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.section h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:var(--ink);margin-bottom:12px;line-height:1.2}
+.section p{font-size:16px;font-weight:600;color:var(--ink-mid);line-height:1.8;margin-bottom:12px}
+.section p:last-child{margin-bottom:0}
+.callout{border-radius:6px;padding:12px 16px;font-size:15px;font-weight:700;line-height:1.7;margin:14px 0}
+.callout.amber{background:var(--amber-light);border:1px solid var(--amber-mid);color:var(--ink-mid)}
+.callout.red{background:var(--red-light);border:1px solid var(--red-mid);color:var(--ink-mid)}
+.callout.green{background:var(--green-light);border:1px solid var(--green-mid);color:var(--ink-mid)}
+.callout.blue{background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--ink-mid)}
+.cause-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0}
+.cause-card{background:var(--red-light);border:1px solid var(--red-mid);border-radius:8px;padding:14px}
+.cause-card .ci{font-size:28px;margin-bottom:6px}
+.cause-card .ct{font-size:13px;font-weight:800;color:var(--red);margin-bottom:4px}
+.cause-card .cd{font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.5}
+.cause-card.amber{background:var(--amber-light);border-color:var(--amber-mid)}.cause-card.amber .ct{color:var(--amber)}
+.cause-card.blue{background:var(--blue-light);border-color:var(--blue-mid)}.cause-card.blue .ct{color:var(--blue)}
+.country-table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0}
+.country-table th{background:var(--panel2);padding:8px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border);text-align:left}
+.country-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid)}
+.country-table td.mono{font-family:'Share Tech Mono',monospace;font-weight:700}
+.country-table td.pos{color:var(--green)}.country-table td.neg{color:var(--red)}.country-table td.uk-row{font-weight:800;color:var(--red)}
+.country-table tr.uk{background:var(--red-light)}
+.bar-chart-manual{margin:14px 0;display:flex;flex-direction:column;gap:8px}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-label{font-size:11px;font-weight:700;color:var(--ink-mid);width:90px;flex-shrink:0;text-align:right}
+.bar-track{flex:1;background:var(--panel2);border-radius:4px;height:22px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.bar-fill.pos{background:var(--green)}
+.bar-fill.neg{background:var(--red)}
+.bar-fill.warn{background:var(--amber)}
+.sources-box{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px 16px;font-size:11px;color:var(--ink-light);line-height:1.7;margin-top:8px}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+@media(max-width:768px){.top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}.top-nav::-webkit-scrollbar{display:none}.nav-groups{flex-shrink:0;flex-wrap:nowrap}.nav-group-btn{padding:0 8px;font-size:10px;white-space:nowrap}.nav-brand span{font-size:16px;white-space:nowrap}.dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="money-in-out.html" class="done">Money In &amp; Out</a>
+        <a href="fiscal-gap.html" class="done">True Fiscal Gap</a>
+        <a href="save-the-uk.html" class="done">Can You Save the UK?</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money &amp; Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 &amp; GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People &amp; Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Public vs Private Employment</a>
+        <a href="pensions.html" class="done">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+        <a href="uk-wealth-decline.html" class="active">UK Wealth Decline</a>
+        <a href="jobs-data-accuracy.html" class="done">Jobs Data — How Accurate?</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="done">Historical Timeline</a>
+        <a href="cost-of-living.html" class="done">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>BRITAIN'S WEALTH COLLAPSE</h1>
+  <div class="subtitle">Why the Average Briton is 23% Poorer Than in 2020 · UBS Global Wealth Report 2026 · Explained</div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss-item red"><div class="sv">−23.2%</div><div class="sl">UK Wealth Change 2020–25</div></div>
+  <div class="ss-item red"><div class="sv">WORST</div><div class="sl">Of 37 Developed Nations</div></div>
+  <div class="ss-item red"><div class="sv">£28,500</div><div class="sl">Lost Per Adult (Real Terms)</div></div>
+  <div class="ss-item amber"><div class="sv">£95,500</div><div class="sl">Median Wealth Per Adult 2025</div></div>
+  <div class="ss-item red"><div class="sv">11.1%</div><div class="sl">Peak CPI Oct 2022</div></div>
+  <div class="ss-item amber"><div class="sv">32%</div><div class="sl">Consumer Price Rise 2020–25</div></div>
+</div>
+
+<div class="main">
+
+  <div class="intro-box">
+    <p>The UBS Global Wealth Report 2026, published on 1 July 2026, contains a number that should shock anyone living in Britain: the average adult's wealth fell by <strong>23.2% in real terms between 2020 and 2025</strong> — the worst performance of any developed country in the survey. That is £28,500 gone per person, after adjusting for inflation. This page explains exactly why it happened, who was affected most, and how Britain compares to the rest of the world.</p>
+  </div>
+
+  <!-- WHAT IS BEING MEASURED -->
+  <div class="section">
+    <div class="section-num">01</div>
+    <h2>What Is Actually Being Measured</h2>
+    <p>The UBS report measures <strong>net household wealth</strong> — the total value of everything a person owns (property, savings, investments, pension assets) minus everything they owe (mortgages, loans, credit cards). It is then adjusted for inflation, so what matters is not the nominal pound value but what that wealth can actually buy.</p>
+    <p>This distinction matters enormously for understanding the UK's position. House prices rose 26% between 2020 and 2025 in nominal terms — but consumer prices rose 32% over the same period. So even homeowners who saw their property go up in value actually lost purchasing power in real terms. On paper they were richer; in practice, they could afford less.</p>
+    <div class="callout amber">⚠️ This is why the headline feels counterintuitive. Property owners who saw their house price rise still show up as poorer in this data — because the inflation that eroded the real value of their wealth was running faster than the rise in their assets.</div>
+  </div>
+
+  <!-- THE INTERNATIONAL LEAGUE TABLE -->
+  <div class="section">
+    <div class="section-num">02</div>
+    <h2>How Britain Compares — The International League Table</h2>
+    <p>Britain sits at the bottom of the wealth league table for the five years since the pandemic. What makes this particularly striking is that Britain performed worse than developing economies including Turkey, Bulgaria, Mexico and Kazakhstan. The countries that gained the most were South Korea and Russia — the latter despite over four years of Western sanctions.</p>
+
+    <div class="bar-chart-manual">
+      <div class="bar-row"><span class="bar-label">South Korea</span><div class="bar-track"><div class="bar-fill pos" style="width:55.4%">+55.4%</div></div></div>
+      <div class="bar-row"><span class="bar-label">Russia</span><div class="bar-track"><div class="bar-fill pos" style="width:36.9%">+36.9%</div></div></div>
+      <div class="bar-row"><span class="bar-label">Taiwan</span><div class="bar-track"><div class="bar-fill pos" style="width:26.1%">+26.1%</div></div></div>
+      <div class="bar-row"><span class="bar-label">Turkey</span><div class="bar-track"><div class="bar-fill pos" style="width:22.1%">+22.1%</div></div></div>
+      <div class="bar-row"><span class="bar-label">Australia</span><div class="bar-track"><div class="bar-fill pos" style="width:18.8%">+18.8%</div></div></div>
+      <div class="bar-row"><span class="bar-label">Spain</span><div class="bar-track"><div class="bar-fill pos" style="width:16%">+16%</div></div></div>
+      <div class="bar-row"><span class="bar-label">Italy</span><div class="bar-track"><div class="bar-fill warn" style="width:3.3%">+3.3%</div></div></div>
+      <div class="bar-row"><span class="bar-label">USA</span><div class="bar-track"><div class="bar-fill pos" style="width:18%">+est.18%</div></div></div>
+      <div class="bar-row"><span class="bar-label">France</span><div class="bar-track"><div class="bar-fill warn" style="width:2%">~0%</div></div></div>
+      <div class="bar-row"><span class="bar-label">UK 🇬🇧</span><div class="bar-track"><div class="bar-fill neg" style="width:23.2%">−23.2%</div></div></div>
+    </div>
+
+    <p>Source: UBS Global Wealth Report 2026. Figures show average wealth per adult, percentage change 2020–2025, adjusted for inflation.</p>
+    <div class="callout red">🚨 Britain's −23.2% is the worst reading in the entire survey of 37 developed and emerging economies. Worse than Turkey (which has suffered severe currency crises), worse than countries that experienced political instability, and dramatically worse than comparable European neighbours.</div>
+  </div>
+
+  <!-- THE FIVE CAUSES -->
+  <div class="section">
+    <div class="section-num">03</div>
+    <h2>The Five Causes — Why Britain Fared So Badly</h2>
+    <p>No single factor explains Britain's position. It was the simultaneous collision of five separate pressures, several of which were worse in the UK than anywhere else in the developed world.</p>
+
+    <div class="cause-grid">
+      <div class="cause-card">
+        <div class="ci">🔥</div>
+        <div class="ct">1. THE INFLATION SHOCK</div>
+        <div class="cd">UK inflation peaked at 11.1% in October 2022 — higher than most comparable European countries and far above the 2% target. Consumer prices rose 32% cumulatively between 2020 and 2025. Every £1 of wealth in 2020 bought only 76p worth of goods by 2025.</div>
+      </div>
+      <div class="cause-card">
+        <div class="ci">⚡</div>
+        <div class="ct">2. THE ENERGY PRICING STRUCTURE</div>
+        <div class="cd">UBS chief economist Paul Donovan specifically cited the UK's "peculiarities of energy pricing structure." Unlike continental Europe, the UK had insufficient long-term gas storage and was more exposed to spot market price spikes after Russia cut supplies in 2022. Energy bills for households roughly tripled at peak.</div>
+      </div>
+      <div class="cause-card amber">
+        <div class="ci">🏠</div>
+        <div class="ct">3. HOUSING GAINS WIPED OUT BY INFLATION</div>
+        <div class="cd">House prices rose 26% in nominal terms — which sounds good. But consumer prices rose 32% over the same period. So in real purchasing power terms, homeowners actually lost ground even as their property's pound value increased. Most people's biggest asset failed to keep pace with rising costs.</div>
+      </div>
+      <div class="cause-card amber">
+        <div class="ci">📈</div>
+        <div class="ct">4. UK STOCK MARKET LAGGED THE US</div>
+        <div class="cd">The FTSE 100 significantly underperformed Wall Street between 2020 and 2025. Americans with stock market exposure saw large real gains in wealth. British savers invested heavily in UK equities — which underperformed — rather than the US tech-heavy indices that drove global returns.</div>
+      </div>
+      <div class="cause-card blue">
+        <div class="ci">📉</div>
+        <div class="ct">5. REAL WAGES FELL SHARPLY</div>
+        <div class="cd">In April 2022, UK real wages fell 4.5% — the sharpest recorded fall. Wages failed to keep pace with inflation for over two years. This meant that the income people received was worth less in real terms, reducing their ability to save and accumulate wealth, compounding the erosion of existing assets.</div>
+      </div>
+      <div class="cause-card blue">
+        <div class="ci">🧾</div>
+        <div class="ct">6. HIGHER TAXES, HIGHER BILLS</div>
+        <div class="cd">The period 2020–2025 saw increases in council tax, NI contributions, frozen income tax thresholds (effectively a tax rise via fiscal drag), and energy bill increases. "Awful April 2025" alone brought water bill rises of 26% — the fastest increase since the 1980s — alongside further energy price increases.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY WORSE THAN EUROPE -->
+  <div class="section">
+    <div class="section-num">04</div>
+    <h2>Why Was the UK Hit Harder Than Europe?</h2>
+    <p>France, Germany, Spain and Italy all faced the same global inflation shock from the Ukraine war and the post-pandemic reopening. Yet none of them saw anything approaching Britain's 23% wealth decline. The difference comes down to three structural factors that made the UK more vulnerable:</p>
+    <p><strong>Energy market structure.</strong> Continental European countries were able to use long-term gas contracts and storage facilities to buffer the worst of the 2022 price spike. The UK, having privatised and run down its gas storage capacity (Rough storage was mothballed in 2017), had to buy on spot markets at peak prices. This made UK energy bills rise faster and further than in comparable European countries.</p>
+    <p><strong>Mortgage structure.</strong> The UK has a high proportion of variable-rate and short-term fixed-rate mortgages (typically 2–5 year deals), meaning Bank of England rate rises fed through to household costs much faster than in countries like France and Germany where 15-20 year fixed rates are common. A German homeowner was largely shielded from the 2022-2023 rate rises; a British homeowner remortgaging in that period saw their payments jump dramatically.</p>
+    <p><strong>Wage structure.</strong> UK wages had been stagnant in real terms since the 2008 financial crisis — a longer period of real-terms wage suppression than most comparable European countries. So when inflation hit, there was less headroom. French and German workers had seen stronger real wage growth in the preceding decade, giving them a larger buffer.</p>
+    <div class="callout blue">📋 The LSE's Centre for Economic Performance found that Brexit also raised food prices in the UK specifically, because increased bureaucracy at ports made importing food from Europe more expensive. This is contested politically but the research is peer-reviewed and points to food price inflation running meaningfully higher in the UK than it otherwise would have. The Bank of England estimated Brexit reduced UK GDP by around 3.5% cumulatively by 2023.</div>
+  </div>
+
+  <!-- WHY SOUTH KOREA AND RUSSIA DID WELL -->
+  <div class="section">
+    <div class="section-num">05</div>
+    <h2>Why Did South Korea and Russia Top the Table?</h2>
+    <p>The contrast with the top performers reveals something important about what drives wealth in real terms.</p>
+    <p><strong>South Korea (+55.4%)</strong> benefited from a technology-driven export boom. South Korean companies — particularly in semiconductors, electric vehicles and electronics — are deeply embedded in global supply chains and saw huge revenue gains during the tech and green energy investment surge of 2020-2025. Strong corporate performance fed through to wages, stock prices, and pension values. Inflation remained moderate. The result was genuine real-terms wealth accumulation.</p>
+    <p><strong>Russia (+36.9%)</strong> is the more counterintuitive result. Despite Western sanctions, the Russian economy benefited from dramatically higher oil and gas revenues during the 2022 energy price spike — the very same price spike that was devastating household wealth in the UK. High energy prices transferred money from importing countries (like the UK) to exporting countries (like Russia). Russia also experienced high inflation, but its asset prices — particularly commodities and government bonds — rose enough in rouble terms to more than compensate. The UBS figure measures wealth in local real terms; it does not mean Russians are wealthier than Britons in absolute terms, simply that their wealth grew faster in the five-year window.</p>
+    <div class="callout amber">⚠️ The Russia figure illustrates a key point: energy price shocks transfer wealth between countries. The same global event — soaring gas prices — made Russian asset holders richer in real terms while making British households poorer. Energy policy and exposure to commodity markets is not just an environmental or security question; it is a wealth question.</div>
+  </div>
+
+  <!-- WHO WAS HIT HARDEST -->
+  <div class="section">
+    <div class="section-num">06</div>
+    <h2>Who Was Hit Hardest Within the UK?</h2>
+    <p>The 23% average figure masks large differences between groups. Not everyone in Britain lost equally.</p>
+    <p><strong>Renters</strong> were hit hardest. They received none of the nominal property value increases that at least partially offset inflation for homeowners. They faced rising rents (up sharply as landlords passed on mortgage cost increases), rising bills, and stagnant wages — with no offsetting asset appreciation. For renters, the real-terms wealth loss was substantially worse than 23%.</p>
+    <p><strong>Young people</strong> were disproportionately affected. They are more likely to rent, less likely to hold financial assets, and more likely to have student debt. They saw no benefit from the housing market and bore the full cost of energy and food price inflation on relatively lower incomes.</p>
+    <p><strong>Fixed-income retirees</strong> — those not protected by the triple lock — saw pension income eroded severely by the 11.1% inflation peak. Those depending on annuities or defined contribution pensions faced a double hit: inflation eroded the real value of their income while rising interest rates depressed the value of bond-heavy pension portfolios.</p>
+    <p><strong>Those with diversified global investments</strong> — typically wealthier, older households — were partly shielded. US stock market exposure in particular provided strong returns. The ONS Wealth and Assets Survey consistently shows financial wealth to be the most unequally distributed component of wealth, meaning the wealthy were better positioned to weather the storm.</p>
+    <div class="callout red">🚨 The Joseph Rowntree Foundation projected in 2025 that disposable incomes for the lowest-income households would continue to decline for the rest of the decade. The Resolution Foundation estimated that household incomes would not return to pre-crisis levels until at least 2027.</div>
+  </div>
+
+  <!-- CHART -->
+  <div class="section">
+    <div class="section-num">07</div>
+    <h2>Inflation vs House Prices — Why Asset Rises Did Not Protect Wealth</h2>
+    <canvas id="inflationChart" height="220"></canvas>
+    <p style="margin-top:12px">The chart above shows the cumulative divergence between UK house price growth and consumer price inflation since 2020. When the consumer price line is above the house price line, homeowners are losing real-terms wealth even if their property is nominally increasing in value. House prices need to rise faster than inflation to preserve wealth — and between mid-2022 and 2025, they consistently failed to do so.</p>
+  </div>
+
+  <!-- WHAT HAPPENS NEXT -->
+  <div class="section">
+    <div class="section-num">08</div>
+    <h2>What Happens Next — Can Wealth Recover?</h2>
+    <p>The Resolution Foundation estimated in late 2023 that household incomes would not return to pre-crisis levels until at least 2027 — and that was before the further bill increases of 2024 and 2025. The ONS confirmed in July 2026 that real household disposable income continued to fall in Q1 2026.</p>
+    <p>For wealth to recover in real terms, one of two things needs to happen: either asset prices (particularly house prices and stock markets) need to rise faster than inflation, or inflation needs to fall significantly and stay down. Both are possible but neither is guaranteed.</p>
+    <p>The Bank of England was forecasting CPI to remain above the 2% target into 2027. House prices showed signs of softening in 2025 as affordability constraints bit. The UK stock market remained structurally underweight in the high-growth technology sectors that drove US wealth gains.</p>
+    <div class="callout green">✅ There are reasons for modest optimism. Real wages turned positive in mid-2023 and have continued to grow in real terms since. Inflation has fallen from its 11.1% peak to around 3.5% by mid-2026. If wage growth continues to outpace inflation and energy prices remain contained, wealth accumulation should gradually resume — but recovering five years of losses will take time.</div>
+    <div class="callout blue">📋 The incoming Burnham government faces the UBS data as its economic inheritance. In his first Commons speech, Burnham said "we cannot go through another decade like the previous one" — but the structural causes (energy dependence, housing undersupply, wage stagnation, mortgage structure) are not quickly reversible by any government.</div>
+  </div>
+
+  <div class="sources-box">
+    <strong>Sources:</strong> UBS Global Wealth Report 2026 (published 1 July 2026); UBS chief economist Paul Donovan commentary; LBC, GB News, The Telegraph and IndexBox reporting on the UBS findings; ONS Wealth and Assets Survey (latest data April 2020 to March 2022, published January 2025); House of Commons Library Research Briefing CBP-10210; Resolution Foundation wealth inequality research; Joseph Rowntree Foundation disposable income projections; LSE Centre for Economic Performance research on Brexit and food prices; Bank of England estimates on Brexit GDP impact; Wikipedia — United Kingdom cost-of-living crisis; ONS Consumer Price Index data; ONS House Price Index data. All figures adjusted for inflation unless stated otherwise.
+  </div>
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ This page is for general information and is not financial advice. <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: UBS Global Wealth Report 2026 · ONS · Resolution Foundation · Bank of England</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="cost-of-living.html">Cost of Living</a><a href="personal-finance.html">Personal Finance</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(function(g){if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(function(g){g.classList.remove('open')})});
+
+// House prices vs inflation chart
+new Chart(document.getElementById('inflationChart'),{
+  type:'line',
+  data:{
+    labels:['Jan 20','Jul 20','Jan 21','Jul 21','Jan 22','Jul 22','Jan 23','Jul 23','Jan 24','Jul 24','Jan 25'],
+    datasets:[
+      {label:'Cumulative CPI (Consumer Prices)',
+       data:[0,0.8,1.5,3.5,6.2,10.1,16.5,20.8,24.8,27.8,32],
+       borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.08)',fill:true,borderWidth:2.5,pointRadius:2,tension:0.4},
+      {label:'Cumulative House Price Growth',
+       data:[0,2.1,7.8,12.5,16.2,17.8,15.2,12.1,12.8,18.4,26],
+       borderColor:'#0060cc',backgroundColor:'rgba(0,96,204,0.06)',fill:true,borderWidth:2.5,pointRadius:2,tension:0.4}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{
+      legend:{labels:{color:'#2a3a50',font:{size:11,weight:'bold'},boxWidth:12}},
+      tooltip:{callbacks:{label:function(c){return c.dataset.label+': +'+c.raw+'%'}}}
+    },
+    scales:{
+      x:{ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'},maxRotation:0},grid:{color:'rgba(0,0,0,0.05)'}},
+      y:{title:{display:true,text:'Cumulative % change since Jan 2020',color:'#2a3a50',font:{size:11,weight:'bold'}},
+         ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'},callback:function(v){return '+'+v+'%'}},
+         grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+</script>
+</body>
+</html>

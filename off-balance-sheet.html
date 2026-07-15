@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Off-Balance-Sheet Debt – Hidden Liabilities | UK-Debt.info</title>
+<meta name="description" content="The UK's hidden liabilities not counted in the official national debt — unfunded pensions, PFI contracts, student loans, nuclear costs and more. Based on Whole of Government Accounts 2023/24.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;
+  --red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;
+  --green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;
+  --amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;
+  --blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;
+  --purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;
+  --ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+
+/* NAV */
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#3d0000,#800000,#cc0000);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(80,0,0,0.4)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+
+/* DANGER STRIP */
+.danger-strip{background:#1a0000;border-bottom:3px solid var(--red);padding:16px 28px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-around}
+.ds-item{text-align:center}
+.ds-item .dv{font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;color:#ff6666;letter-spacing:1px}
+.ds-item .dl{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-top:3px;font-weight:700}
+
+/* MAIN */
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent   {border-top:4px solid var(--red);   background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.amber-accent {border-top:4px solid var(--amber); background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent  {border-top:4px solid var(--blue);  background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.green-accent {border-top:4px solid var(--green); background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* LIABILITY ROWS */
+.liab-list{display:flex;flex-direction:column;gap:8px}
+.liab-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:6px;border:1px solid transparent;gap:12px}
+.liab-row .lr-left{display:flex;flex-direction:column;flex:1}
+.liab-row .lr-name{font-size:13px;font-weight:700;color:var(--ink)}
+.liab-row .lr-desc{font-size:11px;color:var(--ink-light);margin-top:2px;font-weight:600}
+.liab-row .lr-right{text-align:right;flex-shrink:0}
+.liab-row .lr-val{font-family:'Share Tech Mono',monospace;font-size:17px;font-weight:700}
+.liab-row .lr-pct{font-size:10px;font-weight:700;margin-top:2px}
+.liab-row.red   {background:var(--red-light);  border-color:var(--red-mid)  }.liab-row.red   .lr-val{color:var(--red)}  .liab-row.red   .lr-pct{color:var(--red)}
+.liab-row.amber {background:var(--amber-light);border-color:var(--amber-mid)}.liab-row.amber .lr-val{color:var(--amber)}.liab-row.amber .lr-pct{color:var(--amber)}
+.liab-row.blue  {background:var(--blue-light); border-color:var(--blue-mid) }.liab-row.blue  .lr-val{color:var(--blue)} .liab-row.blue  .lr-pct{color:var(--blue)}
+.liab-row.purple{background:var(--purple-light);border-color:var(--purple-mid)}.liab-row.purple .lr-val{color:var(--purple)}.liab-row.purple .lr-pct{color:var(--purple)}
+.liab-row.green {background:var(--green-light);border-color:var(--green-mid)}.liab-row.green .lr-val{color:var(--green)}.liab-row.green .lr-pct{color:var(--green)}
+.liab-row.total {background:var(--ink);border-color:var(--ink)}.liab-row.total .lr-name{color:#fff;font-size:14px}.liab-row.total .lr-desc{color:rgba(255,255,255,0.6)}.liab-row.total .lr-val{color:#ff6666;font-size:20px}.liab-row.total .lr-pct{color:rgba(255,255,255,0.7)}
+
+/* PENSION SCHEME BARS */
+.pension-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.pension-row{display:flex;align-items:center;gap:10px}
+.pension-label{width:130px;font-size:12px;font-weight:700;color:var(--ink-mid);text-align:right;flex-shrink:0}
+.pension-track{flex:1;height:20px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.pension-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden}
+.pension-val{width:70px;font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0}
+
+/* COMPARISON */
+.comp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.comp-label{width:150px;font-size:12px;font-weight:700;color:var(--ink-mid);text-align:right;flex-shrink:0}
+.comp-track{flex:1;height:20px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.comp-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.comp-val{width:80px;font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0}
+
+/* BOXES */
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box {background:var(--red-light);  border:1px solid var(--red-mid);  border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light); border:1px solid var(--blue-mid); border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.green-box{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+
+/* STAT BOXES */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:8px}
+.stat-box{padding:13px;border-radius:6px;border:1px solid transparent;text-align:center}
+.stat-box .sb-val{font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700}
+.stat-box .sb-label{font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;line-height:1.3}
+.stat-box.red   {background:var(--red-light);  border-color:var(--red-mid)  }.stat-box.red   .sb-val{color:var(--red)}
+.stat-box.amber {background:var(--amber-light);border-color:var(--amber-mid)}.stat-box.amber .sb-val{color:var(--amber)}
+.stat-box.blue  {background:var(--blue-light); border-color:var(--blue-mid) }.stat-box.blue  .sb-val{color:var(--blue)}
+.stat-box.purple{background:var(--purple-light);border-color:var(--purple-mid)}.stat-box.purple .sb-val{color:var(--purple)}
+
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments History</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="active">Off-Balance-Sheet Debt</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html">Personal Finance Dashboard</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-title">
+    <h1>UK OFF-BALANCE-SHEET DEBT</h1>
+    <div class="subtitle">Hidden Liabilities Not Counted in Official PSND · Whole of Government Accounts · OBR · ONS</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<!-- DANGER STRIP -->
+<div class="danger-strip">
+  <div class="ds-item"><div class="dv">£2.92tn</div><div class="dl">Official PSND (what Govt admits)</div></div>
+  <div class="ds-item"><div class="dv">+£1.4tn</div><div class="dl">Unfunded Public Pensions (OBR)</div></div>
+  <div class="ds-item"><div class="dv">+£310bn</div><div class="dl">PFI / PPP Contracts</div></div>
+  <div class="ds-item"><div class="dv">+£237bn</div><div class="dl">Student Loan Book</div></div>
+  <div class="ds-item"><div class="dv">~£5tn+</div><div class="dl">Total True Liability (WGA basis)</div></div>
+  <div class="ds-item"><div class="dv">~£73,000</div><div class="dl">Total Liabilities Per Person</div></div>
+</div>
+
+<div class="main">
+
+  <!-- WHAT IS OFF BS DEBT -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">What is Off-Balance-Sheet Debt and Why Does it Matter?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:10px">The UK government's official national debt figure — Public Sector Net Debt (PSND) of £2.91 trillion — is the number reported in the news each month. But it deliberately excludes several categories of real financial obligation that the government is committed to paying.</p>
+        <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:10px">These hidden liabilities are not secret — they appear in the <strong>Whole of Government Accounts (WGA)</strong>, published annually by HM Treasury. The WGA is compiled using the same accounting standards (IFRS) as FTSE 100 companies. On that basis, total public sector liabilities were <strong>£5.02 trillion</strong> at 31 March 2024.</p>
+        <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7">The gap between the headline figure and the full picture is <strong>over £2 trillion</strong> — more than the entire official debt itself.</p>
+      </div>
+      <div>
+        <div class="stat-grid">
+          <div class="stat-box red"><div class="sb-val">£2.92tn</div><div class="sb-label">Official PSND (excl. BoE)</div></div>
+          <div class="stat-box red"><div class="sb-val">£5.02tn</div><div class="sb-label">WGA Total Liabilities</div></div>
+          <div class="stat-box amber"><div class="sb-val">£2.65tn</div><div class="sb-label">WGA Total Assets</div></div>
+          <div class="stat-box red"><div class="sb-val">£2.37tn</div><div class="sb-label">WGA Net Liability Position</div></div>
+        </div>
+        <div class="red-box" style="margin-top:10px">
+          🚨 The WGA shows <strong>£73,000 of liabilities per UK resident</strong> against only £38,500 of assets — a net liability of £34,500 per person. This is the true balance sheet of the UK public sector, not the headline debt figure.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULL LIABILITY TABLE -->
+  <div class="panel red-accent full-width">
+    <div class="panel-label">Complete Hidden Liabilities Register</div>
+    <div class="liab-list">
+      <div class="liab-row red">
+        <div class="lr-left"><span class="lr-name">🏛️ Unfunded Public Sector Pensions (Pay-as-you-go)</span><span class="lr-desc">NHS, teachers, civil servants, armed forces, police — OBR estimate end 2024/25. Not in PSND or PSNFL.</span></div>
+        <div class="lr-right"><div class="lr-val">£1.4tn</div><div class="lr-pct">48% of GDP</div></div>
+      </div>
+      <div class="liab-row amber">
+        <div class="lr-left"><span class="lr-name">🏗️ PFI / PPP Contract Commitments</span><span class="lr-desc">Future payments on Private Finance Initiative contracts for hospitals, schools, roads. £126bn interest + services, £62bn on-balance-sheet lease liabilities.</span></div>
+        <div class="lr-right"><div class="lr-val">£310bn</div><div class="lr-pct">10.5% of GDP</div></div>
+      </div>
+      <div class="liab-row blue">
+        <div class="lr-left"><span class="lr-name">🎓 Student Loan Book</span><span class="lr-desc">Outstanding student loans — expected ~40% never repaid. ONS treats as financial assets but OBR acknowledges significant write-off risk. Included in PSNFL but not PSND.</span></div>
+        <div class="lr-right"><div class="lr-val">£237bn</div><div class="lr-pct">8.0% of GDP</div></div>
+      </div>
+      <div class="liab-row amber">
+        <div class="lr-left"><span class="lr-name">☢️ Nuclear Decommissioning</span><span class="lr-desc">Costs of decommissioning UK's nuclear sites over the coming decades. NDA provision.</span></div>
+        <div class="lr-right"><div class="lr-val">~£23bn</div><div class="lr-pct">0.8% of GDP</div></div>
+      </div>
+      <div class="liab-row blue">
+        <div class="lr-left"><span class="lr-name">🚂 Network Rail / Great British Railways Debt</span><span class="lr-desc">Classified on government balance sheet since 2014. Included in PSND but worth highlighting separately.</span></div>
+        <div class="lr-right"><div class="lr-val">~£54bn</div><div class="lr-pct">1.8% of GDP</div></div>
+      </div>
+      <div class="liab-row purple">
+        <div class="lr-left"><span class="lr-name">⚖️ OBR Contingent Liabilities</span><span class="lr-desc">Guarantees, indemnities, legal exposures reported by OBR — not on balance sheet but real risk.</span></div>
+        <div class="lr-right"><div class="lr-val">~£250bn</div><div class="lr-pct">8.4% of GDP</div></div>
+      </div>
+      <div class="liab-row purple">
+        <div class="lr-left"><span class="lr-name">🏥 Clinical Negligence Claims</span><span class="lr-desc">NHS Resolution outstanding claims — growing rapidly due to maternity negligence and long-tail litigation.</span></div>
+        <div class="lr-right"><div class="lr-val">~£56bn</div><div class="lr-pct">1.9% of GDP</div></div>
+      </div>
+      <div class="liab-row amber">
+        <div class="lr-left"><span class="lr-name">🌊 Flood & Infrastructure Liabilities</span><span class="lr-desc">Maintenance backlogs, flood defence commitments, road/rail infrastructure deficits not yet funded.</span></div>
+        <div class="lr-right"><div class="lr-val">~£30bn</div><div class="lr-pct">1.0% of GDP</div></div>
+      </div>
+      <div class="liab-row total">
+        <div class="lr-left"><span class="lr-name">TOTAL OFF-BALANCE-SHEET (excl. pensions)</span><span class="lr-desc">PFI + student loans + nuclear + Network Rail + contingent + clinical negligence</span></div>
+        <div class="lr-right"><div class="lr-val">~£960bn</div><div class="lr-pct">~32% of GDP</div></div>
+      </div>
+      <div class="liab-row total">
+        <div class="lr-left"><span class="lr-name">TOTAL INCLUDING UNFUNDED PENSIONS</span><span class="lr-desc">All hidden liabilities combined — the gap between official PSND and true obligations</span></div>
+        <div class="lr-right"><div class="lr-val">~£2.4tn+</div><div class="lr-pct">~81% of GDP extra</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PENSION BREAKDOWN -->
+  <div class="panel red-accent">
+    <div class="panel-label">Unfunded Pension Liabilities by Scheme (WGA 2022/23)</div>
+    <div class="pension-list">
+      <div class="pension-row">
+        <span class="pension-label">NHS Workers</span>
+        <div class="pension-track"><div class="pension-fill" style="width:100%;background:linear-gradient(90deg,#ff8090,#d40020)">£535bn</div></div>
+        <span class="pension-val" style="color:var(--red)">£535bn</span>
+      </div>
+      <div class="pension-row">
+        <span class="pension-label">Teachers</span>
+        <div class="pension-track"><div class="pension-fill" style="width:62.6%;background:linear-gradient(90deg,#ff8090,#d40020)">£335bn</div></div>
+        <span class="pension-val" style="color:var(--red)">£335bn</span>
+      </div>
+      <div class="pension-row">
+        <span class="pension-label">Civil Servants</span>
+        <div class="pension-track"><div class="pension-fill" style="width:41.5%;background:linear-gradient(90deg,#ffd070,#c97000)">£222bn</div></div>
+        <span class="pension-val" style="color:var(--amber)">£222bn</span>
+      </div>
+      <div class="pension-row">
+        <span class="pension-label">Armed Forces</span>
+        <div class="pension-track"><div class="pension-fill" style="width:29.2%;background:linear-gradient(90deg,#4090e0,#0060cc)">£156bn</div></div>
+        <span class="pension-val" style="color:var(--blue)">£156bn</span>
+      </div>
+      <div class="pension-row">
+        <span class="pension-label">Police</span>
+        <div class="pension-track"><div class="pension-fill" style="width:19.4%;background:linear-gradient(90deg,#d4b0f8,#6600cc)">£104bn</div></div>
+        <span class="pension-val" style="color:var(--purple)">£104bn</span>
+      </div>
+      <div class="pension-row">
+        <span class="pension-label">Pre-priv. Royal Mail</span>
+        <div class="pension-track"><div class="pension-fill" style="width:5.6%;background:linear-gradient(90deg,#60d0a0,#008844)">£30bn</div></div>
+        <span class="pension-val" style="color:var(--green)">£30bn</span>
+      </div>
+      <div class="pension-row">
+        <span class="pension-label"><strong>TOTAL</strong></span>
+        <div class="pension-track"><div class="pension-fill" style="width:100%;background:#1a0000;font-size:11px">£1,419bn unfunded</div></div>
+        <span class="pension-val" style="color:var(--red);font-weight:800">£1.4tn</span>
+      </div>
+    </div>
+    <div class="warn-box">
+      ⚠️ <strong>Important note on pension valuations:</strong> The WGA figure of £1.4tn uses an IFRS discount rate linked to high-quality corporate bond yields. The OBR's preferred measure uses a different discount rate and gives a similar £1.4tn figure for end-2024/25. Some estimates using lower discount rates put the figure at £3–6tn. The true cost depends heavily on assumptions about future wage growth, inflation and discount rates.
+    </div>
+    <div class="info-box">
+      📋 These are <strong>unfunded, pay-as-you-go schemes</strong> — meaning there is no pot of money set aside. Pensions are paid from current tax receipts each year. Annual pension payments from these schemes currently cost ~£50bn/year and are rising as the workforce ages.
+    </div>
+  </div>
+
+  <!-- PFI EXPLAINED -->
+  <div class="panel amber-accent">
+    <div class="panel-label">PFI / PPP — The Long Shadow of 1990s Deals</div>
+    <div class="stat-grid">
+      <div class="stat-box amber"><div class="sb-val">700+</div><div class="sb-label">PFI Contracts Outstanding</div></div>
+      <div class="stat-box red"><div class="sb-val">£310bn</div><div class="sb-label">Total Remaining Commitments</div></div>
+      <div class="stat-box amber"><div class="sb-val">£57bn</div><div class="sb-label">Original Capital Value</div></div>
+      <div class="stat-box red"><div class="sb-val">5.4×</div><div class="sb-label">Cost vs Original Capital</div></div>
+    </div>
+    <div class="red-box" style="margin-top:12px">
+      🚨 <strong>The PFI scandal in numbers:</strong> The government borrowed £57bn of capital value through PFI — but total payments over the contract lives reach £310bn. For every £1 of hospital or school built under PFI, the taxpayer pays back over £5. The contracts run until the 2040s and 2050s, meaning future generations are still paying for hospitals built in the 1990s.
+    </div>
+    <div style="margin-top:14px">
+      <div class="panel-label">Top PFI Sectors by Commitment</div>
+      <div style="margin-top:4px">
+        <canvas id="pfiChart" height="200"></canvas>
+      </div>
+    </div>
+    <div class="warn-box">
+      ⚠️ The government announced in 2018 it would no longer use PFI for new projects. However existing contracts cannot be unwound without paying significant termination fees, locking in these costs for decades.
+    </div>
+  </div>
+
+  <!-- STUDENT LOANS -->
+  <div class="panel blue-accent">
+    <div class="panel-label">Student Loan Book — The Hidden Write-Off</div>
+    <div class="stat-grid">
+      <div class="stat-box blue"><div class="sb-val">£237bn</div><div class="sb-label">Total Outstanding (2025)</div></div>
+      <div class="stat-box red"><div class="sb-val">~£95bn</div><div class="sb-label">Expected Write-Off (~40%)</div></div>
+      <div class="stat-box amber"><div class="sb-val">£20bn+</div><div class="sb-label">New Loans Issued Per Year</div></div>
+      <div class="stat-box red"><div class="sb-val">30 yrs</div><div class="sb-label">Until Loans Written Off</div></div>
+    </div>
+    <div class="warn-box" style="margin-top:12px">
+      ⚠️ The ONS treats student loans as financial assets in PSNFL — but the OBR and independent economists estimate around 40% will never be repaid and will be written off after 30 years. This ~£95bn expected loss is not reflected in the headline debt figures. As the student loan book grows, so does this hidden liability.
+    </div>
+    <div style="margin-top:14px">
+      <canvas id="loansChart" height="180"></canvas>
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Total Student Loan Book (£bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Estimated Write-Off (£bn)</div>
+    </div>
+  </div>
+
+  <!-- WHOLE OF GOVERNMENT ACCOUNTS CHART -->
+  <div class="panel full-width purple-accent">
+    <div class="panel-label">Whole of Government Accounts — Full Balance Sheet Breakdown (31 March 2024)</div>
+    <canvas id="wgaChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Assets (£tn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Liabilities (£tn)</div>
+    </div>
+    <div class="info-box" style="margin-top:12px">
+      📋 Source: Whole of Government Accounts 2023/24 (HC 917, July 2025). Prepared under IFRS accounting standards — the same standards used by listed companies. This is the most comprehensive picture of what the UK government truly owns and owes.
+    </div>
+  </div>
+
+  <!-- HOW DEBT IS MEASURED -->
+  <div class="panel full-width green-accent">
+    <div class="panel-label">The Ladder of UK Debt Measures — From Narrow to Complete</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:8px">
+      <div style="background:var(--green-light);border:2px solid var(--green);border-radius:6px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px">Narrowest — Headline</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:var(--ink)">£2.92tn</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:4px;line-height:1.5">PSND excl. BoE<br>What's in the news</div>
+      </div>
+      <div style="background:var(--blue-light);border:2px solid var(--blue);border-radius:6px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px">Broader</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:var(--ink)">£2.47tn</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:4px;line-height:1.5">PSNFL excl. BoE<br>Govt fiscal rule target<br>(83.3% of GDP)</div>
+      </div>
+      <div style="background:var(--amber-light);border:2px solid var(--amber);border-radius:6px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px">Comprehensive</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:var(--ink)">~£3.87tn</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:4px;line-height:1.5">PSND + PFI +<br>student loans +<br>contingent liabilities</div>
+      </div>
+      <div style="background:var(--red-light);border:2px solid var(--red);border-radius:6px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px">Full WGA Basis</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:var(--red)">£5.02tn</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:4px;line-height:1.5">Whole of Government<br>Accounts total liabilities<br>IFRS accounting standard</div>
+      </div>
+      <div style="background:#1a0000;border:2px solid var(--red);border-radius:6px;padding:14px">
+        <div style="font-size:10px;font-weight:700;color:#ff8888;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px">True Total</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:#ff6666">£5tn–£9tn</div>
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);margin-top:4px;line-height:1.5">WGA + unfunded pensions<br>at various discount rates<br>£34,500 net per person</div>
+      </div>
+    </div>
+    <div class="green-box" style="margin-top:14px">
+      ✅ <strong>Why governments use the narrow measure:</strong> PSND is internationally comparable (used by IMF, Eurostat), avoids disputed actuarial assumptions, and has a long historical series. It's not dishonest — but it's important to understand what it excludes. The WGA and PSNFL provide the fuller picture.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ Figures from Whole of Government Accounts 2023/24 (HM Treasury), OBR, ONS. Pension liabilities are estimates sensitive to discount rate assumptions. Not financial advice.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: WGA 2023/24 · OBR Fiscal Risks · ONS PSNFL · ICAEW Public Finances Analysis</span>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+// PFI SECTOR CHART
+new Chart(document.getElementById('pfiChart'),{
+  type:'bar',
+  data:{
+    labels:['Health','Education','Transport','Defence','Justice','Other'],
+    datasets:[{
+      label:'PFI Commitment (£bn)',
+      data:[130,65,45,25,18,27],
+      backgroundColor:['#d40020','#c97000','#0060cc','#6600cc','#008844','#4a5a6e'],
+      borderWidth:0
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`£${ctx.raw}bn`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:11,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'£bn',color:'#2a3a50',font:{size:11,weight:'bold'}},
+         ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},
+         grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+// STUDENT LOANS GROWTH
+new Chart(document.getElementById('loansChart'),{
+  type:'bar',
+  data:{
+    labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
+    datasets:[
+      {label:'Total Loan Book (£bn)',data:[76,90,105,121,137,154,170,188,205,222,237],
+       backgroundColor:'rgba(0,96,204,0.7)',stack:'a'},
+      {label:'Estimated Write-Off (£bn)',data:[30,36,42,48,55,62,68,75,82,89,95],
+       backgroundColor:'rgba(212,0,32,0.6)',stack:'b'}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: £${ctx.raw}bn`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},
+         grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+// WGA BALANCE SHEET CHART
+new Chart(document.getElementById('wgaChart'),{
+  type:'bar',
+  data:{
+    labels:['Gilts & Bonds','Pension Liabilities','PFI & Leases','Student Loans (asset)','Other Financial Assets','Property & Infrastructure','Borrowings (other)','Payables & Provisions'],
+    datasets:[
+      {label:'Assets (£tn)',
+       data:[0, 0, 0, 0.24, 0.35, 1.62, 0, 0.44],
+       backgroundColor:'rgba(0,96,204,0.75)',borderWidth:0},
+      {label:'Liabilities (£tn)',
+       data:[2.91, 1.42, 0.19, 0, 0, 0, 0.19, 0.31],
+       backgroundColor:'rgba(212,0,32,0.75)',borderWidth:0}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>ctx.raw>0?`${ctx.dataset.label}: £${ctx.raw.toFixed(2)}tn`:''}}
+    },
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},maxRotation:30},grid:{display:false}},
+      y:{title:{display:true,text:'£ Trillions',color:'#2a3a50',font:{size:11,weight:'bold'}},
+         ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v+'tn'},
+         grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+</script>
+</body>
+</html>

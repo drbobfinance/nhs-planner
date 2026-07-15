@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Russia's War Economy — Have Sanctions Worked? GDP, Oil, Debt | UK-Debt.info</title>
+<meta name="description" content="Russia's economy through the Ukraine war. GDP grew 4% in 2024 but is now stalling. Oil revenues collapsed 45% in Q1 2026. Sanctions reshaped trade but didn't stop the war. The full picture with data.">
+<link rel="canonical" href="https://uk-debt.info/russia-economy-war.html">
+<meta property="og:title" content="Russia's War Economy — Have Sanctions Worked?">
+<meta property="og:type" content="article">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{background:rgba(255,255,255,.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:11px 18px;font-size:14px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+.header{background:linear-gradient(135deg,#1a0000,#3d0000,#660000);padding:24px 40px 20px}
+.header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,4.5vw,28px);letter-spacing:3px;color:#fff;line-height:1.1}
+.header .sub{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.75);text-transform:uppercase;margin-top:4px;font-weight:600}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 40px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss{text-align:center}.ss .sv{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700}.ss .sl{font-size:12px;letter-spacing:1px;color:var(--ink-light);text-transform:uppercase;margin-top:4px;font-weight:700}
+.ss.red .sv{color:var(--red)}.ss.green .sv{color:var(--green)}.ss.amber .sv{color:var(--amber)}.ss.blue .sv{color:var(--blue)}
+.main{padding:20px 32px}
+.intro{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.intro p{font-size:17px;font-weight:600;color:var(--ink-mid);line-height:1.85}
+.section{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sn{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--red);font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.section h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:var(--ink);margin-bottom:12px}
+.section p{font-size:16px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:10px}
+.section p:last-child{margin-bottom:0}
+.callout{border-radius:6px;padding:14px 18px;font-size:15px;font-weight:600;line-height:1.75;margin:14px 0}
+.callout.red{background:var(--red-light);border:1px solid var(--red-mid);color:var(--ink-mid)}
+.callout.green{background:var(--green-light);border:1px solid var(--green-mid);color:var(--ink-mid)}
+.callout.amber{background:var(--amber-light);border:1px solid var(--amber-mid);color:var(--ink-mid)}
+.callout.blue{background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--ink-mid)}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0}
+.sr{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center}
+.sr .sv{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700}.sr .sl{font-size:9px;color:var(--ink-light);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;font-weight:700}
+.sr.good .sv{color:var(--green)}.sr.bad .sv{color:var(--red)}.sr.warn .sv{color:var(--amber)}.sr.blue .sv{color:var(--blue)}
+.verdict-box{background:var(--panel);border:2px solid var(--border);border-radius:10px;padding:20px;margin-bottom:14px}
+.verdict-box h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--ink);margin-bottom:10px}
+.verdict-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.vg-box{border-radius:8px;padding:14px;border:2px solid}
+.vg-box.worked{background:var(--green-light);border-color:var(--green-mid)}
+.vg-box.failed{background:var(--red-light);border-color:var(--red-mid)}
+.vg-box.partial{background:var(--amber-light);border-color:var(--amber-mid)}
+.vg-box h3{font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase}
+.vg-box.worked h3{color:var(--green)}.vg-box.failed h3{color:var(--red)}.vg-box.partial h3{color:var(--amber)}
+.vg-box li{font-size:12px;font-weight:600;color:var(--ink-mid);margin-bottom:5px;line-height:1.5;margin-left:14px}
+.sources{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:11px;color:var(--ink-light);line-height:1.7}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+@media(max-width:768px){.top-nav{padding:0 8px;overflow-x:auto;flex-wrap:nowrap}.top-nav::-webkit-scrollbar{display:none}.nav-groups{flex-shrink:0;flex-wrap:nowrap}.nav-group-btn{padding:0 8px;font-size:10px;white-space:nowrap}.nav-brand span{font-size:16px;white-space:nowrap}.dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}.verdict-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet</a>
+        <a href="obr-spring-2026.html" class="done">OBR Spring 2026</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money &amp; Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People &amp; Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Employment</a>
+        <a href="uk-wealth-decline.html" class="done">UK Wealth Decline</a>
+        <a href="jobs-data-accuracy.html" class="done">Jobs Data Accuracy</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="done">Historical Timeline</a>
+        <a href="debt-reduction-success.html" class="done">Who Reduced Their Debt?</a>
+        <a href="russia-economy-war.html" class="active">Russia War Economy</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>RUSSIA'S WAR ECONOMY — HAVE THE SANCTIONS WORKED?</h1>
+  <div class="sub">GDP · Oil Revenue · Debt · Inflation · Gold Reserves · The Real Picture After Four Years</div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss amber"><div class="sv">~1%</div><div class="sl">GDP Growth 2025/26</div></div>
+  <div class="ss green"><div class="sv">4.1%</div><div class="sl">GDP Growth 2024</div></div>
+  <div class="ss red"><div class="sv">−45%</div><div class="sl">Oil Revenue Q1 2026 YoY</div></div>
+  <div class="ss red"><div class="sv">$40/bbl</div><div class="sl">Urals Price (Sanctioned)</div></div>
+  <div class="ss red"><div class="sv">21%</div><div class="sl">Russia Interest Rate 2025</div></div>
+  <div class="ss amber"><div class="sv">24.8%</div><div class="sl">Russia Debt/GDP — Low</div></div>
+</div>
+
+<div class="main">
+
+  <div class="intro">
+    <p>When Western nations imposed sweeping sanctions on Russia following the February 2022 invasion of Ukraine, many economists predicted severe economic contraction. Those predictions did not materialise in the short term — Russia's economy proved more resilient than expected, growing 3.6% in 2023 and 4.1% in 2024. But by 2026, the picture is changing. Oil revenues have collapsed, inflation is entrenched, and what looked like resilience is increasingly revealing itself as a war-spending bubble now losing air. This page examines what the data actually shows.</p>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="section">
+    <div class="sn">01</div>
+    <h2>Phase 1 (2022-2024) — Surprising Resilience</h2>
+    <div class="stat-row">
+      <div class="sr bad"><div class="sv">−2.1%</div><div class="sl">GDP 2022</div></div>
+      <div class="sr good"><div class="sv">+3.6%</div><div class="sl">GDP 2023</div></div>
+      <div class="sr good"><div class="sv">+4.1%</div><div class="sl">GDP 2024</div></div>
+      <div class="sr bad"><div class="sv">9.5%</div><div class="sl">CPI 2024</div></div>
+      <div class="sr bad"><div class="sv">21%</div><div class="sl">Interest Rate</div></div>
+      <div class="sr warn"><div class="sv">2.6%</div><div class="sl">Unemployment</div></div>
+    </div>
+    <p>The predictions of immediate economic collapse were wrong. Russia's GDP contracted by only 2.1% in 2022 — far less than the double-digit falls many Western economists forecast. It then rebounded strongly, growing 3.6% in 2023 and 4.1% in 2024 — rates that the UK, Germany and France would have envied.</p>
+    <p>Three factors explain this resilience. First, Russia redirected energy exports from Europe to Asia — primarily China and India — at a discount, maintaining volumes even as prices fell below Western benchmarks. Second, the government dramatically increased military spending, which directly boosted GDP through defence production and employment. Federal spending rose 24% in 2024 alone. Third, capital controls, import substitution programmes and the pivot to Asian suppliers partially offset the loss of Western goods and technology.</p>
+    <p>Unemployment fell to a record low of 2.6% — not because the economy was healthy but because the labour market was simultaneously absorbing military mobilisation of hundreds of thousands of working-age men, emigration of educated workers, and wartime production demands. The tight labour market drove wages up but also fed inflation.</p>
+    <div class="callout amber">⚠️ <strong>The resilience was real but misleading.</strong> Russia's economy grew like a patient on fiscal steroids — the stimulus came from massive government spending on the war itself. Carnegie Endowment economists compared it to "a marathoner on fiscal steroids." The growth was not sustainable; it was consuming reserves and accumulating future costs.</div>
+  </div>
+
+  <!-- OIL AND SANCTIONS -->
+  <div class="section">
+    <div class="sn">02</div>
+    <h2>Oil Revenues — The Key to Everything</h2>
+    <div class="stat-row">
+      <div class="sr bad"><div class="sv">$40/bbl</div><div class="sl">Urals Price (2026)</div></div>
+      <div class="sr bad"><div class="sv">$20/bbl</div><div class="sl">Discount to Brent</div></div>
+      <div class="sr bad"><div class="sv">−45%</div><div class="sl">Oil Revenue Q1 2026</div></div>
+      <div class="sr warn"><div class="sv">25%</div><div class="sl">Federal Revenue from Oil</div></div>
+      <div class="sr bad"><div class="sv">−35%</div><div class="sl">Oil Revenue May-Dec 2025</div></div>
+      <div class="sr warn"><div class="sv">7.3%</div><div class="sl">Non-Oil Deficit 2024</div></div>
+    </div>
+    <p>Russia's oil revenues are the key variable in its war financing. Oil and gas exports generate roughly 40% of total export earnings and historically contributed 30-40% of federal revenue (now around 25% as Russia has diversified). Understanding what sanctions actually did to this revenue stream requires separating two questions: did sanctions reduce volumes? And did they reduce prices?</p>
+    <p><strong>Volumes: largely not reduced.</strong> Russia continued exporting roughly three-quarters of its oil production throughout the war. The OPEC+ quota system reduced Russian output slightly — from 11 million barrels/day pre-war to around 9.1-9.5 million barrels/day — but this decline tracked the OPEC+ cuts rather than sanctions specifically. Russia's shadow fleet of tankers, which circumvented Western shipping and insurance sanctions, maintained export volumes to non-Western buyers.</p>
+    <p><strong>Prices: significantly reduced.</strong> Before the invasion, Russian Urals crude traded at just $1-2 below the Brent benchmark. Sanctions forced Russia to sell at a much larger discount. By 2024-2025, the discount had settled at around $10-14 per barrel. The latest round of US sanctions against Rosneft and Lukoil in late 2025 pushed the discount to over $20 per barrel, with Urals now trading below $40 per barrel.</p>
+    <p>The impact on revenue was severe. Between May and December 2025, oil-related budget revenues were 35% lower year-on-year. In Q1 2026, Russia's oil and gas revenues collapsed by 45% year-on-year — and the federal budget deficit exceeded the government's entire full-year target within the first three months of 2026.</p>
+    <canvas id="oilChart" height="200" style="margin-top:12px"></canvas>
+  </div>
+
+  <!-- DEBT AND RESERVES -->
+  <div class="section">
+    <div class="sn">03</div>
+    <h2>Debt, Reserves and the National Wealth Fund</h2>
+    <div class="stat-row">
+      <div class="sr good"><div class="sv">24.8%</div><div class="sl">Government Debt/GDP</div></div>
+      <div class="sr bad"><div class="sv">$300bn</div><div class="sl">Central Bank Reserves Frozen</div></div>
+      <div class="sr bad"><div class="sv">$50bn</div><div class="sl">National Wealth Fund Liquid</div></div>
+      <div class="sr bad"><div class="sv">1.9%</div><div class="sl">NWF as % GDP (was 10%)</div></div>
+      <div class="sr bad"><div class="sv">1.7%</div><div class="sl">Budget Deficit 2024</div></div>
+      <div class="sr warn"><div class="sv">62%</div><div class="sl">Banks Hold Domestic Debt</div></div>
+    </div>
+    <p>Russia's government debt is low by global standards — around 24.8% of GDP. This reflects decades of resource-driven fiscal conservatism and is frequently cited by Putin as evidence of economic strength. However the headline figure understates Russia's fiscal vulnerability in important ways.</p>
+    <p><strong>The National Wealth Fund has been nearly emptied.</strong> Russia's sovereign wealth fund — designed to provide a fiscal buffer — had liquid assets worth around 10% of GDP at end-2021. By September 2025, liquid assets had fallen to just 1.9% of GDP ($50.3bn). Most of the liquid funds were spent covering budget deficits in 2022, 2023 and 2024. The remaining assets are largely tied up in illiquid domestic investments.</p>
+    <p><strong>$300bn in central bank reserves remain frozen.</strong> The G7 froze approximately $300bn of Russian central bank reserves held in Western accounts at the start of the war. These funds have not been seized (the legal and financial complexities are significant) but Russia cannot access them. This represents a huge portion of the pre-war foreign exchange cushion Russia relied on to defend the rouble and stabilise the economy in a crisis.</p>
+    <p><strong>Domestic debt growing rapidly.</strong> Unable to access international financial markets due to sanctions, Russia has financed its deficits primarily through domestic borrowing — Russian banks now hold 62% of domestic government debt (OFZ bonds). This creates a circular dependency between the state and the banking system, both of which are under war-related strain.</p>
+    <div class="callout red">🚨 <strong>The gold question:</strong> Russia has significant gold reserves — the fifth largest in the world at around 2,300 tonnes. Gold prices rose sharply in 2024-2025, with gold reaching over $3,000/oz. This means Russia's gold reserves have roughly doubled in value since the invasion, partially offsetting the frozen foreign exchange reserves. However gold is only useful if you can sell it — Russia faces sanctions on gold sales to Western buyers, requiring it to sell to China, India and Middle Eastern buyers, typically at a discount.</div>
+  </div>
+
+  <!-- PHASE 2 - SLOWDOWN -->
+  <div class="section">
+    <div class="sn">04</div>
+    <h2>Phase 2 (2025-2026) — The War Bubble Deflating</h2>
+    <div class="stat-row">
+      <div class="sr warn"><div class="sv">~1%</div><div class="sl">GDP Growth 2025</div></div>
+      <div class="sr warn"><div class="sv">~1%</div><div class="sl">GDP Growth 2026E</div></div>
+      <div class="sr bad"><div class="sv">5.2%</div><div class="sl">CPI (Official 2026)</div></div>
+      <div class="sr bad"><div class="sv">21%</div><div class="sl">Central Bank Rate</div></div>
+      <div class="sr bad"><div class="sv">7.2%</div><div class="sl">Defence % GDP 2025</div></div>
+      <div class="sr bad"><div class="sv">40%</div><div class="sl">Budget Spent on Defence</div></div>
+    </div>
+    <p>The wartime growth spurt ended in 2025. After two years of 4%+ growth driven by military spending, GDP growth slowed to around 1% — close to Russia's long-term potential growth rate, and potentially heading toward stagnation or recession in 2026.</p>
+    <p>The causes are structural. Russia has reached the capacity limits of its wartime economy. Labour shortages are at record levels — hundreds of thousands of workers are mobilised or dead, and a significant brain drain of educated professionals left in 2022-2023. Sanctions restrict access to critical technology. Interest rates at 21% — the highest in two decades — are crushing private sector investment and business lending. Inflation, officially at 5.2% but likely higher for ordinary consumers, is eroding real wages.</p>
+    <p>Defence spending now consumes 7.2% of GDP and approximately 40% of the entire federal budget — levels not seen since the Soviet Cold War era. This crowds out everything else. Education, health, public works and regional transfers are all being cut in real terms. The Moscow Times described Russia as entering "outright stagnation" in 2026 with recovery unlikely before 2027.</p>
+    <div class="callout amber">⚠️ <strong>The China dependency:</strong> Russia has increasingly relied on China as its primary trade and technology partner. Chinese companies supply roughly three-quarters of the increase in Russia's imports of sanctioned critical military components since 2022. However Kiel Institute researchers describe the relationship as "a partnership of dependence rather than equals" — China is gaining leverage over Russian trade, finance and supply chains while remaining free to dictate terms. Russia has gained an economic lifeline; China has gained a subordinate partner.</div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict-box">
+    <h2>HAVE THE SANCTIONS WORKED? — THE HONEST VERDICT</h2>
+    <p>This is genuinely a complex question with an honest answer of "partially, and in ways that were not intended." Here is the evidence broken down:</p>
+    <div class="verdict-grid">
+      <div class="vg-box worked">
+        <h3>✅ What Sanctions Did Work</h3>
+        <ul>
+          <li>Forced Russia to sell oil at a $20+ discount to Brent — costing tens of billions per year</li>
+          <li>Froze $300bn in central bank reserves, removing Russia's main crisis buffer</li>
+          <li>Cut Russia off from Western financial markets — no new external borrowing</li>
+          <li>Deprived Russia of Western technology — semiconductors, aircraft parts, machinery</li>
+          <li>Oil revenue collapsed 45% year-on-year in Q1 2026 — budget deficit exceeded full-year target in three months</li>
+          <li>National Wealth Fund liquid assets reduced from 10% to 1.9% of GDP</li>
+          <li>Brain drain — significant emigration of educated, productive citizens</li>
+        </ul>
+      </div>
+      <div class="vg-box failed">
+        <h3>❌ What Sanctions Did Not Do</h3>
+        <ul>
+          <li>Did not stop the war — Russia has continued fighting for over four years</li>
+          <li>Did not collapse the economy — GDP grew 4.1% in 2024</li>
+          <li>Did not reduce oil export volumes significantly — shadow fleet maintained shipments</li>
+          <li>Did not prevent China from supplying sanctioned technology and components</li>
+          <li>Did not prevent GDP from growing larger than before the invasion (6% larger per central bank)</li>
+          <li>Did not prevent Russia from financing enormous military spending</li>
+          <li>Did not prevent Russia from maintaining gold reserves worth over $200bn</li>
+        </ul>
+      </div>
+    </div>
+    <div class="vg-box partial" style="margin-top:12px;grid-column:1/-1">
+      <h3>⚠️ The Nuanced Picture</h3>
+      <ul>
+        <li>Sanctions made the war more expensive for Russia but did not make it unaffordable — at least not yet</li>
+        <li>The economic pain is now becoming more severe as NWF depletes and oil revenues fall, suggesting delayed rather than absent effectiveness</li>
+        <li>Kiel Institute: "Russia's growing economic vulnerabilities create a window of opportunity" — the question is whether this window is being used strategically</li>
+        <li>Bank of Finland: "Sanctions are a daily burden on the economy, reducing government revenues and raising costs for all participants" — cumulative damage is real</li>
+        <li>The war itself is the biggest sanction on Russia — military spending crowds out investment, kills working-age men, and leaves Russia with long-term productive capacity damage</li>
+      </ul>
+    </div>
+    <div class="callout blue" style="margin-top:12px">📋 <strong>The fundamental constraint:</strong> Kiel Institute's June 2026 report concluded that "Russia's challenge is no longer simply financial. The fundamental constraint facing Russia today is not access to money but access to people, technology, and productive capacity." The government can mobilise financial resources — but with labour shortages at record levels and sanctions restricting access to critical technology, the ability to translate money into military output is increasingly limited. This suggests sanctions are doing their most important work in constraining military capability, even if headline GDP figures initially appeared resilient.</div>
+  </div>
+
+  <canvas id="gdpChart" height="200" style="margin-bottom:14px"></canvas>
+
+  <div class="sources">
+    <strong>Sources:</strong> Bank of Finland Bulletin "Rough times for the Russian economy" (January 2026); Moscow Times "Russia's Economy in 2026: More War, Slower Growth and Higher Taxes" (January 2026); Kiel Institute "Endgame: Russia's war economy hits its limits" Kiel Report No. 9 (June 2026); Bruegel Working Paper "How resilient is Russia's economy after four years of war?" (December 2025); Carnegie Endowment for International Peace "Russia's Economic Gamble: The Hidden Costs of War-Driven Growth" (February 2026); New Eurasian Strategies Centre "Russia, war, and oil" (February 2026); International Trade Portal / Lloyds Bank Trade "The economic context of Russia" (2026); Statistics of the World "Russia Economy 2026" (2026); Focus Economics "Argentina's Economy Outlook Under Milei" for comparison data. All Russian economic data sourced from Rosstat, Russian Ministry of Finance, and Bank of Russia official figures, cross-referenced with Western analytical institutions. Figures carry uncertainty given limitations on Russian data transparency.
+  </div>
+</div>
+
+<div style="background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,.5)">
+  ⚠️ Independent analysis. Not financial advice. <a href="disclaimer.html" style="color:rgba(255,255,255,.7)">Disclaimer</a> · <a href="privacy.html" style="color:rgba(255,255,255,.7)">Privacy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: Bank of Finland · Kiel Institute · Bruegel · Carnegie Endowment · Moscow Times</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="uk-vs-world.html">UK vs World</a><a href="debt-reduction-success.html">Debt Reduction</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(function(g){if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(function(g){g.classList.remove('open')})});
+
+// Oil revenue chart
+new Chart(document.getElementById('oilChart'),{
+  type:'bar',
+  data:{
+    labels:['2021 (pre-war)','2022','2023','2024','2025','Q1 2026'],
+    datasets:[
+      {label:'Oil & Gas Revenue (index: 2021=100)',
+       data:[100,142,98,105,68,38],
+       backgroundColor:['#008844','#c97000','#c97000','#c97000','#d40020','#d40020'],
+       borderRadius:4}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return 'Index (2021=100): '+c.raw}}}},scales:{x:{ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'}},grid:{display:false}},y:{title:{display:true,text:'Index (2021 pre-war = 100)',color:'#2a3a50',font:{size:10,weight:'bold'}},ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.05)'}}}}
+});
+
+// GDP chart
+new Chart(document.getElementById('gdpChart'),{
+  type:'line',
+  data:{
+    labels:['2019','2020','2021','2022','2023','2024','2025E','2026E'],
+    datasets:[
+      {label:'Russia GDP Growth %',data:[2.2,-2.7,5.6,-2.1,3.6,4.1,1.0,1.0],borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.08)',fill:true,borderWidth:2.5,pointRadius:3,tension:0.3},
+      {label:'UK GDP Growth %',data:[1.7,-11.0,7.6,4.3,0.1,1.1,1.1,1.4],borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3,borderDash:[4,2]}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{labels:{color:'#2a3a50',font:{size:11,weight:'bold'},boxWidth:12}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{x:{ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},y:{title:{display:true,text:'GDP Growth %',color:'#2a3a50',font:{size:10,weight:'bold'}},ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'},callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.05)'}}}}
+});
+</script>
+</body>
+</html>

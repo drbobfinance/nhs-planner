@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Salary Calculator – Where Do You Rank? Tax Freedom Day & Pension Planner | UK-Debt.info</title>
+<meta name="description" content="Find out where your salary ranks in the UK, your tax freedom day, how much income tax your decile pays, and how much you need to save for retirement at different return rates.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;
+  --red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;
+  --green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;
+  --amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;
+  --blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;
+  --purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;
+  --ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+
+/* NAV */
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+
+/* PAGE HEADER */
+.header{background:linear-gradient(135deg,#002244,#1a3a6a,#2d5a9e);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(0,34,68,0.4)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+
+/* SALARY INPUT HERO */
+.calc-hero{background:linear-gradient(135deg,#0d1520,#1a2535,#2a3a50);padding:28px;border-bottom:3px solid var(--blue)}
+.calc-hero h2{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:#fff;margin-bottom:6px}
+.calc-hero p{font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:18px}
+.input-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.salary-input-wrap{display:flex;align-items:center;background:#fff;border-radius:6px;overflow:hidden;border:2px solid var(--blue-mid)}
+.salary-input-wrap .prefix{background:var(--blue);color:#fff;padding:0 14px;font-family:'Bebas Neue',sans-serif;font-size:22px;height:50px;display:flex;align-items:center}
+.salary-input-wrap input{border:none;outline:none;font-family:'Share Tech Mono',monospace;font-size:22px;padding:0 14px;width:180px;color:var(--ink);height:50px}
+.btn-calc{background:var(--blue);border:none;color:#fff;padding:0 28px;height:50px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;cursor:pointer;border-radius:6px;transition:opacity 0.2s}
+.btn-calc:hover{opacity:0.85}
+.hint-text{font-size:11px;color:rgba(255,255,255,0.5);margin-top:8px;font-weight:600}
+
+/* RESULTS BANNER */
+.results-banner{display:none;background:linear-gradient(135deg,#002244,#003366);padding:20px 28px;border-bottom:2px solid var(--blue-mid)}
+.results-banner.visible{display:block}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.result-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:14px;text-align:center}
+.result-card .rv{font-family:'Share Tech Mono',monospace;font-size:24px;font-weight:700;letter-spacing:1px}
+.result-card .rl{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-top:4px;font-weight:700}
+.result-card.blue .rv{color:#66aaff}
+.result-card.green .rv{color:#44cc88}
+.result-card.amber .rv{color:#ffcc44}
+.result-card.red .rv{color:#ff6666}
+.result-card.purple .rv{color:#cc88ff}
+
+/* TAX FREEDOM DAY */
+.freedom-day-display{background:#0d1520;border:2px solid var(--amber);border-radius:8px;padding:16px 20px;text-align:center;margin-top:12px}
+.freedom-day-display .fd-date{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:var(--amber)}
+.freedom-day-display .fd-label{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.7);text-transform:uppercase;margin-top:4px;font-weight:700}
+.freedom-day-display .fd-desc{font-size:12px;color:rgba(255,255,255,0.6);margin-top:6px;font-weight:600}
+
+/* MAIN */
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* DECILE TABLE */
+.decile-table{width:100%;border-collapse:collapse;font-size:12px}
+.decile-table th{background:var(--panel2);padding:8px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border);text-align:left}
+.decile-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid)}
+.decile-table td.mono{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700}
+.decile-table tr.highlight td{background:var(--blue-light);font-weight:800}
+.decile-table tr.highlight td.mono{color:var(--blue)}
+.freedom-cell{font-size:11px;font-weight:700}
+
+/* PENSION PLANNER */
+.pension-controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.pctl{display:flex;flex-direction:column;gap:4px}
+.pctl label{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--ink-mid);text-transform:uppercase}
+.pctl select,.pctl input{background:var(--panel2);border:1.5px solid var(--border);color:var(--ink);padding:8px 10px;font-family:'Share Tech Mono',monospace;font-size:14px;border-radius:5px;outline:none}
+.pctl select:focus,.pctl input:focus{border-color:var(--blue)}
+
+.pension-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px}
+.pr-box{padding:12px;border-radius:6px;border:1px solid transparent;text-align:center}
+.pr-box .prv{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700}
+.pr-box .prl{font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;line-height:1.3}
+.pr-box.green{background:var(--green-light);border-color:var(--green-mid)}.pr-box.green .prv{color:var(--green)}
+.pr-box.blue{background:var(--blue-light);border-color:var(--blue-mid)}.pr-box.blue .prv{color:var(--blue)}
+.pr-box.amber{background:var(--amber-light);border-color:var(--amber-mid)}.pr-box.amber .prv{color:var(--amber)}
+.pr-box.red{background:var(--red-light);border-color:var(--red-mid)}.pr-box.red .prv{color:var(--red)}
+
+/* BOXES */
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.green-box{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="money-in-out.html" class="done">Money In & Out</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="active">Salary Calculator</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>UK SALARY CALCULATOR — WHERE DO YOU RANK?</h1>
+    <div class="subtitle">Income Percentile · Tax Freedom Day · Decile Tax Analysis · Pension Planner · ONS ASHE / HMRC Data 2025/26</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<!-- SALARY INPUT -->
+<div class="calc-hero">
+  <h2>🔍 ENTER YOUR SALARY</h2>
+  <p>Enter your gross annual salary (before tax) to see where you rank in the UK income distribution, your tax freedom day, and your personalised pension saving targets.</p>
+  <div class="input-row">
+    <div class="salary-input-wrap">
+      <span class="prefix">£</span>
+      <input type="number" id="salaryInput" placeholder="35000" min="0" max="5000000" oninput="calculateAll()">
+    </div>
+    <button class="btn-calc" onclick="calculateAll()">CALCULATE →</button>
+  </div>
+  <div class="hint-text">UK median full-time salary: £39,039 · All data from ONS ASHE 2025 & HMRC 2025/26 tax rates</div>
+</div>
+
+<!-- RESULTS BANNER -->
+<div class="results-banner" id="resultsBanner">
+  <div class="results-grid">
+    <div class="result-card blue">
+      <div class="rv" id="r_percentile">—</div>
+      <div class="rl">Your Income Percentile</div>
+    </div>
+    <div class="result-card green">
+      <div class="rv" id="r_topX">—</div>
+      <div class="rl">Top % of UK Earners</div>
+    </div>
+    <div class="result-card amber">
+      <div class="rv" id="r_takehome">—</div>
+      <div class="rl">Estimated Take-Home (pa)</div>
+    </div>
+    <div class="result-card red">
+      <div class="rv" id="r_taxrate">—</div>
+      <div class="rl">Effective Total Tax Rate</div>
+    </div>
+    <div class="result-card purple">
+      <div class="rv" id="r_taxpaid">—</div>
+      <div class="rl">Tax Paid Per Year</div>
+    </div>
+    <div class="result-card amber">
+      <div class="rv" id="r_freedaydisplay">—</div>
+      <div class="rl">Tax Freedom Day</div>
+    </div>
+  </div>
+  <div class="freedom-day-display">
+    <div class="fd-date" id="freedomDayDate">—</div>
+    <div class="fd-label">Your Personal Tax Freedom Day 2026</div>
+    <div class="fd-desc" id="freedomDayDesc">The day of the year when you stop working for the taxman and start earning for yourself</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SALARY DISTRIBUTION CHART -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">UK Salary Distribution — All Workers 2025 (ONS ASHE) — Your Position Shown</div>
+    <canvas id="distChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(0,96,204,0.6)"></div>Number of workers at each salary range (approximate)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Your salary position</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#008844;border:1px dashed #008844"></div>UK Median (£39,039)</div>
+    </div>
+    <div class="info-box">
+      📋 The UK salary distribution is strongly right-skewed — most workers earn between £20,000 and £50,000, but a small number of very high earners stretch the top of the distribution. This is why the mean salary (£39,000 full-time) is higher than the median experience of most workers. The chart shows approximate worker density at each salary band.
+    </div>
+  </div>
+
+  <!-- KEY BENCHMARKS -->
+  <div class="panel green-accent">
+    <div class="panel-label">UK Salary Benchmarks — 2025/26 (ONS ASHE & HMRC)</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+      <div style="display:grid;grid-template-columns:1fr 120px 80px;gap:8px;align-items:center;padding:8px 12px;background:var(--panel2);border-radius:5px;border:1px solid var(--border)">
+        <span style="font-size:12px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px">Percentile</span>
+        <span style="font-size:12px;font-weight:700;color:var(--ink-mid);text-align:right">Salary</span>
+        <span style="font-size:12px;font-weight:700;color:var(--ink-mid);text-align:right">= Top %</span>
+      </div>
+      ${[
+        ['10th (bottom 10%)', '£10,800', '—'],
+        ['20th', '£18,200', '80%'],
+        ['25th', '£22,800', '75%'],
+        ['30th', '£25,500', '70%'],
+        ['40th', '£31,200', '60%'],
+        ['50th (MEDIAN)', '£34,963', '50%'],
+        ['60th', '£39,800', '40%'],
+        ['70th', '£46,500', '30%'],
+        ['75th', '£50,000', '25%'],
+        ['80th', '£55,000', '20%'],
+        ['90th', '£75,000', '10%'],
+        ['95th', '£100,000', '5%'],
+        ['99th (TOP 1%)', '£199,000', '1%'],
+      ].map(([p,s,t]) => `
+      <div style="display:grid;grid-template-columns:1fr 120px 80px;gap:8px;align-items:center;padding:8px 12px;background:${p.includes('MEDIAN')?'var(--green-light)':p.includes('TOP')?'var(--red-light)':'#fff'};border-radius:5px;border:1px solid ${p.includes('MEDIAN')?'var(--green-mid)':p.includes('TOP')?'var(--red-mid)':'var(--border)'}">
+        <span style="font-size:12px;font-weight:700;color:var(--ink-mid)">${p}</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700;color:${p.includes('MEDIAN')?'var(--green)':p.includes('TOP')?'var(--red)':'var(--blue)'};text-align:right">${s}</span>
+        <span style="font-size:12px;font-weight:700;color:var(--ink-light);text-align:right">${t}</span>
+      </div>`).join('')}
+    </div>
+    <div class="warn-box">
+      ⚠️ To be in the top 1% you need £199,000+ gross. <strong>Just 400,000 people out of ~33.5 million workers</strong> are in the top 1%. Top 1% earners pay 28.2% of all income tax despite earning 13.3% of total income.
+    </div>
+  </div>
+
+  <!-- DECILE TAX TABLE -->
+  <div class="panel red-accent">
+    <div class="panel-label">Tax Burden by Income Decile — 2024/25 (HMRC / ONS)</div>
+    <div style="overflow-x:auto">
+      <table class="decile-table" id="decileTable">
+        <thead>
+          <tr>
+            <th>Decile</th>
+            <th>Salary Range</th>
+            <th>% Inc Tax Paid</th>
+            <th>Eff. Tax Rate*</th>
+            <th>Tax Freedom Day</th>
+          </tr>
+        </thead>
+        <tbody id="decileBody"></tbody>
+      </table>
+    </div>
+    <div class="info-box" style="margin-top:10px">
+      📋 *Effective tax rate includes Income Tax + Employee NI + estimated VAT/indirect taxes (approx 10% of income) as a proportion of gross salary. "Tax Freedom Day" assumes all taxes are paid upfront from 1 January — the date your salary starts going to you rather than the government. Sources: HMRC Table 2.4, ONS Effects of Taxes and Benefits 2024.
+    </div>
+  </div>
+
+  <!-- DECILE CHARTS -->
+  <div class="panel full-width amber-accent">
+    <div class="panel-label">Income Tax Paid & % Earnings by Decile — The Distribution of the Tax Burden</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Share of Total Income Tax Paid (%)</div>
+        <canvas id="taxShareChart" height="280"></canvas>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Effective Total Tax Rate (Income Tax + NI + Indirect) by Decile</div>
+        <canvas id="taxRateChart" height="280"></canvas>
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:14px">
+      ⚠️ <strong>The striking fact:</strong> The <strong>top 10%</strong> of earners pay <strong>60.2%</strong> of all income tax. The <strong>top 1%</strong> alone pay <strong>28.2%</strong>. Yet the top decile pays roughly the same effective total tax rate (~45–55%) as the bottom decile when all taxes (particularly VAT, fuel duty and council tax) are included — because indirect taxes are regressive, falling proportionally harder on lower incomes.
+    </div>
+  </div>
+
+  <!-- PENSION PLANNER -->
+  <div class="panel full-width purple-accent">
+    <div class="panel-label">🎯 Pension Savings Planner — How Much Should You Save?</div>
+    <div style="background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:6px;padding:14px;margin-bottom:16px;font-size:13px;font-weight:700;color:var(--ink-mid);line-height:1.6">
+      The UK government's Pension Advisory Service suggests a pension pot of approximately <strong>£250,000</strong> is needed for a modest retirement income (combined with state pension). However, inflation erodes the real value of money — £250,000 today will be worth significantly more in nominal terms by the time you retire. This planner shows how much you need to save each month to hit your target.
+    </div>
+
+    <div class="pension-controls">
+      <div class="pctl">
+        <label>Current Age</label>
+        <input type="number" id="p_age" value="35" min="18" max="65" oninput="calcPension()">
+      </div>
+      <div class="pctl">
+        <label>Retirement Age</label>
+        <input type="number" id="p_retire" value="68" min="55" max="75" oninput="calcPension()">
+      </div>
+      <div class="pctl">
+        <label>Target Pot in TODAY's money</label>
+        <select id="p_target" onchange="calcPension()">
+          <option value="250000">£250,000 (standard guidance)</option>
+          <option value="400000">£400,000 (comfortable retirement)</option>
+          <option value="600000">£600,000 (relaxed retirement)</option>
+          <option value="1000000">£1,000,000 (wealthy retirement)</option>
+          <option value="custom">Custom amount</option>
+        </select>
+      </div>
+      <div class="pctl" id="customTargetWrap" style="display:none">
+        <label>Custom Target (£)</label>
+        <input type="number" id="p_customTarget" value="300000" oninput="calcPension()">
+      </div>
+      <div class="pctl">
+        <label>Inflation Assumption</label>
+        <select id="p_inflation" onchange="calcPension()">
+          <option value="2">2% per year (BoE target)</option>
+          <option value="3">3% per year (recent average)</option>
+          <option value="4" selected>4% per year (cautious)</option>
+          <option value="6">6% per year (high inflation)</option>
+        </select>
+      </div>
+      <div class="pctl">
+        <label>Current Pension Pot (£)</label>
+        <input type="number" id="p_currentpot" value="0" min="0" oninput="calcPension()">
+      </div>
+    </div>
+
+    <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Inflation-Adjusted Target Pot & Monthly Savings Required:</div>
+      <div class="pension-result-grid" id="pensionResults"></div>
+    </div>
+
+    <canvas id="pensionChart" height="260"></canvas>
+    <div class="chart-legend" style="margin-top:10px">
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>4% annual return</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>6% annual return</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>8% annual return</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020;border:1px dashed #d40020"></div>Inflation-adjusted target</div>
+    </div>
+    <div class="warn-box">
+      ⚠️ <strong>Inflation warning:</strong> At 4% annual inflation, £250,000 today is equivalent to approximately <strong id="inflWarnVal">£456,000</strong> in 33 years. Your pension target must be set in FUTURE money, not today's money, to maintain the same purchasing power. The chart and calculations adjust for this automatically.
+    </div>
+    <div class="green-box">
+      ✅ <strong>The power of starting early:</strong> At 6% annual return, a 25-year-old needs to save ~£250/month to reach a £250,000 (real terms) pot by 68. A 45-year-old needs ~£900/month for the same outcome. Starting 20 years earlier requires <strong>nearly 4× less per month</strong>. Tax relief on pension contributions (20% basic rate, 40% higher rate) means the government tops up every £1 you put in — it is the most tax-efficient saving available.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ Salary percentiles from ONS ASHE 2025. Tax calculations are estimates using 2025/26 rates. Pension projections are illustrative — actual returns vary. Not financial advice.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: ONS ASHE 2025 · HMRC Table 2.4 · TaxPayers' Alliance · Pension Advisory Service</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+// ── NAV ────────────────────────────────────────────────────────────────────
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+// ── SALARY PERCENTILE DATA (ONS ASHE 2025, all workers) ───────────────────
+const PERCENTILE_DATA = [
+  {p:5,  salary:8200},  {p:10, salary:10800}, {p:15, salary:13500},
+  {p:20, salary:18200}, {p:25, salary:22800}, {p:30, salary:25500},
+  {p:35, salary:27800}, {p:40, salary:31200}, {p:45, salary:33200},
+  {p:50, salary:34963}, {p:55, salary:37000}, {p:60, salary:39800},
+  {p:65, salary:42500}, {p:70, salary:46500}, {p:75, salary:50000},
+  {p:80, salary:55000}, {p:85, salary:62000}, {p:90, salary:75000},
+  {p:93, salary:85000}, {p:95, salary:100000},{p:97, salary:130000},
+  {p:99, salary:199000},{p:100,salary:5000000}
+];
+
+// ── TAX CALCULATION (2025/26 England/Wales) ───────────────────────────────
+function calcTax(gross) {
+  const PA = 12570;
+  // Income Tax
+  let taxable = Math.max(0, gross - PA);
+  // Taper personal allowance above 100k
+  if(gross > 100000) taxable = gross - Math.max(0, PA - (gross - 100000)/2);
+  let incomeTax = 0;
+  if(taxable > 0) {
+    const basic = Math.min(taxable, 37700); // 20%
+    incomeTax += basic * 0.20;
+    const higher = Math.min(Math.max(0, taxable - 37700), 87430); // 40%
+    incomeTax += higher * 0.40;
+    const additional = Math.max(0, taxable - 125130); // 45%
+    incomeTax += additional * 0.45;
+  }
+  // Employee NI (2025/26): 8% on £12,570–£50,270, 2% above
+  let ni = 0;
+  if(gross > 12570) {
+    ni += Math.min(Math.max(0, gross - 12570), 37700) * 0.08;
+    ni += Math.max(0, gross - 50270) * 0.02;
+  }
+  // Indirect taxes (VAT, fuel, council tax etc): ~10% of gross for average earner, regressive
+  const indirectRate = gross < 15000 ? 0.18 : gross < 30000 ? 0.14 : gross < 60000 ? 0.10 : gross < 100000 ? 0.07 : 0.05;
+  const indirect = gross * indirectRate;
+  const totalTax = incomeTax + ni + indirect;
+  const effectiveRate = totalTax / gross;
+  const takeHome = gross - incomeTax - ni;
+  return { incomeTax, ni, indirect, totalTax, effectiveRate, takeHome };
+}
+
+// ── PERCENTILE LOOKUP ─────────────────────────────────────────────────────
+function getPercentile(salary) {
+  for(let i = PERCENTILE_DATA.length-1; i >= 0; i--) {
+    if(salary >= PERCENTILE_DATA[i].salary) {
+      const p = PERCENTILE_DATA[i].p;
+      // Interpolate
+      if(i < PERCENTILE_DATA.length-1) {
+        const lo = PERCENTILE_DATA[i], hi = PERCENTILE_DATA[i+1];
+        const frac = (salary - lo.salary) / (hi.salary - lo.salary);
+        return lo.p + frac * (hi.p - lo.p);
+      }
+      return p;
+    }
+  }
+  return 1;
+}
+
+// ── FREEDOM DAY ───────────────────────────────────────────────────────────
+function getTaxFreedomDay(effectiveRate) {
+  const dayOfYear = Math.round(effectiveRate * 365);
+  const d = new Date(2026, 0, 1);
+  d.setDate(d.getDate() + dayOfYear - 1);
+  return {
+    date: d.toLocaleDateString('en-GB', {day:'numeric', month:'long'}),
+    dayNum: dayOfYear
+  };
+}
+
+function fmt(n){return Math.round(n).toLocaleString('en-GB')}
+function fmtP(n){return n.toFixed(1)+'%'}
+
+// ── CALCULATE ALL ─────────────────────────────────────────────────────────
+let distChart, pensionChart;
+
+function calculateAll() {
+  const raw = document.getElementById('salaryInput').value;
+  const salary = parseFloat(raw);
+  if(!salary || salary < 1) return;
+
+  const tax = calcTax(salary);
+  const pct = getPercentile(salary);
+  const topX = (100 - pct).toFixed(1);
+  const fd = getTaxFreedomDay(tax.effectiveRate);
+
+  // Show results banner
+  document.getElementById('resultsBanner').classList.add('visible');
+  document.getElementById('r_percentile').textContent = Math.round(pct) + 'th';
+  document.getElementById('r_topX').textContent = 'Top ' + topX + '%';
+  document.getElementById('r_takehome').textContent = '£' + fmt(tax.takeHome);
+  document.getElementById('r_taxrate').textContent = fmtP(tax.effectiveRate * 100);
+  document.getElementById('r_taxpaid').textContent = '£' + fmt(tax.totalTax);
+  document.getElementById('r_freedaydisplay').textContent = fd.date;
+  document.getElementById('freedomDayDate').textContent = fd.date + ' 2026';
+  document.getElementById('freedomDayDesc').textContent =
+    `You work ${fd.dayNum} days per year for the government and ${365-fd.dayNum} days for yourself. ` +
+    `Your total tax burden (income tax + NI + indirect taxes) is approximately ${fmtP(tax.effectiveRate*100)} of gross income.`;
+
+  // Update distribution chart position
+  updateDistChart(salary);
+
+  // Run pension
+  calcPension();
+}
+
+// ── DISTRIBUTION CHART ────────────────────────────────────────────────────
+const DIST_LABELS = ['<£10k','£10-15k','£15-20k','£20-25k','£25-30k','£30-35k','£35-40k','£40-50k','£50-60k','£60-75k','£75-100k','£100-150k','£150k+'];
+const DIST_MIDPOINTS = [7500,12500,17500,22500,27500,32500,37500,45000,55000,67500,87500,125000,200000];
+// Approximate number of workers in each band (millions)
+const DIST_WORKERS = [2.1,2.4,2.8,3.2,3.6,3.8,3.5,4.2,2.8,2.1,1.5,0.7,0.3];
+
+function initDistChart() {
+  const ctx = document.getElementById('distChart').getContext('2d');
+  distChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: DIST_LABELS,
+      datasets: [
+        {
+          label: 'Workers (approx, millions)',
+          data: DIST_WORKERS,
+          backgroundColor: DIST_WORKERS.map(() => 'rgba(0,96,204,0.6)'),
+          borderWidth: 0,
+          yAxisID: 'y'
+        },
+        {
+          label: 'Your salary',
+          data: DIST_WORKERS.map(() => null),
+          type: 'line',
+          borderColor: '#d40020',
+          backgroundColor: 'rgba(212,0,32,0.15)',
+          borderWidth: 3,
+          pointRadius: 0,
+          yAxisID: 'y'
+        },
+        {
+          label: 'UK Median',
+          data: DIST_WORKERS.map(() => null),
+          type: 'line',
+          borderColor: '#008844',
+          borderWidth: 2,
+          pointRadius: 0,
+          borderDash: [5,3],
+          yAxisID: 'y'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {display: false},
+        tooltip: {callbacks: {label: ctx => ctx.datasetIndex===0 ? `~${ctx.raw}m workers` : ''}}
+      },
+      scales: {
+        x: {ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},maxRotation:30}, grid:{display:false}},
+        y: {title:{display:true,text:'Workers (millions)',color:'#2a3a50',font:{size:11,weight:'bold'}},
+            ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'m'},
+            grid:{color:'rgba(0,0,0,0.04)'}}
+      }
+    }
+  });
+}
+
+function updateDistChart(salary) {
+  if(!distChart) return;
+  // Find which band salary falls in
+  const bandIdx = DIST_MIDPOINTS.findIndex((m, i) => {
+    if(i === DIST_MIDPOINTS.length-1) return salary >= 150000;
+    return salary < DIST_MIDPOINTS[i+1];
+  });
+  // Highlight that bar
+  distChart.data.datasets[0].backgroundColor = DIST_WORKERS.map((_, i) =>
+    i === bandIdx ? 'rgba(212,0,32,0.8)' : 'rgba(0,96,204,0.5)'
+  );
+  // Show median line
+  const medianBand = 6; // £35-40k band
+  distChart.data.datasets[2].data = DIST_WORKERS.map((v,i) => i === medianBand ? v * 1.05 : null);
+  distChart.update('none');
+}
+
+// ── DECILE TABLE ──────────────────────────────────────────────────────────
+// Data from HMRC Table 2.4 and ONS Effects of Taxes & Benefits 2024/25
+const DECILE_DATA = [
+  {d:'1st (Bottom 10%)', range:'Under £15,000',   itShare:0.3,  effRate:25, grossMid:10000},
+  {d:'2nd',              range:'£15–22k',          itShare:0.8,  effRate:28, grossMid:18000},
+  {d:'3rd',              range:'£22–27k',          itShare:1.7,  effRate:30, grossMid:24500},
+  {d:'4th',              range:'£27–32k',          itShare:3.2,  effRate:32, grossMid:29500},
+  {d:'5th (Median)',     range:'£32–38k',          itShare:5.5,  effRate:34, grossMid:35000},
+  {d:'6th',              range:'£38–46k',          itShare:7.8,  effRate:36, grossMid:42000},
+  {d:'7th',              range:'£46–55k',          itShare:10.2, effRate:38, grossMid:50000},
+  {d:'8th',              range:'£55–70k',          itShare:13.2, effRate:41, grossMid:62000},
+  {d:'9th',              range:'£70–100k',         itShare:16.9, effRate:44, grossMid:82000},
+  {d:'10th (Top 10%)',   range:'£100k+',           itShare:40.4, effRate:51, grossMid:150000},
+];
+
+function buildDecileTable() {
+  const tbody = document.getElementById('decileBody');
+  DECILE_DATA.forEach(row => {
+    const fd = getTaxFreedomDay(row.effRate / 100);
+    const isHighlight = false;
+    tbody.innerHTML += `<tr>
+      <td style="font-weight:700;color:var(--ink)">${row.d}</td>
+      <td class="mono" style="color:var(--blue)">${row.range}</td>
+      <td class="mono" style="color:var(--red)">${row.itShare}%</td>
+      <td class="mono" style="color:var(--amber)">${row.effRate}%</td>
+      <td class="freedom-cell" style="color:var(--purple)">${fd.date}</td>
+    </tr>`;
+  });
+}
+
+// ── DECILE CHARTS ─────────────────────────────────────────────────────────
+function buildDecileCharts() {
+  const labels = DECILE_DATA.map(d => d.d.split('(')[0].trim());
+
+  new Chart(document.getElementById('taxShareChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: DECILE_DATA.map(d => d.itShare),
+        backgroundColor: DECILE_DATA.map(d => d.itShare > 20 ? 'rgba(212,0,32,0.75)' : d.itShare > 10 ? 'rgba(201,112,0,0.75)' : 'rgba(0,96,204,0.65)'),
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {legend:{display:false}, tooltip:{callbacks:{label:ctx=>`${ctx.raw}% of all income tax`}}},
+      scales: {
+        x: {ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},maxRotation:45}, grid:{display:false}},
+        y: {title:{display:true,text:'% of total income tax',color:'#2a3a50',font:{size:10,weight:'bold'}},
+            ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},callback:v=>v+'%'},
+            grid:{color:'rgba(0,0,0,0.05)'}, max:45}
+      }
+    }
+  });
+
+  new Chart(document.getElementById('taxRateChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: DECILE_DATA.map(d => d.effRate),
+        backgroundColor: DECILE_DATA.map(d => d.effRate > 45 ? 'rgba(212,0,32,0.75)' : d.effRate > 38 ? 'rgba(201,112,0,0.75)' : 'rgba(0,96,204,0.65)'),
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {legend:{display:false}, tooltip:{callbacks:{label:ctx=>`${ctx.raw}% effective total tax rate`}}},
+      scales: {
+        x: {ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},maxRotation:45}, grid:{display:false}},
+        y: {title:{display:true,text:'Effective total tax rate %',color:'#2a3a50',font:{size:10,weight:'bold'}},
+            ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},callback:v=>v+'%'},
+            grid:{color:'rgba(0,0,0,0.05)'}, min:20, max:60}
+      }
+    }
+  });
+}
+
+// ── PENSION PLANNER ───────────────────────────────────────────────────────
+let pensChart;
+
+function calcPension() {
+  const age = parseInt(document.getElementById('p_age').value) || 35;
+  const retireAge = parseInt(document.getElementById('p_retire').value) || 68;
+  const targetSel = document.getElementById('p_target').value;
+  const rawTarget = targetSel === 'custom'
+    ? (parseFloat(document.getElementById('p_customTarget').value) || 250000)
+    : parseFloat(targetSel);
+  const inflationPct = parseFloat(document.getElementById('p_inflation').value) / 100;
+  const currentPot = parseFloat(document.getElementById('p_currentpot').value) || 0;
+  const years = Math.max(1, retireAge - age);
+
+  // Show custom input if needed
+  document.getElementById('customTargetWrap').style.display = targetSel === 'custom' ? '' : 'none';
+
+  // Inflation-adjusted target (future money)
+  const inflatedTarget = rawTarget * Math.pow(1 + inflationPct, years);
+
+  const returns = [0.04, 0.06, 0.08];
+  const colors = ['#008844', '#0060cc', '#6600cc'];
+  const labels = ['4%', '6%', '8%'];
+
+  // Monthly saving needed for each return
+  // FV = PV*(1+r)^n + PMT * [((1+r)^n - 1)/r]
+  // Solve for PMT: PMT = (FV - PV*(1+r)^n) * r / ((1+r)^n - 1)
+  // Where r = monthly rate, n = months
+  const results = returns.map(annualR => {
+    const r = annualR / 12;
+    const n = years * 12;
+    const fvExistingPot = currentPot * Math.pow(1 + r, n);
+    const remainingTarget = Math.max(0, inflatedTarget - fvExistingPot);
+    const pmt = remainingTarget > 0
+      ? remainingTarget * r / (Math.pow(1 + r, n) - 1)
+      : 0;
+    return { monthlyNeeded: pmt, pctOfSalary: 0, inflatedTarget };
+  });
+
+  // Try to get salary
+  const salary = parseFloat(document.getElementById('salaryInput').value) || 35000;
+  results.forEach(r => { r.pctOfSalary = (r.monthlyNeeded * 12 / salary * 100); });
+
+  // Update result boxes
+  const container = document.getElementById('pensionResults');
+  container.innerHTML = `
+    <div class="pr-box red">
+      <div class="prv">£${fmt(inflatedTarget)}</div>
+      <div class="prl">Target Pot at Retirement<br>(future money, ${(inflationPct*100).toFixed(0)}% inflation, ${years}yr)</div>
+    </div>` +
+    results.map((r, i) => `
+    <div class="pr-box ${['green','blue','purple'][i]}">
+      <div class="prv">£${fmt(r.monthlyNeeded)}/mo</div>
+      <div class="prl">At ${labels[i]} return<br>${r.pctOfSalary.toFixed(1)}% of salary p.a.</div>
+    </div>`).join('');
+
+  // Update inflation warning
+  document.getElementById('inflWarnVal').textContent = '£' + fmt(inflatedTarget);
+
+  // Build growth chart
+  const yearLabels = Array.from({length: years+1}, (_, i) => age + i);
+  const chartDatasets = returns.map((annualR, i) => {
+    let pot = currentPot;
+    const pmt = results[i].monthlyNeeded;
+    return {
+      label: `${labels[i]} return`,
+      data: yearLabels.map(y => {
+        const val = pot;
+        const monthlyR = annualR / 12;
+        pot = pot * (1 + annualR) + pmt * 12;
+        return Math.round(val);
+      }),
+      borderColor: colors[i],
+      backgroundColor: 'transparent',
+      borderWidth: 2.5,
+      pointRadius: 0,
+      tension: 0.4
+    };
+  });
+
+  // Target line
+  chartDatasets.push({
+    label: 'Inflation-adjusted target',
+    data: yearLabels.map(y => {
+      const t = rawTarget * Math.pow(1 + inflationPct, y - age);
+      return Math.round(t);
+    }),
+    borderColor: '#d40020',
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    pointRadius: 0,
+    borderDash: [5,3]
+  });
+
+  if(pensChart) {
+    pensChart.data.labels = yearLabels;
+    pensChart.data.datasets = chartDatasets;
+    pensChart.update('none');
+  } else {
+    const ctx = document.getElementById('pensionChart').getContext('2d');
+    pensChart = new Chart(ctx, {
+      type: 'line',
+      data: { labels: yearLabels, datasets: chartDatasets },
+      options: {
+        responsive: true,
+        interaction: {mode:'index', intersect:false},
+        plugins: {
+          legend: {display:false},
+          tooltip: {callbacks: {label: ctx => `${ctx.dataset.label}: £${fmt(ctx.raw)}`}}
+        },
+        scales: {
+          x: {title:{display:true,text:'Age',color:'#2a3a50',font:{size:11,weight:'bold'}},
+              ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+          y: {title:{display:true,text:'Pension Pot Value (£)',color:'#2a3a50',font:{size:11,weight:'bold'}},
+              ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+Math.round(v).toLocaleString()},
+              grid:{color:'rgba(0,0,0,0.05)'}}
+        }
+      }
+    });
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+initDistChart();
+buildDecileTable();
+buildDecileCharts();
+calcPension();
+
+// Also allow Enter key
+document.getElementById('salaryInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter') calculateAll();
+});
+
+// Custom target select
+document.getElementById('p_target').addEventListener('change', function() {
+  document.getElementById('customTargetWrap').style.display = this.value === 'custom' ? '' : 'none';
+  calcPension();
+});
+</script>
+</body>
+</html>

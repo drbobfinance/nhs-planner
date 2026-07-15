@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bank of England Bond Programme – QE & QT Costs | UK-Debt.info</title>
+<meta name="description" content="The full story of the Bank of England's £895bn quantitative easing programme, the losses being crystallised through QT, and the total cost to the UK taxpayer.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#002244,#004488,#0066cc);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(0,34,68,0.4)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss-item{text-align:center}
+.ss-item .sv{font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700}
+.ss-item .sl{font-size:10px;letter-spacing:2px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.ss-item.red .sv{color:var(--red)}.ss-item.green .sv{color:var(--green)}.ss-item.amber .sv{color:var(--amber)}.ss-item.blue .sv{color:var(--blue)}.ss-item.purple .sv{color:var(--purple)}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border-bottom:none}
+.tl-year{font-family:'Bebas Neue',sans-serif;font-size:22px;width:70px;flex-shrink:0;padding-top:2px}
+.tl-content .tl-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.tl-content .tl-desc{font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.5}
+.tl-content .tl-amount{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700;margin-top:4px}
+.tl-item.profit .tl-year{color:var(--green)}.tl-item.profit .tl-amount{color:var(--green)}
+.tl-item.loss .tl-year{color:var(--red)}.tl-item.loss .tl-amount{color:var(--red)}
+.tl-item.neutral .tl-year{color:var(--blue)}.tl-item.neutral .tl-amount{color:var(--blue)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat-box{padding:13px;border-radius:6px;border:1px solid transparent;text-align:center}
+.stat-box .sb-val{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}
+.stat-box .sb-lbl{font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;line-height:1.3}
+.stat-box.red{background:var(--red-light);border-color:var(--red-mid)}.stat-box.red .sb-val{color:var(--red)}
+.stat-box.green{background:var(--green-light);border-color:var(--green-mid)}.stat-box.green .sb-val{color:var(--green)}
+.stat-box.amber{background:var(--amber-light);border-color:var(--amber-mid)}.stat-box.amber .sb-val{color:var(--amber)}
+.stat-box.blue{background:var(--blue-light);border-color:var(--blue-mid)}.stat-box.blue .sb-val{color:var(--blue)}
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.green-box{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.comp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.comp-label{width:160px;font-size:12px;font-weight:700;color:var(--ink-mid);text-align:right;flex-shrink:0}
+.comp-track{flex:1;height:18px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.comp-fill{height:100%;border-radius:4px}
+.comp-val{width:75px;font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments History</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="boe-bonds.html" class="active">BoE Bond Programme</a>
+        <a href="money-supply.html">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html">Personal Finance Dashboard</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>BANK OF ENGLAND BOND PROGRAMME</h1>
+    <div class="subtitle">Quantitative Easing · Quantitative Tightening · APF Cash Flows · Taxpayer Cost · BoE / OBR / House of Commons Library</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss-item blue"><div class="sv">£895bn</div><div class="sl">Peak QE Holdings (2021)</div></div>
+  <div class="ss-item green"><div class="sv">£123.9bn</div><div class="sl">Profits Paid to Treasury (2013–22)</div></div>
+  <div class="ss-item red"><div class="sv">£126bn+</div><div class="sl">Estimated Lifetime Net Loss (OBR)</div></div>
+  <div class="ss-item amber"><div class="sv">£553bn</div><div class="sl">Gilt Stock Remaining (Q4 2025)</div></div>
+  <div class="ss-item red"><div class="sv">£70bn/yr</div><div class="sl">QT Pace (MPC Target 2025/26)</div></div>
+</div>
+
+<div class="main">
+
+  <!-- WHAT IS QE -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">What is Quantitative Easing — and Why Does it Matter?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:10px">Quantitative Easing (QE) is the process by which the Bank of England created new money and used it to buy UK government bonds (gilts) from investors in the secondary market. Between 2009 and 2021, the BoE purchased <strong>£895 billion of gilts</strong> — equivalent to a third of all outstanding gilts and roughly a third of annual UK GDP.</p>
+        <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:10px">The purpose was to lower long-term interest rates, stimulate the economy, and prevent deflation — first after the 2008 financial crisis, then again during COVID-19. It worked, but at a cost that is now becoming clear.</p>
+        <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7">Quantitative Tightening (QT) is the reverse: selling those gilts back to the market or allowing them to mature without replacement. The BoE began QT in 2022 and is reducing the portfolio by ~£70bn per year.</p>
+      </div>
+      <div>
+        <div class="stat-grid">
+          <div class="stat-box blue"><div class="sb-val">£875bn</div><div class="sb-lbl">Gilts Purchased (total QE)</div></div>
+          <div class="stat-box blue"><div class="sb-val">£20bn</div><div class="sb-lbl">Corporate Bonds (QE)</div></div>
+          <div class="stat-box green"><div class="sb-val">2009</div><div class="sb-lbl">QE Started</div></div>
+          <div class="stat-box amber"><div class="sb-val">2022</div><div class="sb-lbl">QT Started</div></div>
+          <div class="stat-box red"><div class="sb-val">~2028</div><div class="sb-lbl">Est. QT Completion</div></div>
+          <div class="stat-box red"><div class="sb-val">~28p</div><div class="sb-lbl">Lowest Sale Price (per £1 bought)</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APF BALANCE SHEET CHART -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">APF Gilt Holdings Over Time — QE Build-Up and QT Unwind (£bn)</div>
+    <canvas id="apfChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Gilt Holdings (£bn, left axis)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Cumulative Cash to Treasury (£bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Cumulative Cash from Treasury (losses, £bn)</div>
+    </div>
+  </div>
+
+  <!-- CASHFLOW TIMELINE -->
+  <div class="panel green-accent">
+    <div class="panel-label">APF Cash Flow Timeline — Profits Then Losses</div>
+    <div class="timeline">
+      <div class="tl-item neutral">
+        <div class="tl-year">2009</div>
+        <div class="tl-content">
+          <div class="tl-title">QE Begins — First £75bn</div>
+          <div class="tl-desc">BoE creates money to buy gilts. Interest rate cut to 0.5%. APF established with HMT indemnity.</div>
+        </div>
+      </div>
+      <div class="tl-item neutral">
+        <div class="tl-year">2012</div>
+        <div class="tl-content">
+          <div class="tl-title">Profit Transfer Begins</div>
+          <div class="tl-desc">George Osborne agrees to transfer APF net income to HMT. APF holdings reach £375bn.</div>
+          <div class="tl-amount">Starts transferring profits to Treasury</div>
+        </div>
+      </div>
+      <div class="tl-item profit">
+        <div class="tl-year">2013–22</div>
+        <div class="tl-content">
+          <div class="tl-title">Golden Years — Profits Flow to Treasury</div>
+          <div class="tl-desc">With Bank Rate near zero, APF coupon income far exceeds funding costs. Cumulative profit peaks.</div>
+          <div class="tl-amount">+£123.9bn transferred to HM Treasury</div>
+        </div>
+      </div>
+      <div class="tl-item neutral">
+        <div class="tl-year">2020–21</div>
+        <div class="tl-content">
+          <div class="tl-title">COVID — Final QE Surge</div>
+          <div class="tl-desc">Additional £450bn of QE to fund COVID response. Peak holdings reach £895bn in late 2021.</div>
+          <div class="tl-amount">Peak: £895bn gilt portfolio</div>
+        </div>
+      </div>
+      <div class="tl-item loss">
+        <div class="tl-year">2022</div>
+        <div class="tl-content">
+          <div class="tl-title">Rate Rises — Losses Begin</div>
+          <div class="tl-desc">Bank Rate rises sharply to fight inflation. APF funding costs (interest on reserves) exceed coupon income. QT active sales begin September 2022. Some gilts sold for as little as 28p per £1 paid.</div>
+          <div class="tl-amount">First HMT→APF loss payment: Oct 2022</div>
+        </div>
+      </div>
+      <div class="tl-item loss">
+        <div class="tl-year">2023–25</div>
+        <div class="tl-content">
+          <div class="tl-title">Accelerating Losses</div>
+          <div class="tl-desc">HMT makes quarterly loss payments to APF. Annual loss in 2024 approximately £40bn — 1.4% of GDP. All earlier profits now reversed.</div>
+          <div class="tl-amount">Net taxpayer position turns negative early 2026</div>
+        </div>
+      </div>
+      <div class="tl-item loss">
+        <div class="tl-year">2026+</div>
+        <div class="tl-content">
+          <div class="tl-title">Ongoing QT — Losses Continue</div>
+          <div class="tl-desc">Portfolio reducing at £70bn/year. OBR estimates cumulative net lifetime loss of £126bn. Completion expected ~2028–2030.</div>
+          <div class="tl-amount">OBR lifetime net loss: ~£126bn</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COST BREAKDOWN -->
+  <div class="panel red-accent">
+    <div class="panel-label">The True Cost to Taxpayers</div>
+    <div class="stat-grid">
+      <div class="stat-box green"><div class="sb-val">£123.9bn</div><div class="sb-lbl">Profits to Treasury 2013–22</div></div>
+      <div class="stat-box red"><div class="sb-val">~£250bn</div><div class="sb-lbl">Estimated Total Losses (lifetime)</div></div>
+      <div class="stat-box red"><div class="sb-val">~£126bn</div><div class="sb-lbl">Net Lifetime Loss (OBR est.)</div></div>
+      <div class="stat-box amber"><div class="sb-val">~£40bn</div><div class="sb-lbl">Annual Loss in 2024</div></div>
+    </div>
+    <div class="red-box">
+      🚨 <strong>The bottom line:</strong> The BoE made £123.9bn in profits when rates were near zero, transferred it all to the Treasury, then began making much larger losses as rates rose. The OBR estimates the net lifetime loss at £126bn — meaning the programme will cost taxpayers a net £126bn more than it made. The 2024 annual loss of ~£40bn alone is larger than the UK's entire defence budget.
+    </div>
+    <div style="margin-top:14px">
+      <div class="panel-label">QE Programme Cost vs Public Spending (Net Loss £126bn)</div>
+      <div class="comp-row">
+        <span class="comp-label">NHS Annual Budget</span>
+        <div class="comp-track"><div class="comp-fill" style="width:100%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <span class="comp-val" style="color:var(--blue)">£192bn</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">QE Net Loss</span>
+        <div class="comp-track"><div class="comp-fill" style="width:65.6%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <span class="comp-val" style="color:var(--red)">£126bn</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">All Schools</span>
+        <div class="comp-track"><div class="comp-fill" style="width:40.1%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+        <span class="comp-val" style="color:var(--amber)">£77bn</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-label">Defence Budget</span>
+        <div class="comp-track"><div class="comp-fill" style="width:28.1%;background:linear-gradient(90deg,#60d0a0,#008844)"></div></div>
+        <span class="comp-val" style="color:var(--green)">£54bn</span>
+      </div>
+    </div>
+    <div class="warn-box">
+      ⚠️ <strong>Important context:</strong> The BoE argues that QE delivered wider fiscal benefits — by lowering gilt yields during QE, the government was able to borrow at lower rates, saving potentially as much as the losses on the programme itself. The APF Q4 2025 report shows that under one set of assumptions, debt-servicing savings could fully offset lifetime losses. This is contested by economists and the Treasury Select Committee found the calculation opaque.
+    </div>
+  </div>
+
+  <!-- QT PACE CHART -->
+  <div class="panel full-width amber-accent">
+    <div class="panel-label">QT Unwind Progress — Gilt Portfolio Reduction (£bn) 2022–2030 est.</div>
+    <canvas id="qtChart" height="220"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Active QT Sales (£bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c97000"></div>Passive QT (Maturities, £bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Remaining Portfolio (£bn, right axis)</div>
+    </div>
+    <div class="info-box">
+      📋 The MPC set a pace of £100bn reduction in the year to September 2023, then £100bn to September 2024, then £100bn to September 2025, then £70bn to September 2026. At this pace the portfolio will reach near zero around 2028–2030. The pace of active sales vs passive maturities affects when losses are crystallised but not the total lifetime cost in present value terms.
+    </div>
+  </div>
+
+  <!-- UK vs OTHER CENTRAL BANKS -->
+  <div class="panel full-width purple-accent">
+    <div class="panel-label">UK vs Other Central Banks — How QT Losses Are Being Handled</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px">
+      <div style="background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🇬🇧 Bank of England</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.5">Active QT (selling gilts). Losses charged immediately to taxpayer via HMT indemnity. Most aggressive approach globally. Net loss ~£126bn.</div>
+      </div>
+      <div style="background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🇺🇸 US Federal Reserve</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.5">Books losses as "deferred asset" — effectively borrowing against future profits. Does not charge losses to Treasury immediately. Total 2024 loss ~$87bn but not taxpayer-facing.</div>
+      </div>
+      <div style="background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🇪🇺 European Central Bank</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.5">Passive QT only — holding bonds to maturity, not selling. Also stopped paying interest on minimum reserves since Sep 2023, reducing losses significantly.</div>
+      </div>
+      <div style="background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🇨🇦 Bank of Canada / NZ</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.5">Created matching derivative asset on balance sheet to cover QT losses out of future profits — spreading the cost over time rather than charging immediately to Treasury.</div>
+      </div>
+    </div>
+    <div class="red-box">
+      🚨 The UK's approach — active QT with immediate Treasury indemnity — means UK taxpayers are bearing QT losses faster and more directly than almost any other major economy. The Treasury Select Committee questioned whether this represents good value for money. The BoE maintains that the total lifetime cost is the same regardless of pace, but the immediate fiscal pressure is uniquely high in the UK.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ All figures from Bank of England APF Quarterly Reports, OBR and House of Commons Library. Lifetime loss projections are scenarios, not certainties.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: BoE APF Q1 2026 · OBR EFO Mar 2026 · Commons Library CBP-10455 · Treasury Select Committee 2024</span>
+  <div class="footer-links">
+    <a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a>
+  </div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+// APF CHART
+const apfYrs=['2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026e','2027e','2028e'];
+const holdings=[200,200,275,375,375,375,375,435,435,445,645,745,895,838,750,650,553,450,330,200];
+const cumToTreasury=[0,0,0,0,8,24,40,56,72,88,104,115,124,124,124,124,124,124,124,124];
+const cumFromTreasury=[0,0,0,0,0,0,0,0,0,0,0,0,0,5,30,70,90,110,126,126];
+
+new Chart(document.getElementById('apfChart'),{
+  type:'bar',
+  data:{
+    labels:apfYrs,
+    datasets:[
+      {label:'Gilt Holdings (£bn)',data:holdings,backgroundColor:'rgba(0,96,204,0.65)',yAxisID:'y',order:2},
+      {label:'Cumulative to Treasury',data:cumToTreasury,type:'line',borderColor:'#008844',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,yAxisID:'y2',tension:0.3,order:1},
+      {label:'Cumulative from Treasury (losses)',data:cumFromTreasury,type:'line',borderColor:'#d40020',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,yAxisID:'y2',tension:0.3,order:1,borderDash:[4,2]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>`${ctx.dataset.label}: £${ctx.raw}bn`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{position:'left',title:{display:true,text:'Gilt Holdings (£bn)',color:'#0060cc',font:{size:11,weight:'bold'}},ticks:{color:'#0060cc',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{color:'rgba(0,0,0,0.04)'},min:0,max:1000},
+      y2:{position:'right',title:{display:true,text:'Cumulative Cash Flows (£bn)',color:'#d40020',font:{size:11,weight:'bold'}},ticks:{color:'#d40020',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{display:false},min:0,max:150}
+    }
+  }
+});
+
+// QT CHART
+new Chart(document.getElementById('qtChart'),{
+  type:'bar',
+  data:{
+    labels:['2022/23','2023/24','2024/25','2025/26','2026/27e','2027/28e','2028/29e'],
+    datasets:[
+      {label:'Active Sales (£bn)',data:[14,36,14,18,25,30,25],backgroundColor:'rgba(212,0,32,0.7)',stack:'a'},
+      {label:'Passive Maturities (£bn)',data:[32,64,88,52,45,40,35],backgroundColor:'rgba(201,112,0,0.7)',stack:'a'},
+      {label:'Portfolio Remaining (£bn)',data:[838,738,623,553,480,410,350],type:'line',borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:2.5,pointRadius:4,yAxisID:'y2',tension:0.3}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>`${ctx.dataset.label}: £${ctx.raw}bn`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:11,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'Annual Reduction (£bn)',color:'#2a3a50',font:{size:11,weight:'bold'}},stacked:true,ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{color:'rgba(0,0,0,0.05)'},max:130},
+      y2:{position:'right',title:{display:true,text:'Portfolio Remaining (£bn)',color:'#0060cc',font:{size:11,weight:'bold'}},ticks:{color:'#0060cc',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{display:false},min:0,max:1000}
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Where the Money Comes From & Where It Goes | UK-Debt.info</title>
+<meta name="description" content="Every major source of UK government income — income tax, NI, VAT, corporation tax, fuel duty — and every major spending category — NHS, welfare, PIP, defence, foreign aid. 2025/26 figures.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#004400,#006622,#009944);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(0,68,0,0.35)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.balance-strip{background:#0d1520;padding:14px 28px;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-around;border-bottom:3px solid var(--red)}
+.bs-item{text-align:center}
+.bs-item .bv{font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700;letter-spacing:1px}
+.bs-item .bl{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.6);text-transform:uppercase;margin-top:3px;font-weight:700}
+.bs-item.green .bv{color:#44cc88}.bs-item.red .bv{color:#ff6666}.bs-item.amber .bv{color:#ffcc44}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+/* MONEY ROWS */
+.money-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.money-icon{font-size:18px;width:28px;flex-shrink:0;text-align:center}
+.money-info{flex:1}
+.money-info .mi-name{font-size:13px;font-weight:700;color:var(--ink)}
+.money-info .mi-desc{font-size:11px;color:var(--ink-light);font-weight:600;margin-top:1px}
+.money-track{width:220px;flex-shrink:0}
+.money-bar-wrap{height:14px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:2px}
+.money-bar{height:100%;border-radius:4px}
+.money-val{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;text-align:right}
+.money-pct{font-size:10px;color:var(--ink-light);font-weight:600;text-align:right}
+/* PETROL BOX */
+.petrol-box{background:linear-gradient(135deg,#1a2535,#2a3a50);border-radius:8px;padding:20px;margin-top:12px}
+.petrol-box h3{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#fff;margin-bottom:14px}
+.petrol-litre{display:flex;flex-direction:column;gap:5px}
+.pl-row{display:flex;align-items:center;gap:10px}
+.pl-label{width:160px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.8);flex-shrink:0}
+.pl-bar-wrap{flex:1;height:18px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+.pl-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap}
+.pl-val{width:55px;font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;text-align:right;flex-shrink:0}
+/* BOXES */
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments History</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="money-in-out.html" class="active">Money In & Money Out</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance Dashboard</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+        <a href="trade-deficit.html">Trade Deficit</a>
+        <a href="obr-accuracy.html">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>MONEY IN & MONEY OUT — THE GOVERNMENT'S FINANCES</h1>
+    <div class="subtitle">Every Major Tax Source · Every Major Spending Category · 2025/26 · HMRC · OBR · HM Treasury · DWP</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="balance-strip">
+  <div class="bs-item green"><div class="bv">£1,235bn</div><div class="bl">Total Revenue 2025/26</div></div>
+  <div class="bs-item red"><div class="bv">£1,368bn</div><div class="bl">Total Spending 2025/26</div></div>
+  <div class="bs-item amber"><div class="bv">-£133bn</div><div class="bl">Deficit (Borrowing Required)</div></div>
+  <div class="bs-item amber"><div class="bv">40.4%</div><div class="bl">Revenue as % of GDP</div></div>
+  <div class="bs-item red"><div class="bv">44.8%</div><div class="bl">Spending as % of GDP</div></div>
+</div>
+
+<div class="main">
+
+  <!-- REVENUE CHART -->
+  <div class="panel full-width green-accent">
+    <div class="panel-label">All Revenue Sources at a Glance — 2025/26 (£bn)</div>
+    <canvas id="revenueChart" height="220"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Direct Taxes (Income Tax, NI, Corporation Tax)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Indirect Taxes (VAT, Fuel Duty, Excise)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c97000"></div>Property & Other Taxes</div>
+    </div>
+  </div>
+
+  <!-- INCOME IN -->
+  <div class="panel green-accent">
+    <div class="panel-label">Where The Money Comes In — Tax Receipts 2025/26</div>
+
+    <div class="money-row">
+      <div class="money-icon">💰</div>
+      <div class="money-info"><div class="mi-name">Income Tax</div><div class="mi-desc">PAYE + self-assessment. Largest single source. Frozen thresholds pulling more into higher bands.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:100%;background:linear-gradient(90deg,#60d0a0,#008844)"></div></div>
+        <div class="money-val" style="color:var(--green)">£330bn</div>
+        <div class="money-pct">26.7% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">👷</div>
+      <div class="money-info"><div class="mi-name">National Insurance Contributions</div><div class="mi-desc">Employee + employer NI. Employer rate rose to 15% in Oct 2024 budget.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:61%;background:linear-gradient(90deg,#60d0a0,#008844)"></div></div>
+        <div class="money-val" style="color:var(--green)">£199bn</div>
+        <div class="money-pct">16.1% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🛒</div>
+      <div class="money-info"><div class="mi-name">Value Added Tax (VAT)</div><div class="mi-desc">20% on most goods & services. £6,250 per household. Fell during COVID, now at record highs.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:55%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <div class="money-val" style="color:var(--blue)">£181bn</div>
+        <div class="money-pct">14.7% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🏢</div>
+      <div class="money-info"><div class="mi-name">Corporation Tax</div><div class="mi-desc">25% on profits (since Apr 2023). Up from 19%. Now 7.7% of total receipts.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:29%;background:linear-gradient(90deg,#60d0a0,#008844)"></div></div>
+        <div class="money-val" style="color:var(--green)">£96bn</div>
+        <div class="money-pct">7.8% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🏠</div>
+      <div class="money-info"><div class="mi-name">Council Tax</div><div class="mi-desc">Local authority tax on domestic properties. Set by councils.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:15%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+        <div class="money-val" style="color:var(--amber)">£50bn</div>
+        <div class="money-pct">4.0% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">⛽</div>
+      <div class="money-info"><div class="mi-name">Fuel Duty</div><div class="mi-desc">52.95p per litre (frozen since 2011, incl. 5p temp cut). Declining as EVs grow.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:7.4%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <div class="money-val" style="color:var(--blue)">£24.3bn</div>
+        <div class="money-pct">2.0% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🏗️</div>
+      <div class="money-info"><div class="mi-name">Business Rates</div><div class="mi-desc">Tax on non-domestic properties. ~£31bn. Under review.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:9.5%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+        <div class="money-val" style="color:var(--amber)">£31bn</div>
+        <div class="money-pct">2.5% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">📈</div>
+      <div class="money-info"><div class="mi-name">Capital Gains Tax</div><div class="mi-desc">Rates raised in Oct 2024 budget. Highly volatile — depends on market conditions.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:5%;background:linear-gradient(90deg,#60d0a0,#008844)"></div></div>
+        <div class="money-val" style="color:var(--green)">£16bn</div>
+        <div class="money-pct">1.3% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🍺</div>
+      <div class="money-info"><div class="mi-name">Alcohol Duties</div><div class="mi-desc">Beer, wine, spirits. Duty rates restructured 2023.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:4%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <div class="money-val" style="color:var(--blue)">£13.5bn</div>
+        <div class="money-pct">1.1% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🚬</div>
+      <div class="money-info"><div class="mi-name">Tobacco Duty</div><div class="mi-desc">Declining structurally as smoking rates fall.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:2.4%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <div class="money-val" style="color:var(--blue)">£7.9bn</div>
+        <div class="money-pct">0.6% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🏦</div>
+      <div class="money-info"><div class="mi-name">Stamp Duty (SDLT)</div><div class="mi-desc">Property and share transactions. Sensitive to housing market.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:4%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+        <div class="money-val" style="color:var(--amber)">£13bn</div>
+        <div class="money-pct">1.1% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">✈️</div>
+      <div class="money-info"><div class="mi-name">Air Passenger Duty</div><div class="mi-desc">Per-flight tax. Rising with travel recovery.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:1.3%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <div class="money-val" style="color:var(--blue)">£4.1bn</div>
+        <div class="money-pct">0.3% of revenue</div>
+      </div>
+    </div>
+
+    <div class="money-row" style="padding-top:10px;border-top:2px solid var(--green-mid);margin-top:6px">
+      <div class="money-icon">📊</div>
+      <div class="money-info"><div class="mi-name" style="color:var(--green);font-size:14px">TOTAL HMRC RECEIPTS</div><div class="mi-desc">All HMRC-collected taxes. Up 9.3% year-on-year 2025/26.</div></div>
+      <div class="money-track">
+        <div class="money-val" style="color:var(--green);font-size:18px">£938.8bn</div>
+        <div class="money-pct">+ other govt income = £1,235bn total</div>
+      </div>
+    </div>
+
+    <!-- PETROL BOX -->
+    <div class="petrol-box">
+      <h3>⛽ What Makes Up the Price of a Litre of Petrol/Diesel?</h3>
+      <div class="petrol-litre">
+        <div class="pl-row">
+          <span class="pl-label">Fuel Duty</span>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="width:42%;background:#d40020">52.95p</div></div>
+          <span class="pl-val" style="color:#ff8090">52.95p</span>
+        </div>
+        <div class="pl-row">
+          <span class="pl-label">VAT (20%)</span>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="width:22%;background:#c97000">~24p</div></div>
+          <span class="pl-val" style="color:#ffd070">~24p</span>
+        </div>
+        <div class="pl-row">
+          <span class="pl-label">Crude Oil Cost</span>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="width:30%;background:#0060cc">~38p</div></div>
+          <span class="pl-val" style="color:#66aaff">~38p</span>
+        </div>
+        <div class="pl-row">
+          <span class="pl-label">Refining & Distribution</span>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="width:10%;background:#4a5a6e">~12p</div></div>
+          <span class="pl-val" style="color:#aabbcc">~12p</span>
+        </div>
+        <div class="pl-row">
+          <span class="pl-label">Retailer Margin</span>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="width:5%;background:#006633">~6p</div></div>
+          <span class="pl-val" style="color:#44cc88">~6p</span>
+        </div>
+        <div style="margin-top:10px;padding:8px 12px;background:rgba(212,0,32,0.15);border-radius:4px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.85)">
+          🏛️ Total tax on 1 litre (duty + VAT): <strong style="color:#ff8090">~77p</strong> of a ~132p litre = <strong style="color:#ff8090">58% is tax</strong>. Fuel duty has been frozen at 52.95p since 2011 (with temporary 5p cut since 2022).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPENDING OUT -->
+  <div class="panel red-accent">
+    <div class="panel-label">Where The Money Goes — Government Spending 2025/26</div>
+
+    <div class="money-row">
+      <div class="money-icon">🤲</div>
+      <div class="money-info"><div class="mi-name">Total Welfare & Benefits</div><div class="mi-desc">State pension, Universal Credit, housing benefit, disability — all social security combined.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:100%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <div class="money-val" style="color:var(--red)">£334bn</div>
+        <div class="money-pct">24.4% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">👴</div>
+      <div class="money-info"><div class="mi-name">↳ State Pension</div><div class="mi-desc">Basic + new state pension. Triple lock: highest of CPI/earnings/2.5%. ~12.8m recipients.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:54%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <div class="money-val" style="color:var(--red)">£130bn</div>
+        <div class="money-pct">9.5% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">♿</div>
+      <div class="money-info"><div class="mi-name">↳ Disability & Health Benefits (incl. PIP)</div><div class="mi-desc">PIP, ESA, DLA, Attendance Allowance — £76.9bn. PIP alone ~£26bn and rising rapidly.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:32%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <div class="money-val" style="color:var(--red)">£76.9bn</div>
+        <div class="money-pct">5.6% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🏠</div>
+      <div class="money-info"><div class="mi-name">↳ Housing Benefit / LHA</div><div class="mi-desc">Local housing allowance + housing element of Universal Credit.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:15.8%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <div class="money-val" style="color:var(--red)">£37.8bn</div>
+        <div class="money-pct">2.8% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🏥</div>
+      <div class="money-info"><div class="mi-name">Health (NHS)</div><div class="mi-desc">Total health spending including NHS England budget, public health, social care.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:85%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <div class="money-val" style="color:var(--red)">£204bn</div>
+        <div class="money-pct">14.9% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">💳</div>
+      <div class="money-info"><div class="mi-name">Debt Interest</div><div class="mi-desc">Interest on £2.92tn national debt. Third largest item after welfare and health.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:45.8%;background:linear-gradient(90deg,#ff8090,#d40020)"></div></div>
+        <div class="money-val" style="color:var(--red)">£110bn</div>
+        <div class="money-pct">8.0% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🎓</div>
+      <div class="money-info"><div class="mi-name">Education</div><div class="mi-desc">Schools, colleges, universities, early years. Total including capital.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:39.6%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+        <div class="money-val" style="color:var(--amber)">£95bn</div>
+        <div class="money-pct">6.9% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🛡️</div>
+      <div class="money-info"><div class="mi-name">Defence</div><div class="mi-desc">Rising to 2.5% of GDP target. £60.2bn in 2024/25, expected higher in 2025/26.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:26%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <div class="money-val" style="color:var(--blue)">£62bn</div>
+        <div class="money-pct">4.5% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🚂</div>
+      <div class="money-info"><div class="mi-name">Transport & Infrastructure</div><div class="mi-desc">Roads, rail, HS2 (now cancelled beyond Birmingham), local transport.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:17.9%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+        <div class="money-val" style="color:var(--amber)">£43bn</div>
+        <div class="money-pct">3.1% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">👮</div>
+      <div class="money-info"><div class="mi-name">Police & Criminal Justice</div><div class="mi-desc">Police, courts, prisons, probation, legal aid.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:11.7%;background:linear-gradient(90deg,#4090e0,#0060cc)"></div></div>
+        <div class="money-val" style="color:var(--blue)">£28bn</div>
+        <div class="money-pct">2.0% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🌍</div>
+      <div class="money-info"><div class="mi-name">Foreign Aid (ODA)</div><div class="mi-desc">Official Development Assistance. Cut from 0.7% to 0.5% of GNI in 2021. Now ~0.4% due to refugee housing costs counted as ODA.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:4.6%;background:linear-gradient(90deg,#60d0a0,#008844)"></div></div>
+        <div class="money-val" style="color:var(--green)">£11.2bn</div>
+        <div class="money-pct">0.8% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">👶</div>
+      <div class="money-info"><div class="mi-name">Children & Family Benefits</div><div class="mi-desc">Child Benefit, Child Tax Credit, childcare subsidies.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:8.3%;background:linear-gradient(90deg,#ffd070,#c97000)"></div></div>
+        <div class="money-val" style="color:var(--amber)">£20bn</div>
+        <div class="money-pct">1.5% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row">
+      <div class="money-icon">🌱</div>
+      <div class="money-info"><div class="mi-name">Environment & Energy</div><div class="mi-desc">Green subsidies, Great British Energy, renewable contracts, energy security.</div></div>
+      <div class="money-track">
+        <div class="money-bar-wrap"><div class="money-bar" style="width:13.3%;background:linear(90deg,#60d0a0,#008844)"></div></div>
+        <div class="money-val" style="color:var(--green)">£32bn</div>
+        <div class="money-pct">2.3% of spending</div>
+      </div>
+    </div>
+
+    <div class="money-row" style="padding-top:10px;border-top:2px solid var(--red-mid);margin-top:6px">
+      <div class="money-icon">📊</div>
+      <div class="money-info"><div class="mi-name" style="color:var(--red);font-size:14px">TOTAL MANAGED EXPENDITURE</div><div class="mi-desc">All public sector spending. 44.8% of GDP.</div></div>
+      <div class="money-track">
+        <div class="money-val" style="color:var(--red);font-size:18px">£1,368bn</div>
+        <div class="money-pct">Deficit: £133bn</div>
+      </div>
+    </div>
+
+    <div class="red-box">
+      🚨 <strong>The structural problem:</strong> The UK now spends more on debt interest (£110bn) than on defence (£62bn) and transport (£43bn) combined. Disability and health benefit spending (£76.9bn) is growing at 10%+ per year and is the fastest-growing major spending item — driven by PIP caseload growth. Total welfare at £334bn now exceeds the entire NHS budget.
+    </div>
+  </div>
+
+  <!-- SPENDING DONUT CHART -->
+  <div class="panel blue-accent full-width">
+    <div class="panel-label">Spending Breakdown — 2025/26 (Visual)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center">
+      <canvas id="spendChart" height="300"></canvas>
+      <canvas id="incomeChart" height="300"></canvas>
+    </div>
+    <div style="display:flex;gap:20px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+      <strong style="font-size:13px;font-weight:700;color:var(--red)">← Spending</strong>
+      <strong style="font-size:13px;font-weight:700;color:var(--green)">Revenue →</strong>
+    </div>
+    <div class="warn-box">
+      ⚠️ <strong>PIP alert:</strong> Personal Independence Payment spending was £26bn in 2024/25 and is forecast to reach £34bn by 2029/30 — almost doubling in 5 years. It is now one of the fastest-growing items in the entire government budget, driven by rising mental health caseloads, long COVID, and widened eligibility.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ All figures from HMRC, OBR, HM Treasury, DWP 2025/26. Figures are estimates and may be revised.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: HMRC Annual Bulletin · OBR EFO March 2026 · DWP Benefit Expenditure Tables · HM Treasury</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+// Revenue bar chart
+new Chart(document.getElementById('revenueChart'),{
+  type:'bar',
+  data:{
+    labels:['Income Tax','NI Contribs','VAT','Corporation Tax','Council Tax','Fuel Duty','Business Rates','CGT','Alcohol','Tobacco','Stamp Duty','APD','Other'],
+    datasets:[{
+      data:[330,199,181,96,50,24.3,31,16,13.5,7.9,13,4.1,170],
+      backgroundColor:['#008844','#008844','#0060cc','#008844','#c97000','#0060cc','#c97000','#008844','#0060cc','#0060cc','#c97000','#0060cc','#4a5a6e'],
+      borderWidth:0
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`£${ctx.raw}bn`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'£bn',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+// Spending donut
+new Chart(document.getElementById('spendChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Welfare/Pensions £334bn','Health £204bn','Debt Interest £110bn','Education £95bn','Defence £62bn','Transport £43bn','Environment £32bn','Police/Justice £28bn','Foreign Aid £11bn','Other £449bn'],
+    datasets:[{data:[334,204,110,95,62,43,32,28,11.2,449],
+      backgroundColor:['#d40020','#cc2244','#880000','#c97000','#0060cc','#6600cc','#008844','#004499','#009944','#4a5a6e'],
+      borderWidth:2,borderColor:'#fff'}]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10,weight:'bold'},color:'#2a3a50',padding:6}},title:{display:true,text:'Where It Goes (£bn)',color:'#d40020',font:{size:13,weight:'bold'}}}}
+});
+
+// Income donut
+new Chart(document.getElementById('incomeChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Income Tax £330bn','NI £199bn','VAT £181bn','Corp Tax £96bn','Council Tax £50bn','Business Rates £31bn','Fuel Duty £24bn','Other £324bn'],
+    datasets:[{data:[330,199,181,96,50,31,24,324],
+      backgroundColor:['#008844','#006633','#0060cc','#004488','#c97000','#7a4400','#0044aa','#4a5a6e'],
+      borderWidth:2,borderColor:'#fff'}]
+  },
+  options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10,weight:'bold'},color:'#2a3a50',padding:6}},title:{display:true,text:'Where It Comes From (£bn)',color:'#008844',font:{size:13,weight:'bold'}}}}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Asset Clock – Government Reserves & Money Supply</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--border-bright:#a0bcd8;
+  --red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;
+  --green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;
+  --amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;
+  --blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;
+  --gold:#b8860b;--gold-light:#fffbea;--gold-mid:#f5d87a;
+  --purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;
+  --ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+
+/* NAV */
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:10px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3)}
+.nav-brand{display:flex;align-items:center;gap:12px}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand h1{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:#fff}
+.nav-links{display:flex;gap:6px}
+.nav-link{color:rgba(255,255,255,0.8);text-decoration:none;padding:6px 14px;font-size:12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;border-radius:4px;transition:all 0.2s}
+.nav-link:hover,.nav-link.active{background:rgba(255,255,255,0.2);color:#fff}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#004400,#006622,#00aa44);padding:20px 28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 3px 12px rgba(0,68,0,0.3)}
+.header-title h2{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.header-right .live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.header-right .live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+
+/* TOTAL RESERVES BANNER */
+.reserves-banner{background:linear-gradient(135deg,#004400,#007733);padding:18px 28px;display:flex;align-items:center;justify-content:space-around;flex-wrap:wrap;gap:16px;border-bottom:3px solid var(--green)}
+.rb-item{text-align:center}
+.rb-item .rb-val{font-family:'Share Tech Mono',monospace;font-size:28px;color:#fff;font-weight:700;letter-spacing:1px}
+.rb-item .rb-label{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:700}
+.rb-divider{width:1px;height:50px;background:rgba(255,255,255,0.2)}
+
+/* MAIN GRID */
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+
+/* PANELS */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.gold-accent{border-top:4px solid var(--gold);background:linear-gradient(180deg,var(--gold-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ASSET ROWS */
+.asset-list{display:flex;flex-direction:column;gap:8px}
+.asset-row{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:6px;border:1px solid transparent}
+.asset-row .ar-left{display:flex;flex-direction:column}
+.asset-row .ar-name{font-size:13px;font-weight:700;color:var(--ink)}
+.asset-row .ar-sub{font-size:10px;color:var(--ink-light);margin-top:2px;letter-spacing:0.5px}
+.asset-row .ar-val{font-family:'Share Tech Mono',monospace;font-size:17px;font-weight:700;text-align:right}
+.asset-row .ar-change{font-size:10px;text-align:right;margin-top:2px;font-weight:700}
+.asset-row.gold{background:var(--gold-light);border-color:var(--gold-mid)}.asset-row.gold .ar-val{color:var(--gold)}
+.asset-row.green{background:var(--green-light);border-color:var(--green-mid)}.asset-row.green .ar-val{color:var(--green)}
+.asset-row.blue{background:var(--blue-light);border-color:var(--blue-mid)}.asset-row.blue .ar-val{color:var(--blue)}
+.asset-row.amber{background:var(--amber-light);border-color:var(--amber-mid)}.asset-row.amber .ar-val{color:var(--amber)}
+.asset-row.purple{background:var(--purple-light);border-color:var(--purple-mid)}.asset-row.purple .ar-val{color:var(--purple)}
+.asset-row.red{background:var(--red-light);border-color:var(--red-mid)}.asset-row.red .ar-val{color:var(--red)}
+.up{color:var(--green)}.down{color:var(--red)}
+
+/* STAT BOXES */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat-box{padding:13px;border-radius:6px;border:1px solid transparent}
+.stat-box .sb-label{font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;line-height:1.3}
+.stat-box .sb-val{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}
+.stat-box .sb-sub{font-size:10px;color:var(--ink-light);margin-top:3px;font-weight:600}
+.stat-box.gold{background:var(--gold-light);border-color:var(--gold-mid)}.stat-box.gold .sb-val{color:var(--gold)}
+.stat-box.green{background:var(--green-light);border-color:var(--green-mid)}.stat-box.green .sb-val{color:var(--green)}
+.stat-box.blue{background:var(--blue-light);border-color:var(--blue-mid)}.stat-box.blue .sb-val{color:var(--blue)}
+.stat-box.amber{background:var(--amber-light);border-color:var(--amber-mid)}.stat-box.amber .sb-val{color:var(--amber)}
+.stat-box.purple{background:var(--purple-light);border-color:var(--purple-mid)}.stat-box.purple .sb-val{color:var(--purple)}
+.stat-box.red{background:var(--red-light);border-color:var(--red-mid)}.stat-box.red .sb-val{color:var(--red)}
+
+/* RATIO BAR */
+.ratio-wrap{margin-top:10px}
+.ratio-label-row{display:flex;justify-content:space-between;font-size:12px;color:var(--ink);margin-bottom:5px;font-weight:700}
+.ratio-track{height:22px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden;display:flex}
+.ratio-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;letter-spacing:0.5px;transition:width 1s ease;white-space:nowrap;overflow:hidden}
+
+/* CHART */
+.chart-wrap{position:relative;margin-top:10px}
+canvas{width:100%!important;border-radius:4px}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:12px;height:12px;border-radius:2px;flex-shrink:0}
+
+/* DEBT VS ASSETS */
+.dva-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+.dva-label{width:130px;font-size:12px;font-weight:700;color:var(--ink-mid);text-align:right;flex-shrink:0}
+.dva-track{flex:1;height:20px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.dva-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.dva-val{width:80px;font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0}
+
+/* WARNING BOX */
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;margin-top:10px;font-size:11px;color:var(--ink-mid);line-height:1.7;font-weight:600}
+
+/* BOTTOM */
+.bottom-bar{padding:13px 24px;background:#fff;border-top:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.sources{padding:8px 24px;font-size:9px;color:var(--ink-light);text-align:center;line-height:1.8;background:var(--bg);border-top:1px solid var(--border)}
+
+/* UPDATE BADGE */
+.update-badge{display:inline-flex;align-items:center;gap:7px;background:var(--green-light);border:1px solid var(--green-mid);padding:5px 12px;border-radius:20px;font-size:11px;color:var(--green);font-weight:700}
+.update-badge .dot{width:6px;height:6px;background:var(--green);border-radius:50%}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="top-nav">
+  <div class="nav-brand">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg">
+      <rect width="44" height="27" fill="#012169"/>
+      <line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/>
+      <line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/>
+      <line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/>
+      <line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/>
+      <rect x="0" y="10" width="44" height="7" fill="white"/>
+      <rect x="19" y="0" width="6" height="27" fill="white"/>
+      <rect x="0" y="11" width="44" height="5" fill="#C8102E"/>
+      <rect x="20" y="0" width="4" height="27" fill="#C8102E"/>
+    </svg>
+    <h1>UK-DEBT.INFO</h1>
+  </div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">💷 Debt Clock</a>
+    <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="uk-assets.html" class="nav-link active">🏦 Asset Clock</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-title">
+    <h2>UK GOVERNMENT ASSET CLOCK</h2>
+    <div class="subtitle">Official Reserves · Hard Assets · Money Supply · HM Treasury / Bank of England Data</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<!-- TOTAL RESERVES BANNER -->
+<div class="reserves-banner">
+  <div class="rb-item">
+    <div class="rb-val">~£130bn</div>
+    <div class="rb-label">Total Official Reserves (EEA)</div>
+  </div>
+  <div class="rb-divider"></div>
+  <div class="rb-item">
+    <div class="rb-val">310.3t</div>
+    <div class="rb-label">Gold Holdings (Tonnes)</div>
+  </div>
+  <div class="rb-divider"></div>
+  <div class="rb-item">
+    <div class="rb-val">~£36bn</div>
+    <div class="rb-label">Gold Value (GBP)</div>
+  </div>
+  <div class="rb-divider"></div>
+  <div class="rb-item">
+    <div class="rb-val">£3.20tn</div>
+    <div class="rb-label">M2 Money Supply</div>
+  </div>
+  <div class="rb-divider"></div>
+  <div class="rb-item">
+    <div class="rb-val">~2,760:1</div>
+    <div class="rb-label">Debt-to-Reserves Ratio</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- OFFICIAL HARD RESERVES -->
+  <div class="panel gold-accent">
+    <div class="panel-label">Official Hard Reserves (Exchange Equalisation Account)</div>
+    <div class="asset-list">
+      <div class="asset-row gold">
+        <div class="ar-left">
+          <span class="ar-name">🥇 GOLD RESERVES</span>
+          <span class="ar-sub">310.29 tonnes · BoE vaults · unchanged since 2002</span>
+        </div>
+        <div>
+          <div class="ar-val">~£36bn</div>
+          <div class="ar-change up">↑ Value up on gold price rise</div>
+        </div>
+      </div>
+      <div class="asset-row blue">
+        <div class="ar-left">
+          <span class="ar-name">💵 FOREIGN CURRENCY ASSETS</span>
+          <span class="ar-sub">USD, EUR, JPY, CAD holdings · EEA managed by BoE</span>
+        </div>
+        <div>
+          <div class="ar-val">~£85bn</div>
+          <div class="ar-change up">↑ Feb 2026 all-time high</div>
+        </div>
+      </div>
+      <div class="asset-row purple">
+        <div class="ar-left">
+          <span class="ar-name">🏛️ IMF SPECIAL DRAWING RIGHTS</span>
+          <span class="ar-sub">SDR holdings · ~SDR 15bn allocated to UK</span>
+        </div>
+        <div>
+          <div class="ar-val">~£16bn</div>
+          <div class="ar-change">≈ $1.36 per SDR · Mar 2026</div>
+        </div>
+      </div>
+      <div class="asset-row green">
+        <div class="ar-left">
+          <span class="ar-name">📋 IMF RESERVE TRANCHE POSITION</span>
+          <span class="ar-sub">Unconditional drawing right at IMF</span>
+        </div>
+        <div>
+          <div class="ar-val">~£4bn</div>
+          <div class="ar-change">Immediately accessible</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="ratio-label-row"><span>Composition of Official Reserves</span></div>
+      <div class="ratio-track">
+        <div class="ratio-seg" style="width:27%;background:#b8860b">GOLD 27%</div>
+        <div class="ratio-seg" style="width:61%;background:#0060cc">FX 61%</div>
+        <div class="ratio-seg" style="width:9%;background:#6600cc">SDR 9%</div>
+        <div class="ratio-seg" style="width:3%;background:#008844">RTP 3%</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;text-align:center">
+      <span class="update-badge"><span class="dot"></span>HM Treasury · Apr 2026 Release</span>
+    </div>
+  </div>
+
+  <!-- GOLD IN DETAIL -->
+  <div class="panel gold-accent">
+    <div class="panel-label">Gold Reserve Detail</div>
+    <div class="stat-grid">
+      <div class="stat-box gold">
+        <div class="sb-label">Holdings</div>
+        <div class="sb-val">310.3t</div>
+        <div class="sb-sub">Tonnes · Q1 2026</div>
+      </div>
+      <div class="stat-box gold">
+        <div class="sb-label">Value (USD)</div>
+        <div class="sb-val">$46.1bn</div>
+        <div class="sb-sub">Apr 2026</div>
+      </div>
+      <div class="stat-box gold">
+        <div class="sb-label">Value (GBP)</div>
+        <div class="sb-val">~£36bn</div>
+        <div class="sb-sub">Est. at ~£3,250/oz</div>
+      </div>
+      <div class="stat-box amber">
+        <div class="sb-label">World Ranking</div>
+        <div class="sb-val">#17</div>
+        <div class="sb-sub">By gold holdings</div>
+      </div>
+    </div>
+    <div class="warn-box" style="background:var(--gold-light);border-color:var(--gold-mid)">
+      ⚠️ <strong>Historical note:</strong> The UK sold 395 tonnes of gold between 1999–2002 at an average price of ~$275/oz — now known as "Brown's Bottom." Those 395 tonnes would be worth approximately <strong>£40bn+</strong> at today's prices. The remaining 310 tonnes have been held constant since 2002.
+    </div>
+    <div style="margin-top:12px">
+      <div class="panel-label">Gold vs National Debt Coverage</div>
+      <div class="dva-row">
+        <span class="dva-label">Gold Reserves</span>
+        <div class="dva-track"><div class="dva-fill" style="width:1.3%;background:#b8860b"></div></div>
+        <span class="dva-val" style="color:var(--gold)">£36bn</span>
+      </div>
+      <div class="dva-row">
+        <span class="dva-label">Official Reserves</span>
+        <div class="dva-track"><div class="dva-fill" style="width:4.7%;background:#0060cc"></div></div>
+        <span class="dva-val" style="color:var(--blue)">£130bn</span>
+      </div>
+      <div class="dva-row">
+        <span class="dva-label">National Debt</span>
+        <div class="dva-track"><div class="dva-fill" style="width:100%;background:#d40020"></div></div>
+        <span class="dva-val" style="color:var(--red)">£2,796bn</span>
+      </div>
+      <div class="warn-box" style="margin-top:10px">
+        💡 Official reserves cover only <strong>4.7%</strong> of the national debt. Gold alone covers just <strong>1.3%</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- MONEY SUPPLY -->
+  <div class="panel blue-accent">
+    <div class="panel-label">Money Supply (Bank of England · Feb 2026)</div>
+    <div class="asset-list">
+      <div class="asset-row blue">
+        <div class="ar-left">
+          <span class="ar-name">M0 — MONETARY BASE</span>
+          <span class="ar-sub">Physical notes & coins + BoE reserves</span>
+        </div>
+        <div><div class="ar-val">£104bn</div></div>
+      </div>
+      <div class="asset-row blue">
+        <div class="ar-left">
+          <span class="ar-name">M1 — NARROW MONEY</span>
+          <span class="ar-sub">M0 + current account deposits</span>
+        </div>
+        <div><div class="ar-val">£2,282bn</div></div>
+      </div>
+      <div class="asset-row blue">
+        <div class="ar-left">
+          <span class="ar-name">M2 — BROAD MONEY</span>
+          <span class="ar-sub">M1 + savings & short-term deposits</span>
+        </div>
+        <div>
+          <div class="ar-val">£3,198bn</div>
+          <div class="ar-change up">↑ All-time high Feb 2026</div>
+        </div>
+      </div>
+      <div class="asset-row purple">
+        <div class="ar-left">
+          <span class="ar-name">M3 — BROAD + TIME DEPOSITS</span>
+          <span class="ar-sub">M2 + longer-term bank deposits</span>
+        </div>
+        <div><div class="ar-val">£3,757bn</div></div>
+      </div>
+      <div class="asset-row green">
+        <div class="ar-left">
+          <span class="ar-name">M2 ANNUAL GROWTH</span>
+          <span class="ar-sub">Year-on-year change Feb 2026</span>
+        </div>
+        <div><div class="ar-val" style="color:var(--green)">+2.8%</div></div>
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:12px">
+      📊 UK M2 has grown from ~£900bn in 2000 to <strong>£3.2tn in 2026</strong> — a <strong>3.5× increase</strong> in 26 years. Over the same period the gold price has risen from ~$280/oz to ~$3,000+/oz.
+    </div>
+  </div>
+
+  <!-- BoE BALANCE SHEET -->
+  <div class="panel purple-accent">
+    <div class="panel-label">Bank of England Balance Sheet (Apr 2026)</div>
+    <div class="asset-list">
+      <div class="asset-row purple">
+        <div class="ar-left">
+          <span class="ar-name">BoE TOTAL ASSETS</span>
+          <span class="ar-sub">Central bank balance sheet</span>
+        </div>
+        <div><div class="ar-val">£796bn</div></div>
+      </div>
+      <div class="asset-row purple">
+        <div class="ar-left">
+          <span class="ar-name">GILT HOLDINGS (QE)</span>
+          <span class="ar-sub">UK govt bonds held via QE — being unwound</span>
+        </div>
+        <div>
+          <div class="ar-val">~£680bn</div>
+          <div class="ar-change down">↓ Active QT reduction</div>
+        </div>
+      </div>
+      <div class="asset-row green">
+        <div class="ar-left">
+          <span class="ar-name">BoE BASE RATE</span>
+          <span class="ar-sub">Set Mar 2026</span>
+        </div>
+        <div><div class="ar-val" style="color:var(--green)">3.75%</div></div>
+      </div>
+      <div class="asset-row blue">
+        <div class="ar-left">
+          <span class="ar-name">DEPOSIT RATE</span>
+          <span class="ar-sub">Bank deposit rate</span>
+        </div>
+        <div><div class="ar-val">3.50%</div></div>
+      </div>
+    </div>
+    <div class="warn-box" style="background:var(--purple-light);border-color:var(--purple-mid);margin-top:12px">
+      ⚠️ The BoE's balance sheet expanded from ~£80bn pre-2009 to a peak of ~£895bn during COVID QE. It is currently being reduced via Quantitative Tightening (QT) — selling gilts back to the market at a loss.
+    </div>
+  </div>
+
+  <!-- M2 vs INFLATION vs GOLD CHART -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">M2 Money Supply vs CPI Inflation vs Gold Price (2000–2026)</div>
+    <div class="chart-wrap">
+      <canvas id="chart1" height="320"></canvas>
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>M2 Money Supply (£bn, left axis)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>CPI Inflation % (right axis)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#b8860b"></div>Gold Price (USD/oz, right axis ÷10)</div>
+    </div>
+    <div class="warn-box" style="margin-top:12px">
+      📈 The chart shows the relationship between money creation (M2), inflation, and gold. Notice how gold price broadly tracks money supply growth over the long term, and how the post-COVID M2 surge (2020–21) preceded the 2022–23 inflation spike. Gold has risen ~10× since 2000 while M2 has risen ~3.5×.
+    </div>
+  </div>
+
+  <!-- DEBT vs ASSETS SUMMARY -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">National Balance Sheet Snapshot — Assets vs Liabilities</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+      <div class="stat-box green">
+        <div class="sb-label">Official Reserves</div>
+        <div class="sb-val">£130bn</div>
+        <div class="sb-sub">EEA · HM Treasury</div>
+      </div>
+      <div class="stat-box gold">
+        <div class="sb-label">Gold Value</div>
+        <div class="sb-val">£36bn</div>
+        <div class="sb-sub">310 tonnes · BoE vaults</div>
+      </div>
+      <div class="stat-box purple">
+        <div class="sb-label">BoE Balance Sheet</div>
+        <div class="sb-val">£796bn</div>
+        <div class="sb-sub">Incl. QE gilts</div>
+      </div>
+      <div class="stat-box blue">
+        <div class="sb-label">M2 Money Supply</div>
+        <div class="sb-val">£3.2tn</div>
+        <div class="sb-sub">Broad money · Feb 2026</div>
+      </div>
+      <div class="stat-box red">
+        <div class="sb-label">National Debt (PSND)</div>
+        <div class="sb-val">£2.80tn</div>
+        <div class="sb-sub">Excl. unfunded liabilities</div>
+      </div>
+      <div class="stat-box red">
+        <div class="sb-label">Total Liabilities (incl. pensions)</div>
+        <div class="sb-val">~£9tn+</div>
+        <div class="sb-sub">Off-balance-sheet included</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="panel-label">Hard Assets as % of National Debt</div>
+      <div class="dva-row">
+        <span class="dva-label">Gold Reserves</span>
+        <div class="dva-track"><div class="dva-fill" style="width:1.3%;background:var(--gold)"></div></div>
+        <span class="dva-val" style="color:var(--gold)">1.3%</span>
+      </div>
+      <div class="dva-row">
+        <span class="dva-label">All Reserves</span>
+        <div class="dva-track"><div class="dva-fill" style="width:4.7%;background:var(--green)"></div></div>
+        <span class="dva-val" style="color:var(--green)">4.7%</span>
+      </div>
+      <div class="dva-row">
+        <span class="dva-label">BoE Balance Sheet</span>
+        <div class="dva-track"><div class="dva-fill" style="width:28%;background:var(--purple)"></div></div>
+        <span class="dva-val" style="color:var(--purple)">28%</span>
+      </div>
+      <div class="dva-row">
+        <span class="dva-label">M2 vs Debt</span>
+        <div class="dva-track"><div class="dva-fill" style="width:100%;background:var(--blue)"></div></div>
+        <span class="dva-val" style="color:var(--blue)">114%</span>
+      </div>
+    </div>
+
+    <div class="warn-box" style="margin-top:12px">
+      ℹ️ <strong>Important context:</strong> Unlike households, governments don't need to "back" their debt with hard assets — they can tax, issue bonds, and create money. However, the UK's hard reserve position is weak compared to countries like Germany, Italy, or the US which hold far larger gold reserves relative to debt. The BoE's QE gilt holdings are the largest single "asset" but represent money already created, not independent wealth.
+    </div>
+  </div>
+
+
+  <!-- US TREASURIES EXPLAINER -->
+  <div class="panel full-width amber-accent">
+    <div class="panel-label">Why the UK "Holds $900bn of US Treasuries" — But It's NOT a Government Asset</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:10px">
+          You may have seen headlines stating the UK holds nearly <strong>$900 billion in US Treasury bonds</strong> — making it the second-largest foreign holder after Japan. This is technically true, but deeply misleading as a measure of UK government wealth.
+        </p>
+        <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:10px">
+          The US Treasury data records holdings by <strong>country of custody</strong>, not by owner. The vast majority of those $900bn of Treasuries are held by <strong>London-based hedge funds</strong> — not by the UK government, the Bank of England, or the British public. London has become the world's largest hedge fund hub, and those funds use UK custodian banks to hold their US assets.
+        </p>
+        <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7">
+          The actual UK government foreign currency reserves — held in the Exchange Equalisation Account (EEA) and managed by the Bank of England — total approximately <strong>£130bn</strong>. That is the figure on this page.
+        </p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:var(--red-light);border:2px solid var(--red-mid);border-radius:6px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">❌ NOT Government Assets</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700;color:var(--red)">~$897bn (~£700bn)</div>
+          <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:4px;line-height:1.5">US Treasuries held via London custody — privately owned by hedge funds. Cannot be used to pay UK national debt or fund public services.</div>
+        </div>
+        <div style="background:var(--green-light);border:2px solid var(--green-mid);border-radius:6px;padding:14px">
+          <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">✅ Actual Government Assets</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700;color:var(--green)">~£130bn</div>
+          <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:4px;line-height:1.5">HM Treasury Exchange Equalisation Account — gold, foreign currency, SDRs. These ARE the UK government's official reserves.</div>
+        </div>
+        <div style="background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:4px">🏦 Why Does London Hold So Much?</div>
+          <div style="font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.6">London is the world's largest hedge fund hub. Funds use the "basis trade" — buying Treasuries while selling futures — to exploit tiny price differences. These strategies require holding large volumes of physical Treasuries in custodian accounts, which appear as "UK holdings" in US data.</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="panel-label">UK "Holdings" vs Actual Government Reserves — The Key Distinction</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:8px">
+        <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+          <div style="font-size:10px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">US TIC Data<br>"UK Holdings"</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:var(--red)">$926bn</div>
+          <div style="font-size:11px;font-weight:600;color:var(--ink-mid);margin-top:3px">~£720bn at current rate<br>Custody-based measure<br>Mostly hedge funds</div>
+        </div>
+        <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+          <div style="font-size:10px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">BoE Official<br>FX Reserves</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:var(--blue)">~£185bn</div>
+          <div style="font-size:11px;font-weight:600;color:var(--ink-mid);margin-top:3px">~$237bn (Feb 2026)<br>Government owned<br>Part of EEA</div>
+        </div>
+        <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+          <div style="font-size:10px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">Total EEA<br>Official Reserves</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:var(--green)">~£130bn</div>
+          <div style="font-size:11px;font-weight:600;color:var(--ink-mid);margin-top:3px">Gold + FX + SDRs<br>HM Treasury / BoE<br>True govt assets</div>
+        </div>
+        <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+          <div style="font-size:10px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">Difference</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:var(--amber)">~£590bn</div>
+          <div style="font-size:11px;font-weight:600;color:var(--ink-mid);margin-top:3px">Private sector assets<br>incorrectly attributed<br>to "the UK"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-bar">
+  <span>Sources: HM Treasury Official Reserves · Bank of England · ONS · IMF · CEIC Data</span>
+  <span>Figures as of latest available releases. Gold value converted at approximate GBP/USD rate.</span>
+</div>
+<div class="sources">
+  HM Treasury Monthly Official Holdings of International Reserves · Bank of England Statistical Interactive Database · ONS M2 Series · IMF SDR Allocations · CEIC Data
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+// Clock
+function updateClock(){
+  const n=new Date();
+  document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);
+  document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+setInterval(updateClock,1000);updateClock();
+
+// CHART DATA — M2 (£bn), CPI %, Gold (USD/oz)
+const years=['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010',
+             '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021',
+             '2022','2023','2024','2025','2026'];
+const m2=[900,940,990,1050,1120,1200,1300,1410,1480,1570,1680,
+          1750,1820,1880,1940,1980,2010,2060,2130,2210,2560,2820,
+          2780,2850,2980,3100,3198];
+const cpi=[0.8,1.2,1.3,1.4,1.3,2.1,2.3,2.3,3.6,2.2,3.3,
+           4.5,2.8,2.6,1.5,0.0,0.7,2.7,2.5,1.7,0.9,2.5,
+           9.1,7.4,3.2,2.8,3.5];
+const gold=[280,271,310,363,409,444,603,695,872,1095,1225,
+            1572,1669,1411,1266,1060,1251,1257,1268,1477,1770,1798,
+            1802,1941,2060,2625,3050];
+
+const ctx=document.getElementById('chart1').getContext('2d');
+new Chart(ctx,{
+  type:'line',
+  data:{
+    labels:years,
+    datasets:[
+      {
+        label:'M2 (£bn)',
+        data:m2,
+        borderColor:'#0060cc',
+        backgroundColor:'rgba(0,96,204,0.08)',
+        borderWidth:2.5,
+        pointRadius:2,
+        yAxisID:'y',
+        fill:true,
+        tension:0.3
+      },
+      {
+        label:'CPI Inflation %',
+        data:cpi,
+        borderColor:'#d40020',
+        backgroundColor:'transparent',
+        borderWidth:2,
+        pointRadius:2,
+        yAxisID:'y2',
+        tension:0.3
+      },
+      {
+        label:'Gold Price USD/oz ÷10',
+        data:gold.map(g=>g/10),
+        borderColor:'#b8860b',
+        backgroundColor:'transparent',
+        borderWidth:2,
+        pointRadius:2,
+        borderDash:[4,2],
+        yAxisID:'y2',
+        tension:0.3
+      }
+    ]
+  },
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        callbacks:{
+          label:function(ctx){
+            if(ctx.datasetIndex===0) return ' M2: £'+ctx.raw+'bn';
+            if(ctx.datasetIndex===1) return ' CPI: '+ctx.raw+'%';
+            return ' Gold: $'+(ctx.raw*10).toFixed(0)+'/oz';
+          }
+        }
+      }
+    },
+    scales:{
+      x:{
+        grid:{color:'rgba(0,0,0,0.05)'},
+        ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}}
+      },
+      y:{
+        position:'left',
+        title:{display:true,text:'M2 (£bn)',color:'#0060cc',font:{size:11,weight:'bold'}},
+        grid:{color:'rgba(0,96,204,0.08)'},
+        ticks:{color:'#0060cc',font:{size:10,weight:'bold'}}
+      },
+      y2:{
+        position:'right',
+        title:{display:true,text:'CPI % / Gold ÷10',color:'#d40020',font:{size:11,weight:'bold'}},
+        grid:{display:false},
+        ticks:{color:'#d40020',font:{size:10,weight:'bold'}}
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

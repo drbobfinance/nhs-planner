@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understanding QE and QT — What Money Printing Costs the UK | UK-Debt.info</title>
+<meta name="description" content="A plain-English guide to Quantitative Easing and Quantitative Tightening — how the Bank of England's bond-buying programme worked, who gained, who lost, and what it's costing taxpayers now.">
+<link rel="canonical" href="https://uk-debt.info/understanding-qe-qt.html">
+<meta property="og:title" content="Understanding QE and QT | UK-Debt.info">
+<meta property="og:description" content="What Quantitative Easing and Quantitative Tightening actually did, and what they're costing the UK taxpayer now.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://uk-debt.info/understanding-qe-qt.html">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+.header{background:linear-gradient(135deg,#1a0044,#2d0066,#4400aa);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:#fff;line-height:1.1}
+.header-title .subtitle{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:4px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:18px;color:#fff;letter-spacing:2px;font-weight:700}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss-item{text-align:center}.ss-item .sv{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700}.ss-item .sl{font-size:10px;letter-spacing:1px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.ss-item.red .sv{color:var(--red)}.ss-item.green .sv{color:var(--green)}.ss-item.amber .sv{color:var(--amber)}.ss-item.blue .sv{color:var(--blue)}.ss-item.purple .sv{color:var(--purple)}
+.main{padding:20px 32px}
+.intro-box{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.intro-box p{font-size:17px;font-weight:600;color:var(--ink-mid);line-height:1.85}
+.section{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:22px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.section-num{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--purple);font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.section h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:var(--ink);margin-bottom:12px;line-height:1.2}
+.section p{font-size:16px;font-weight:600;color:var(--ink-mid);line-height:1.8;margin-bottom:12px}
+.section p:last-child{margin-bottom:0}
+.callout{border-radius:6px;padding:12px 16px;font-size:15px;font-weight:700;line-height:1.7;margin:14px 0}
+.callout.amber{background:var(--amber-light);border:1px solid var(--amber-mid);color:var(--ink-mid)}
+.callout.red{background:var(--red-light);border:1px solid var(--red-mid);color:var(--ink-mid)}
+.callout.green{background:var(--green-light);border:1px solid var(--green-mid);color:var(--ink-mid)}
+.callout.blue{background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--ink-mid)}
+.mech-flow{display:flex;flex-direction:column;gap:0;margin:16px 0}
+.mech-step{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px 16px;position:relative}
+.mech-step:not(:last-child){margin-bottom:18px}
+.mech-step:not(:last-child)::after{content:'↓';position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);font-size:18px;color:var(--purple);font-weight:700}
+.mech-step-title{font-size:14px;font-weight:800;color:var(--ink)}
+.mech-step-desc{font-size:12px;color:var(--ink-light);margin-top:2px;font-weight:600}
+.mech-step.cost{background:var(--red-light);border-color:var(--red-mid)}
+.mech-step.cost .mech-step-title{color:var(--red)}
+.qe-table{width:100%;border-collapse:collapse;font-size:13px;margin:14px 0}
+.qe-table th{background:var(--panel2);padding:8px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border);text-align:left}
+.qe-table td{padding:8px 10px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid)}
+.qe-table td.mono{font-family:'Share Tech Mono',monospace;font-weight:700;color:var(--purple)}
+.qe-table tr.now-row{background:var(--blue-light)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
+.stat-box{padding:12px;border-radius:6px;border:1px solid transparent;text-align:center}
+.stat-box .sv{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700}
+.stat-box .sl{font-size:10px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;line-height:1.3}
+.stat-box.red{background:var(--red-light);border-color:var(--red-mid)}.stat-box.red .sv{color:var(--red)}
+.stat-box.green{background:var(--green-light);border-color:var(--green-mid)}.stat-box.green .sv{color:var(--green)}
+.stat-box.amber{background:var(--amber-light);border-color:var(--amber-mid)}.stat-box.amber .sv{color:var(--amber)}
+.stat-box.blue{background:var(--blue-light);border-color:var(--blue-mid)}.stat-box.blue .sv{color:var(--blue)}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.sources-box{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px 16px;font-size:11px;color:var(--ink-light);line-height:1.7;margin-top:8px}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+@media(max-width:768px){
+  .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .top-nav::-webkit-scrollbar{display:none}
+  .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+  .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+  .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+  .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="money-in-out.html" class="done">Money In & Out</a>
+        <a href="fiscal-gap.html" class="done">True Fiscal Gap</a>
+        <a href="save-the-uk.html" class="done">Can You Save the UK?</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="active">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Public vs Private Employment</a>
+        <a href="pensions.html" class="done">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="done">Historical Timeline</a>
+        <a href="cost-of-living.html" class="done">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>UNDERSTANDING QE AND QT</h1>
+    <div class="subtitle">What Money Printing Actually Did · Who Gained, Who Lost · What It's Costing Now</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+  </div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss-item purple"><div class="sv">£895bn</div><div class="sl">Peak QE Stock (2021)</div></div>
+  <div class="ss-item blue"><div class="sv">~£528bn</div><div class="sl">QE Stock Today</div></div>
+  <div class="ss-item green"><div class="sv">+£124bn</div><div class="sl">Profit Banked 2012-22</div></div>
+  <div class="ss-item red"><div class="sv">-£86bn</div><div class="sl">Paid Back Since Oct 2022</div></div>
+  <div class="ss-item red"><div class="sv">£134bn</div><div class="sl">OBR Lifetime Cost Forecast</div></div>
+</div>
+
+<div class="main">
+
+  <div class="intro-box">
+    <p>The Bank of England created hundreds of billions of pounds to support the economy through four separate crises. Here's how that worked, who gained, who lost, and why it's now costing the taxpayer money.</p>
+  </div>
+
+  <!-- 01 -->
+  <div class="section">
+    <div class="section-num">01</div>
+    <h2>The Bank's Actual Job</h2>
+    <p>The Bank of England exists to keep the economy stable — stopping it collapsing in a crisis, and stopping prices rising too fast the rest of the time.</p>
+    <p>Its day-to-day tool is Bank Rate, the interest rate that ripples through to every mortgage, loan and savings account in the country. Cut it, and borrowing gets cheaper, spending rises, the economy gets a boost.</p>
+    <p>When Bank Rate is already close to zero and the economy still needs help, the Bank reaches for a second tool: buying government bonds directly. This is <strong>quantitative easing, or QE</strong>.</p>
+    <div class="callout blue">📋 QE and Bank Rate cuts do the same underlying job — lowering the cost of borrowing across the economy — just through different mechanisms.</div>
+  </div>
+
+  <!-- 02 -->
+  <div class="section">
+    <div class="section-num">02</div>
+    <h2>Why Bond Prices Move Opposite to Interest Rates</h2>
+    <p>A government bond, or gilt, pays a fixed amount of interest each year. That fixed payment is what makes its price move in the opposite direction to rates.</p>
+    <p>A gilt paying £4 a year on a £100 face value is a 4% yield. If new gilts start paying £5 a year because rates have risen, nobody wants the old one at £100 any more — its price has to fall to around £80 so the same £4 still works out as a competitive yield.</p>
+    <p>The reverse happens when the Bank buys gilts in bulk: extra demand pushes the price up, and because the payment is fixed, a higher price means a lower effective yield.</p>
+    <div class="callout amber">⚠️ That's the entire QE mechanism in one line: more demand for gilts pushes prices up, which pushes effective interest rates down — because gilt yields are the benchmark every other loan and mortgage gets priced against.</div>
+  </div>
+
+  <!-- 03 -->
+  <div class="section">
+    <div class="section-num">03</div>
+    <h2>Why Sellers Didn't Just Wait for the Bonds to Mature</h2>
+    <p>Every bond has a fixed lifespan and always repays its original face value at maturity, whatever its price does in the meantime — so why sell early at all?</p>
+    <p>Pension funds and insurers weren't short of cash. They sold because the Bank's buying pushed gilt prices above what the funds had originally paid, letting them lock in a profit immediately rather than wait years for the same face value.</p>
+    <p>The proceeds were meant to be reinvested into shares, corporate bonds or property. That reinvestment into the wider economy was the actual point of the policy — known as the <strong>portfolio rebalancing channel</strong> — not a side effect.</p>
+  </div>
+
+  <!-- 04 - MECHANISM FLOW -->
+  <div class="section">
+    <div class="section-num">04</div>
+    <h2>The Full Mechanism, Step by Step</h2>
+    <div class="mech-flow">
+      <div class="mech-step">
+        <div class="mech-step-title">1. Economy Under Stress</div>
+        <div class="mech-step-desc">Recession, financial crisis or shock</div>
+      </div>
+      <div class="mech-step">
+        <div class="mech-step-title">2. Bank of England Creates New Money</div>
+        <div class="mech-step-desc">Quantitative easing, QE</div>
+      </div>
+      <div class="mech-step">
+        <div class="mech-step-title">3. Buys Gilts from Pension Funds & Insurers</div>
+        <div class="mech-step-desc">Sellers take a quick profit and reinvest elsewhere</div>
+      </div>
+      <div class="mech-step">
+        <div class="mech-step-title">4. Institutions Hold the Cash</div>
+        <div class="mech-step-desc">Earn Bank Rate — currently about 4%</div>
+      </div>
+      <div class="mech-step">
+        <div class="mech-step-title">5. Bank of England Holds the Gilts</div>
+        <div class="mech-step-desc">Earns the old fixed yield — about 2%</div>
+      </div>
+      <div class="mech-step cost">
+        <div class="mech-step-title">6. The Gap Becomes a Cost</div>
+        <div class="mech-step-desc">4% paid out minus 2% earned back — the gap is added to government debt interest</div>
+      </div>
+    </div>
+    <div class="callout red">🚨 That's how quantitative easing turns into a real cost line on the government's books.</div>
+  </div>
+
+  <!-- 05 - SIX EPISODES TABLE -->
+  <div class="section">
+    <div class="section-num">05</div>
+    <h2>Six Episodes, Not One Continuous Programme</h2>
+    <p>QE wasn't a single 2009 policy left running. The Bank used it in six separate rounds across more than a decade, each triggered by a fresh shock.</p>
+    <table class="qe-table">
+      <thead><tr><th>Year</th><th>Trigger</th><th>Added to QE Stock</th></tr></thead>
+      <tbody>
+        <tr><td>2009</td><td>Global financial crisis</td><td class="mono">£200bn</td></tr>
+        <tr><td>2011–12</td><td>Eurozone debt crisis</td><td class="mono">£175bn</td></tr>
+        <tr><td>2016</td><td>EU referendum result</td><td class="mono">£60bn</td></tr>
+        <tr><td>2020</td><td>Covid pandemic</td><td class="mono">£300bn+</td></tr>
+        <tr><td>2022</td><td>Inflation surge</td><td class="mono">QT begins</td></tr>
+        <tr class="now-row"><td>2026</td><td>Ongoing unwind</td><td class="mono">~£528bn stock</td></tr>
+      </tbody>
+    </table>
+    <div class="callout blue">📋 The reason QE kept getting reused for over a decade is structural: Bank Rate was stuck near zero from 2009 to 2021 — an unprecedented stretch in the Bank's 300-year history — so whenever a new shock hit, QE was the only lever left. Today Bank Rate sits around 4.25%, well above zero, which is exactly why there's no fresh QE now: the Bank has plenty of conventional room to cut rates the normal way if it needs to.</div>
+  </div>
+
+  <!-- 06 - WHO GAINED WHO LOST -->
+  <div class="section">
+    <div class="section-num">06</div>
+    <h2>Who Gained, Who Lost</h2>
+    <p>QE redistributed money within the country as much as it created a cost. Borrowers won. Savers and pensioners lost. Asset owners, who skew older and wealthier, gained the most.</p>
+    <div class="callout amber">⚠️ <strong>This was never a clean win for the Treasury.</strong> QE only looked profitable while Bank Rate stayed near zero. The £124bn shown below was banked between 2012 and 2022, while rates were down at 0.1%–0.5%. The moment rates rose, the position flipped into a loss, and that loss has already more than wiped out a decade of profit. The two figures below aren't separate good and bad news stories — they're the same trade, before and after the conditions that made it profitable disappeared.</div>
+    <div class="stat-grid">
+      <div class="stat-box green"><div class="sv">+£124bn</div><div class="sl">Profit Banked While Rates Near Zero, 2012-2022</div></div>
+      <div class="stat-box red"><div class="sv">-£86bn</div><div class="sl">Reversed Into Losses Since Rates Rose, Oct 2022-Now</div></div>
+      <div class="stat-box red"><div class="sv">-25%</div><div class="sl">Pension Annuity Income Since 2009</div></div>
+      <div class="stat-box blue"><div class="sv">+£10,000</div><div class="sl">Household Assets Boosted by QE</div></div>
+    </div>
+    <p>Borrowers won in aggregate: lower gilt yields fed through to cheaper mortgages and business loans for over a decade — which is the stimulus mechanism working as intended.</p>
+    <p>Since QE began in March 2009, the income paid by pension annuities has fallen by a quarter — a direct hit to anyone relying on savings income in retirement.</p>
+    <p>The Bank told the Treasury Select Committee that QE raised the value of shares and bonds by 26%, or £600 billion — equivalent to £10,000 per household, but concentrated among older people who tend to own more financial assets.</p>
+    <div class="callout blue">📋 <strong>A caveat worth keeping:</strong> the £10,000 figure is an average, not a payout. Asset ownership is heavily skewed toward older, wealthier households, while the income loss from low rates fell hardest on savers and pensioners with little offsetting asset gain.</div>
+  </div>
+
+  <!-- 07 - WHAT IT'S COSTING NOW + CHART -->
+  <div class="section">
+    <div class="section-num">07</div>
+    <h2>What It's Costing Now, and Why the Number Keeps Moving</h2>
+    <p>The eventual bill depends almost entirely on how fast interest rates fall from here. Every estimate published in the last three years gives a different number, because each was made under different rate assumptions.</p>
+    <canvas id="scenarioChart" height="220"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Profit (rates near zero)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Loss (rates risen)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c97000"></div>Best-case scenario</div>
+    </div>
+    <p style="margin-top:14px">Between 2012 and 2022 the Asset Purchase Facility transferred £124bn in profit to the Treasury — the years when Bank Rate was near zero and below the yield on the gilts it held.</p>
+    <p>Since October 2022, HM Treasury has transferred £85.9bn back to the Bank to cover losses under the indemnity — money already paid, not a forecast.</p>
+    <p>Looking ahead, the Bank's own analysis gives a range: <strong>-£125bn</strong> if rates follow the path markets currently expect, or <strong>-£60bn</strong> if rates fall further to an estimated neutral level.</p>
+    <p>The most recent official government forecast sits inside that range: the <strong>OBR's Spring 2025 forecast puts the total lifetime cost at £133.7bn</strong>.</p>
+    <div class="callout green">✅ <strong>The one-line takeaway:</strong> the bill is mostly a bet on how fast interest rates fall. Every rate cut that comes faster than expected saves real money on this specific line, separate from the wider case for or against cutting rates.</div>
+  </div>
+
+  <!-- WHAT IF RATES RISE + CHART -->
+  <div class="section">
+    <h2>What If Rates Go the Other Way?</h2>
+    <p>All the figures above assume Bank Rate stays roughly where it is now or falls. Every scenario gets dramatically worse if rates rise instead — and that isn't a remote possibility, it's exactly what happened in 2022.</p>
+    <canvas id="rateChart" height="220"></canvas>
+    <div class="callout amber" style="margin-top:10px">⚠️ This is a simple illustration, not a Bank of England forecast: it applies the same gap-times-stock arithmetic used earlier (Bank Rate paid out, minus the roughly 2% fixed yield earned on the existing gilts) to a range of possible future rates, holding today's roughly £500bn stock constant.</div>
+    <p>At today's 4.25% Bank Rate, the annual cost is around £11bn. At 5% it rises to roughly £15bn, at 6% to roughly £20bn, and at 7% to roughly £25bn a year — before the stock has shrunk any further through QT.</p>
+    <div class="callout red">🚨 Rates have moved this much before, and recently: Bank Rate went from 0.1% to 5.25% in just 20 months during 2021–2023, so a further rise of two or three percentage points from here is well within recent experience, not a fringe scenario.</div>
+
+    <h2 style="margin-top:24px">Why Rates Could Rise: The "Kindness of Strangers" Risk</h2>
+    <p>The government depends on investors, in the UK and abroad, being willing to keep buying and holding its debt. If that willingness weakens, investors demand higher yields to compensate, and Bank Rate-level scenarios stop being the only thing driving the cost up.</p>
+    <p>Foreign investors hold a substantial share of UK government debt, with overseas holdings of UK gilts running at around 25–30% in recent years, and the OBR has explicitly flagged this rising foreign ownership share as a vulnerability — since overseas holders have less structural need to hold sterling assets than domestic pension funds and can switch out of gilts quickly if confidence falls.</p>
+    <p>This isn't theoretical. The <strong>September 2022 mini-budget</strong> triggered a sharp loss of investor confidence in UK fiscal policy, sending gilt yields spiking and forcing the Bank of England into emergency bond-buying to stabilise the market — a real recent example of yields jumping well outside any central forecast within days.</p>
+    <p>A Bank of England policymaker has separately warned that the growing presence of more reactive international investors in the gilt market increases the potential for rapid sell-offs if a future shock hits confidence, which would push yields — and therefore both government borrowing costs and the QE interest gap — higher than any of the scenarios above assume.</p>
+    <div class="callout red">🚨 Every figure in this section assumes investors keep willingly buying and holding UK debt at roughly current yields. If confidence in the pound or in UK fiscal credibility weakens, instead of choosing between a 4%, 5% or 6% scenario, the market could simply demand higher yields on its own terms — the way it did in autumn 2022 — and the cost could move faster and further than any of the orderly scenarios above.</div>
+  </div>
+
+  <!-- 08 -->
+  <div class="section">
+    <div class="section-num">08</div>
+    <h2>Is the Bank of England Actually Separate from Government?</h2>
+    <p>It's a specific, deliberate split, not full independence. Ownership and operational decisions are treated very differently.</p>
+    <p><strong>Ownership: not separate at all.</strong> The Bank is wholly owned by the UK government, its entire capital held by the Treasury Solicitor on behalf of HM Treasury, which also appoints every senior policymaker including the Governor.</p>
+    <p><strong>Monetary policy decisions: genuinely independent.</strong> Since May 1997 the Bank has set interest rates and decided on QE based on its own judgement of how to hit the inflation target, without day-to-day government interference — even though government sets that 2% target.</p>
+    <p><strong>The money side of QE specifically: less independent than it looks.</strong> The Bank only undertakes QE with the Treasury's authorisation, and the Treasury indemnifies the Bank for all gains and losses on QE transactions — so the Bank is acting as the Treasury's agent financially, even while the policy decision remains its own.</p>
+  </div>
+
+  <!-- 09 -->
+  <div class="section">
+    <div class="section-num">09</div>
+    <h2>Where the Money Comes From, and What Backs It</h2>
+    <p>The Bank's own balance sheet is tiny — nowhere near big enough to back a programme that peaked near £900 billion. What actually backs QE is a direct government guarantee, not the Bank's own assets.</p>
+    <p>The Bank's entire statutory capital is around £14.6 million — a figure dating back to 1946 nationalisation compensation, not a fund built to absorb QE-scale losses. Even its broader capital buffer is only a few billion pounds.</p>
+    <p>What actually backs QE losses is <strong>HM Treasury's indemnity</strong>, agreed when the Asset Purchase Facility was set up in 2009: any losses are paid by the Treasury, meaning the taxpayer, not absorbed by the Bank's own money.</p>
+    <p>The gilts themselves are the nominal assets behind the programme — real government debt sitting in the Asset Purchase Facility — but since those gilts are also a liability of the same government that owns the Bank, this is best understood as <strong>the state lending to itself through an intermediary</strong>, funded by newly created money on one side and a Treasury guarantee on the other.</p>
+  </div>
+
+  <div class="sources-box">
+    Figures and quotations sourced from Bank of England publications including its Asset Purchase Facility Quarterly Reports, market notices and explainer pages; the Office for Budget Responsibility's Economic and Fiscal Outlook and fiscal risks reports; the New Economics Foundation; NIESR; and Treasury Select Committee evidence. The 5%, 6% and 7% stress scenarios are illustrative calculations by this site, not official Bank of England or OBR forecasts, and apply current gilt stock and yield gap assumptions that will change as the stock shrinks through QT. Figures marked as estimates or projections are dependent on future interest rate assumptions and will be updated as new official data is published.
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ This page is for general explanation and is not financial or legal advice.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: Bank of England · OBR · NIESR · New Economics Foundation · Treasury Select Committee</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="boe-bonds.html">BoE Bond Programme</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(function(g){if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(function(g){g.classList.remove('open')})});
+function tick(){var n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8)}
+setInterval(tick,1000);tick();
+
+new Chart(document.getElementById('scenarioChart'),{
+  type:'bar',
+  data:{
+    labels:['Profit\\n2012–22','Paid since\\nOct 2022','If rates follow\\nmarket path','If rates fall\\nto neutral','OBR official\\nforecast'],
+    datasets:[{
+      data:[124,-86,-125,-60,-134],
+      backgroundColor:['#008844','#d40020','#d40020','#c97000','#d40020'],
+      borderRadius:4
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '£'+c.raw+'bn'}}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:9,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'£bn',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:function(v){return '£'+v+'bn'}},grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+new Chart(document.getElementById('rateChart'),{
+  type:'bar',
+  data:{
+    labels:['4.25% (today)','5%','6%','7%'],
+    datasets:[{
+      label:'Annual cost £bn',
+      data:[11,15,20,25],
+      backgroundColor:['#0060cc','#c97000','#c97000','#d40020'],
+      borderRadius:4
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '£'+c.raw+'bn/yr'}}}},
+    scales:{
+      x:{title:{display:true,text:'Bank Rate',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'Annual cost (£bn)',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:function(v){return '£'+v+'bn'}},grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+</script>
+</body>
+</html>

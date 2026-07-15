@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Taxes, Mansion Tax and the UK Housing Market | UK-Debt.info</title>
+<meta name="description" content="The mansion tax has already distorted UK property prices. Stamp duty killed a generation of landlords. Transactions crashed 41%. And the wealth effect means every homeowner feeling poorer is spending less. The data tells the story.">
+<link rel="canonical" href="https://uk-debt.info/wealth-taxes.html">
+<meta property="og:title" content="Property Taxes and the UK Housing Market — What the Data Shows">
+<meta property="og:description" content="83% of offers near the £2m mansion tax threshold came in below it. Transactions fell 41%. Luxury sales at a five-year low. The evidence on what property taxes are doing to the UK economy.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://uk-debt.info/wealth-taxes.html">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{background:rgba(255,255,255,.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:11px 18px;font-size:14px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+.header{background:linear-gradient(135deg,#3d0000,#660000,#990000);padding:24px 40px 20px}
+.header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3.5vw,40px);letter-spacing:3px;color:#fff;line-height:1.1}
+.header .sub{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.75);text-transform:uppercase;margin-top:4px;font-weight:600}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 40px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss{text-align:center}.ss .sv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}.ss .sl{font-size:12px;letter-spacing:1px;color:var(--ink-light);text-transform:uppercase;margin-top:4px;font-weight:700}
+.ss.red .sv{color:var(--red)}.ss.green .sv{color:var(--green)}.ss.amber .sv{color:var(--amber)}.ss.blue .sv{color:var(--blue)}
+.main{padding:20px 32px}
+.intro{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.intro p{font-size:17px;font-weight:600;color:var(--ink-mid);line-height:1.85}
+.section{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:28px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sn{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--red);font-weight:700;letter-spacing:2px;margin-bottom:4px}
+.section h2{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;color:var(--ink);margin-bottom:12px}
+.section p{font-size:16px;font-weight:600;color:var(--ink-mid);line-height:1.85;margin-bottom:12px}
+.section p:last-child{margin-bottom:0}
+.callout{border-radius:6px;padding:14px 18px;font-size:15px;font-weight:600;line-height:1.75;margin:14px 0}
+.callout.red{background:var(--red-light);border:1px solid var(--red-mid);color:var(--ink-mid)}
+.callout.green{background:var(--green-light);border:1px solid var(--green-mid);color:var(--ink-mid)}
+.callout.amber{background:var(--amber-light);border:1px solid var(--amber-mid);color:var(--ink-mid)}
+.callout.blue{background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--ink-mid)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
+.stat-box{padding:12px;border-radius:6px;border:1px solid transparent;text-align:center}
+.stat-box .sv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}
+.stat-box .sl{font-size:10px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:.5px;margin-top:4px;line-height:1.3}
+.stat-box.red{background:var(--red-light);border-color:var(--red-mid)}.stat-box.red .sv{color:var(--red)}
+.stat-box.green{background:var(--green-light);border-color:var(--green-mid)}.stat-box.green .sv{color:var(--green)}
+.stat-box.amber{background:var(--amber-light);border-color:var(--amber-mid)}.stat-box.amber .sv{color:var(--amber)}
+.stat-box.blue{background:var(--blue-light);border-color:var(--blue-mid)}.stat-box.blue .sv{color:var(--blue)}
+.timeline{display:flex;flex-direction:column;gap:0;margin:14px 0}
+.tl-item{display:flex;gap:14px;position:relative;padding-bottom:20px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:17px;top:36px;bottom:0;width:2px;background:var(--border)}
+.tl-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--red-light);border:2px solid var(--red)}
+.tl-content{flex:1}
+.tl-title{font-size:13px;font-weight:800;color:var(--ink)}
+.tl-date{font-size:11px;font-weight:700;color:var(--red);margin-bottom:2px}
+.tl-desc{font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.6}
+.sources{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:11px;color:var(--ink-light);line-height:1.7;margin-top:8px}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+@media(max-width:768px){.top-nav{padding:0 8px;overflow-x:auto;flex-wrap:nowrap}.top-nav::-webkit-scrollbar{display:none}.nav-groups{flex-shrink:0;flex-wrap:nowrap}.nav-group-btn{padding:0 8px;font-size:10px;white-space:nowrap}.nav-brand span{font-size:16px;white-space:nowrap}.dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-gap.html" class="done">True Fiscal Gap</a>
+        <a href="obr-spring-2026.html" class="done">OBR Spring 2026</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money &amp; Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People &amp; Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Employment</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+        <a href="uk-wealth-decline.html" class="done">UK Wealth Decline</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="done">Historical Timeline</a>
+        <a href="debt-reduction-success.html" class="done">Who Reduced Their Debt?</a>
+        <a href="russia-economy-war.html" class="done">Russia War Economy</a>
+        <a href="wealth-taxes.html" class="active">Property Taxes — The Evidence</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="header">
+  <h1>PROPERTY TAXES AND THE UK HOUSING MARKET — WHAT THE DATA SHOWS</h1>
+  <div class="sub">Mansion Tax · Stamp Duty · The Wealth Effect · Transactions Collapse · What It Is Doing To The Economy</div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss red"><div class="sv">−41%</div><div class="sl">Property Transactions Apr 2026 YoY</div></div>
+  <div class="ss red"><div class="sv">83%</div><div class="sl">Offers Near £2m Came In Below It</div></div>
+  <div class="ss red"><div class="sv">−18%</div><div class="sl">London Luxury Sales Value 2025</div></div>
+  <div class="ss red"><div class="sv">−17.5%</div><div class="sl">Average UK Household Wealth 2026</div></div>
+  <div class="ss red"><div class="sv">−20%</div><div class="sl">New Buyers vs 5yr Average Q2 2025</div></div>
+  <div class="ss amber"><div class="sv">4th</div><div class="sl">UK Property Tax Burden OECD Rank</div></div>
+</div>
+
+<div class="main">
+
+  <div class="intro">
+    <p>The UK already has the fourth highest property tax burden in the developed world. The mansion tax has been announced — and it is already distorting prices, collapsing transactions at the top end, and pushing homeowners to reprice properties downward to stay below the threshold. Meanwhile stamp duty changes caused the worst annual transaction collapse since records began. This page examines what the data shows about the economic consequences of piling further taxes onto property that is already among the most heavily taxed in the world.</p>
+  </div>
+
+  <!-- THE MANSION TAX IS ALREADY HITTING PRICES -->
+  <div class="section">
+    <div class="sn">01</div>
+    <h2>The Mansion Tax — Already Hitting Prices Before It Even Starts</h2>
+    <p>The mansion tax — officially the High Value Council Tax Surcharge — was announced in the November 2025 Budget. It applies to homes worth over £2 million from April 2028, costing owners between £2,500 and £7,500 a year depending on value. The government expects it to raise £400 million by 2029-30.</p>
+    <p>The tax does not start until 2028. It is being valued on April 2026 prices. Yet the data shows it has already moved markets — significantly — from the moment it was announced.</p>
+
+    <div class="stat-grid">
+      <div class="stat-box red"><div class="sv">83%</div><div class="sl">Offers Near £2m Coming In Below It — Feb 2026</div></div>
+      <div class="stat-box red"><div class="sv">64%</div><div class="sl">Same Figure a Year Earlier — Feb 2025</div></div>
+      <div class="stat-box red"><div class="sv">+5.6%</div><div class="sl">Homes Listed £1.8m-£2m Rose After Budget</div></div>
+      <div class="stat-box red"><div class="sv">−6.5%</div><div class="sl">Homes Listed £2m-£2.2m Fell After Budget</div></div>
+    </div>
+
+    <p>Hamptons estate agency data shows that in February 2026, 83% of offers on homes priced within 10% of £2 million came in below the £2 million threshold — compared to just 64% a year earlier. The jump of 19 percentage points represents a direct, measurable market response to the tax announcement.</p>
+    <p>Sellers are repricing downward to stay below the threshold where buyer demand is now concentrated. The number of homes listed between £1.8m and £2m rose 5.6% year-on-year in the two months after the Budget. The number listed between £2m and £2.2m fell 6.5% — as sellers adjusted asking prices to sit below the taxable line rather than above it.</p>
+    <p>Hamptons estimates this pricing distortion means the tax will raise around £28 million less per year than originally projected — even before it has started. If the distortion continues and more owners price or sell below £2m ahead of the 2026 valuation date, the revenue shortfall will increase further.</p>
+
+    <div class="callout red">🚨 <strong>The structural problem with threshold-based taxes:</strong> Any tax with a sharp cliff edge at a specific value creates a gravity well below that threshold. Markets cluster just below it. A home worth £2.1m before the announcement may now genuinely be worth £1.95m — because buyers will pay less to avoid a permanent annual charge of £2,500+. This wealth destruction at the threshold is real, not theoretical. Every owner of a property near £2m has seen their asset value affected by the announcement of a tax that does not even begin until 2028.</div>
+  </div>
+
+  <!-- TRANSACTIONS COLLAPSED -->
+  <div class="section">
+    <div class="sn">02</div>
+    <h2>Property Transactions — The Collapse in Numbers</h2>
+    <p>The stamp duty changes of April 2025 — when the nil-rate threshold reverted from £250,000 to £125,000 and first-time buyer relief was cut from £425,000 to £300,000 — caused a predictable surge before the deadline and a sharp fall after it. But the scale of the fall was larger than almost anyone expected.</p>
+
+    <div class="stat-grid">
+      <div class="stat-box red"><div class="sv">−41%</div><div class="sl">UK Transactions Year-on-Year April 2026</div></div>
+      <div class="stat-box red"><div class="sv">−20%</div><div class="sl">New Buyers vs 5yr Average Q2 2025</div></div>
+      <div class="stat-box red"><div class="sv">+11%</div><div class="sl">New Listings Simultaneously Rose Q2 2025</div></div>
+      <div class="stat-box amber"><div class="sv">−12%</div><div class="sl">Sales vs May 2024 in May 2025</div></div>
+    </div>
+
+    <p>UK property transactions fell 41% year-on-year in April 2026 — measured against the surge month of April 2025 when buyers rushed to complete before the stamp duty change. But even adjusting for that distortion, the underlying market trend is poor. The sales turnover rate across England fell from 17% in April 2025 to 14% in April 2026 — meaning homes are sitting on the market longer and converting to sales less frequently.</p>
+    <p>Knight Frank's data showed that in Q2 2025, the number of new prospective buyers was down by a fifth against the five-year average — while new listings were simultaneously up 11%. Too many homes chasing too few buyers is the classic recipe for price pressure, and it is exactly what the data showed.</p>
+    <p>House prices fell in April 2025 after the stamp duty changes took effect and had not returned to the March peak by mid-year. In real terms — adjusted for inflation — UK house prices have fallen consistently since 2022. A homeowner who bought at peak 2022 prices and adjusts for subsequent inflation is in real-terms negative territory even if their nominal price has held.</p>
+
+    <canvas id="transactionChart" height="200" style="margin-top:14px"></canvas>
+
+    <div class="callout amber">⚠️ <strong>The 41% drop in context:</strong> PropertyWire's industry analysis described April as "particularly challenging" and noted the housing market was "absorbing an extraordinary number of shocks at once" — stamp duty changes, deteriorating economic outlook, higher mortgage rates, and mansion tax uncertainty all simultaneously reducing buyer confidence. These shocks are cumulative, not independent. Each one individually might be manageable; together they compound.</div>
+  </div>
+
+  <!-- STAMP DUTY IS ECONOMICALLY DAMAGING -->
+  <div class="section">
+    <div class="sn">03</div>
+    <h2>Stamp Duty — Economists' Most-Criticised Tax</h2>
+    <p>Among independent economists, stamp duty on property transactions is consistently identified as one of the most economically damaging taxes in the UK system. Not because of the revenue it raises — but because of what it does to behaviour.</p>
+    <p><strong>It taxes mobility, not wealth.</strong> Stamp duty falls not on owning a property but on moving. A homeowner who bought 20 years ago and stays put pays nothing. A homeowner who needs to move for a job, to downsize, or to be near family pays thousands — or tens of thousands at the high end. This creates a systematic disincentive to move that has measurable economic consequences.</p>
+    <p><strong>It has killed property investment returns.</strong> Hamptons data shows the average gross profit on a flipped property has fallen from £36,500 in 2015 to £16,390 in 2025. In the South West, average post-SDLT profits have fallen 80.3% since 2015. In London, stamp duty now absorbs 45.6% of the average gross profit on a resold property. The second home surcharge — raised from 3% to 5% in October 2024 — has been particularly damaging to the buy-to-let market, with the number of flipped homes halving since its introduction.</p>
+    <p><strong>It reduces the supply of rented homes.</strong> As landlords exit the market due to rising stamp duty on additional properties and higher property income tax, rental supply falls. With fewer rental properties available, rents rise — directly hitting the households least able to afford it. The OBR and Hamptons have both noted this dynamic: tax changes aimed at wealthy property investors are feeding through into higher costs for tenants.</p>
+
+    <canvas id="stampDutyChart" height="200" style="margin-top:14px"></canvas>
+
+    <div class="callout red">🚨 <strong>The Laffer peak for stamp duty has already been passed at the top rates.</strong> HMRC's own ready reckoner shows that raising the 12% top stamp duty band by 1 percentage point loses £25 million in revenue. Raising the additional-property surcharge by 1 percentage point loses £45 million. At the top rates, stamp duty is already past its revenue-maximising point — meaning higher rates collect less money while doing more economic damage. The rates that still raise revenue are the lower bands — which fall on ordinary home movers, not on the wealthy.</div>
+  </div>
+
+  <!-- THE LUXURY MARKET COLLAPSE -->
+  <div class="section">
+    <div class="sn">04</div>
+    <h2>The Luxury Market — Sales at a Five-Year Low</h2>
+    <p>At the top end of the market, the combination of stamp duty, non-dom abolition, CGT rises and mansion tax uncertainty has produced a significant and measurable contraction.</p>
+
+    <div class="stat-grid">
+      <div class="stat-box red"><div class="sv">−11%</div><div class="sl">London £5m+ Sales Volume 2025</div></div>
+      <div class="stat-box red"><div class="sv">−18%</div><div class="sl">London £5m+ Sales Value 2025</div></div>
+      <div class="stat-box red"><div class="sv">Lowest</div><div class="sl">Since 2020 for Both Volume and Value</div></div>
+      <div class="stat-box red"><div class="sv">−18%</div><div class="sl">£10m-£15m Market Steepest Decline</div></div>
+    </div>
+
+    <p>Savills data shows that sales of London homes worth £5 million or more dropped 11% in 2025 compared to 2024. Buyers spent a total of £4.09 billion on 412 homes priced at £5m or more — an 18% fall in total value on the previous year. Both the number of sales and total value fell to their lowest level since 2020.</p>
+    <p>Adrian Anderson of mortgage broker Anderson Harris specifically cited "extremely high" stamp duty and the abolition of the non-dom tax regime as the causes — noting that "uncertainty around government policy, particularly ahead of the Budget, stalled activity" and that "the anticipation of future property or wealth taxes, including a mansion tax on high-value homes, had led buyers and sellers to delay decisions."</p>
+    <p>This last point is important: the chilling effect of anticipated taxes is itself an economic cost, even before the tax is introduced. Transactions that don't happen represent estate agent fees not paid, solicitor fees not paid, removal firms not hired, renovation works not started, and spending on furniture and fittings not made. Every stalled transaction has a real economic multiplier effect that is absent from any Treasury revenue calculation.</p>
+    <div class="callout amber">⚠️ <strong>The hidden economic cost of tax uncertainty:</strong> The mansion tax was announced in November 2025 but does not start until April 2028. In the intervening two-plus years, every owner of a property near or above £2m is making decisions — to sell, to hold, to defer renovation, to move or not to move — based on anticipation of the tax. These decisions are already affecting transactions, prices and economic activity. The cost of policy uncertainty is real and starts from the moment of announcement, not from the moment the tax takes effect.</div>
+  </div>
+
+  <!-- THE WEALTH EFFECT -->
+  <div class="section">
+    <div class="sn">05</div>
+    <h2>The Wealth Effect — Why Property Tax Policy Affects All Spending</h2>
+    <p>Housing is the UK's largest single store of household wealth. The total value of UK housing stands at approximately £8.6 trillion — more than three times the entire annual GDP of the UK economy. When house prices fall, or when people perceive their property wealth to be under threat, it affects spending across the entire economy. This is called the wealth effect.</p>
+    <p>The mechanism is well-documented in the economic literature:</p>
+    <p><strong>Confidence falls.</strong> Homeowners who feel their primary asset is worth less — or at risk from new annual charges — become more cautious about spending. They save more and spend less. For 63% of English households who are owner-occupiers, their home is their largest financial asset and a significant source of financial confidence.</p>
+    <p><strong>Equity withdrawal dries up.</strong> When house prices rise, homeowners can remortgage and release cash to spend on home improvements, cars, holidays and other consumption. In the boom years to 2007, equity withdrawal added £14 billion a year to consumer spending. In 2008, with falling prices, it reversed to negative £7 billion — a swing of £21 billion in consumer spending from one source alone.</p>
+    <p><strong>Household spending falls.</strong> St James's Place's Financial Health report for 2026 found that average UK household wealth had fallen 17.5% to £104,329, down from £126,482. Their analysis concluded that "many households are feeling worse off, with living costs and heightened global uncertainty weighing on confidence and, understandably, affecting how people feel about their finances and the future" — and suggested this would lead to further cuts in consumer spending.</p>
+    <p><strong>Construction falls.</strong> Fewer transactions mean fewer renovation projects, less demand for tradespeople, less spending on white goods, furniture and materials. The construction sector is one of the most economically important labour-intensive sectors in the UK economy, and its fortunes track housing market activity closely.</p>
+
+    <canvas id="wealthEffectChart" height="200" style="margin-top:14px"></canvas>
+
+    <div class="callout red">🚨 <strong>In real terms, UK homeowners are already poorer.</strong> Nominal house prices have risen modestly since 2022. But consumer prices have risen faster. The result is that real house prices — adjusted for what money can actually buy — have fallen consistently since 2022 and remain below their 2007 peak. A homeowner who paid £300,000 for a house in 2022 may see it valued at £320,000 today — but if the same goods and services that cost £300,000 in 2022 now cost £396,000, they are in real terms poorer than they were. This is the silent wealth effect that is already suppressing consumer confidence, before the mansion tax even begins.</div>
+  </div>
+
+  <!-- THE LANDLORD EXODUS AND RENTAL MARKET -->
+  <div class="section">
+    <div class="sn">06</div>
+    <h2>The Landlord Exodus — How Property Taxes Are Pushing Up Rents</h2>
+    <p>One of the clearest and least-anticipated consequences of rising property taxes has been the accelerating exit of individual landlords from the rental market. The sequence of policy changes affecting private landlords since 2016 has been cumulative and compounding.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot">💰</div>
+        <div class="tl-content">
+          <div class="tl-date">2016</div>
+          <div class="tl-title">Second home stamp duty surcharge introduced at 3%</div>
+          <div class="tl-desc">Immediately raised the cost of entering the buy-to-let market. Number of flipped homes began a long decline from 21,520 that year.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">💰</div>
+        <div class="tl-content">
+          <div class="tl-date">2017-2020</div>
+          <div class="tl-title">Mortgage interest relief phased out for individual landlords</div>
+          <div class="tl-desc">Section 24 changes meant landlords could no longer deduct mortgage interest as a business expense. For higher-rate taxpayers, effective tax rates on rental income rose sharply. Many landlords began to sell.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">💰</div>
+        <div class="tl-content">
+          <div class="tl-date">October 2024</div>
+          <div class="tl-title">Second home surcharge raised from 3% to 5%</div>
+          <div class="tl-desc">Immediately increased the cost of entering buy-to-let. Reduced profitability of existing portfolios for those considering expansion. Hamptons noted this "could accelerate the trend of investors exiting the market."</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">💰</div>
+        <div class="tl-content">
+          <div class="tl-date">April 2027</div>
+          <div class="tl-title">Property income tax rates rise by 2%</div>
+          <div class="tl-desc">Basic rate rises to 22%, higher rate to 42%, additional rate to 47% for rental income. Hamptons: "For individual landlords who make up the bulk of the market and who are already squeezed by higher borrowing costs and previous tax changes, this could accelerate the trend of investors exiting the market."</div>
+        </div>
+      </div>
+    </div>
+
+    <p>The cumulative effect of these changes is a systematic disinvestment from the private rental sector by individual landlords — the group that provides the majority of rented homes in the UK. As they exit, rental supply falls. As rental supply falls, rents rise for tenants.</p>
+    <p>This is one of the most economically counterproductive dynamics in current UK tax policy: measures nominally aimed at reducing the tax advantages of property ownership are feeding through directly into higher rents for the renters who can least afford it, while doing real damage to transaction volumes, construction activity and consumer confidence.</p>
+    <div class="callout amber">⚠️ The Resolution Foundation found that the reduction in rental supply caused by landlord tax changes was a significant contributor to the rental inflation of 2022-2025, during which private rents rose faster than at any point since records began. The policy aimed at making housing more affordable has had the opposite effect for tenants.</div>
+  </div>
+
+  <!-- THE OVERALL UK PROPERTY TAX BURDEN -->
+  <div class="section">
+    <div class="sn">07</div>
+    <h2>The UK Already Has the World's Fourth Highest Property Tax Burden</h2>
+    <p>Before adding the mansion tax, property income tax rises and further stamp duty changes, it is worth establishing where the UK already sits globally on property taxation.</p>
+    <p>According to the OECD's December 2025 Revenue Statistics report, the UK has the fourth highest property tax burden in its 38-country membership — behind only Israel, South Korea and the United States. UK property taxes (council tax, stamp duty, business rates) account for 10.5% of total tax revenue, compared to an OECD average of 5.1%. As a share of GDP, UK property taxation is the highest of any OECD country.</p>
+    <p>This is an important context that is rarely mentioned in policy debates. The case for adding further property taxes is implicitly premised on the UK being a low-tax property environment that could absorb more. The data shows the opposite: the UK is already at the top of the international distribution on property taxation, with a system that is widely regarded by independent economists as poorly designed rather than merely insufficient.</p>
+
+    <canvas id="propertyTaxChart" height="200" style="margin-top:14px"></canvas>
+
+    <div class="callout blue">📋 <strong>What economists actually recommend instead:</strong> The Mirrlees Review — the most comprehensive independent review of the UK tax system in a generation — recommended replacing stamp duty with an annual property charge based on current values, and updating council tax valuations from their 1991 base. These reforms would raise similar or greater revenue more fairly, with far less damage to market mobility and consumer confidence. Neither has been implemented by any government.</div>
+  </div>
+
+  <!-- WHAT HAPPENS NEXT -->
+  <div class="section">
+    <div class="sn">08</div>
+    <h2>What Happens Next — The Cumulative Picture</h2>
+    <p>The UK's property tax environment in 2026 is the product of more than a decade of incremental changes, each individually justified but collectively creating a burden that is now affecting market behaviour, household wealth, consumer spending and economic confidence in ways that were not fully anticipated.</p>
+    <p>Between now and 2028, the following are confirmed or likely:</p>
+    <p><strong>April 2027:</strong> Property income tax rates rise by 2 percentage points across all bands — pushing more landlords to exit, further reducing rental supply.</p>
+    <p><strong>Late 2026:</strong> The Valuation Office Agency begins assessing homes estimated at £1.5m+ for mansion tax banding. This will create a wave of disputes, legal challenges and further pricing distortions as owners seek to push valuations below the threshold.</p>
+    <p><strong>April 2028:</strong> The mansion tax takes effect. An estimated 130,000 properties above £2m will start paying between £2,500 and £7,500 annually — though by then the number may be lower as pricing adjustments take effect.</p>
+    <p><strong>Ongoing:</strong> Stamp duty at current rates continues to suppress transaction volumes, reduce market mobility, and act as a brake on the economic activity that flows from property transactions — renovation, construction, retail and professional services.</p>
+    <div class="callout red">🚨 <strong>The economic case against further property taxation is not ideological — it is empirical.</strong> Transactions are down. Household wealth is down. Consumer confidence is suppressed. Rental supply is falling while rents rise. Luxury sales are at a five-year low. The mansion tax is already distorting prices before it begins. And the UK already taxes property more heavily than almost any comparable economy. The question is not whether property should be taxed — it clearly should be, and already is. The question is whether a system that is already showing signs of overload can absorb further increases without meaningful economic cost to the households it purports to support.</div>
+  </div>
+
+  <div class="sources">
+    <strong>Sources:</strong> Hamptons Estate Agency "Mansion Tax begins to influence pricing" (February 2026) and property flip data (April 2026); HomeOwners Alliance "UK Property Tax Changes 2026: How The Mansion Tax Will Work" (July 2026) and mansion tax valuation guide (2026); PropertyWire "UK property transactions drop 41% following stamp duty changes" (May 2026); Which? "How have stamp duty changes impacted the property market?" (July 2025); Estate Agent Today "Stamp duty kills flipping as a property investment" (April 2026); Yahoo Finance / Telegraph "London luxury property sales sink to five-year low" (January 2026); St James's Place Financial Health Report 2026 (May 2026); taxpolicy.org.uk "The stamp duty hike didn't backfire. That's the problem" (June 2026); OECD Revenue Statistics 2025 (December 2025); Economics Help "How the housing market affects the economy" and "Impact of falling house prices"; NBER "How Do House Prices Affect Consumption?" (Campbell and Cocco); MoneyWeek "What's happening with UK house prices? Latest property forecasts for 2026" (July 2026); OBR Economic and Fiscal Outlook March 2026; HMRC SDLT ready reckoner data; Resolution Foundation rental market research; Mirrlees Review of UK Taxation. Property income tax rise data from Budget 2025 official documents (26 November 2025). All figures from official or institutional sources.
+  </div>
+</div>
+
+<div style="background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,.5)">
+  ⚠️ Independent analysis. Not financial or tax advice. <a href="disclaimer.html" style="color:rgba(255,255,255,.7)">Disclaimer</a> · <a href="privacy.html" style="color:rgba(255,255,255,.7)">Privacy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: Hamptons · OECD · OBR · Savills · Which? · St James's Place · PropertyWire</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="uk-wealth-decline.html">UK Wealth Decline</a><a href="personal-finance.html">Personal Finance</a><a href="disclaimer.html">Disclaimer</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(function(g){if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(function(g){g.classList.remove('open')})});
+
+// Transaction chart
+new Chart(document.getElementById('transactionChart'),{
+  type:'bar',
+  data:{
+    labels:['Jan 24','Mar 24','May 24','Jul 24','Sep 24','Nov 24','Jan 25','Mar 25','Apr 25','May 25','Jul 25','Sep 25','Nov 25','Jan 26','Mar 26','Apr 26'],
+    datasets:[{
+      label:'Monthly Transactions (000s)',
+      data:[85,92,88,84,87,88,90,148,104,82,86,88,90,92,112,62],
+      backgroundColor:function(ctx){
+        const v=ctx.raw;
+        if(v>120) return '#008844';
+        if(v<75) return '#d40020';
+        return '#0060cc';
+      },
+      borderRadius:3
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:function(c){return c.raw+'k transactions'}}}
+    },
+    scales:{
+      x:{ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'},maxRotation:45},grid:{display:false}},
+      y:{title:{display:true,text:'Transactions (000s)',color:'#2a3a50',font:{size:10,weight:'bold'}},
+         ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'},callback:function(v){return v+'k'}},
+         grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+// Stamp duty profit erosion chart
+new Chart(document.getElementById('stampDutyChart'),{
+  type:'line',
+  data:{
+    labels:['2015','2016\n(surcharge\nintroduced)','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
+    datasets:[
+      {label:'Avg post-SDLT profit on flipped property (£)',
+       data:[36500,28000,25000,22000,20000,26000,30000,24000,20000,18000,16390],
+       borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.08)',fill:true,borderWidth:2.5,pointRadius:3,tension:0.3},
+      {label:'% of gross profit absorbed by SDLT',
+       data:[12,25,30,35,38,28,25,35,40,42,43],
+       borderColor:'#c97000',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{
+      legend:{labels:{color:'#2a3a50',font:{size:11,weight:'bold'},boxWidth:12}},
+      tooltip:{callbacks:{label:function(c){
+        if(c.datasetIndex===0) return 'Profit: £'+c.raw.toLocaleString();
+        return 'SDLT share: '+c.raw+'%';
+      }}}
+    },
+    scales:{
+      x:{ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'},maxRotation:0},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'Post-SDLT Profit (£)',color:'#d40020',font:{size:10,weight:'bold'}},
+         ticks:{color:'#d40020',font:{size:9,weight:'bold'},callback:function(v){return '£'+v.toLocaleString()}},
+         grid:{color:'rgba(0,0,0,0.05)'},position:'left'},
+      y2:{title:{display:true,text:'SDLT % of gross profit',color:'#c97000',font:{size:10,weight:'bold'}},
+          ticks:{color:'#c97000',font:{size:9,weight:'bold'},callback:function(v){return v+'%'}},
+          grid:{display:false},position:'right'}
+    }
+  }
+});
+
+// Wealth effect chart
+new Chart(document.getElementById('wealthEffectChart'),{
+  type:'line',
+  data:{
+    labels:['2000','2002','2004','2006','2008','2010','2012','2014','2016','2018','2020','2022','2024','2026'],
+    datasets:[
+      {label:'Real house price index (2015=100)',
+       data:[62,72,88,96,84,78,80,90,100,110,115,128,122,118],
+       borderColor:'#0060cc',backgroundColor:'rgba(0,96,204,0.08)',fill:true,borderWidth:2.5,pointRadius:3,tension:0.4},
+      {label:'Consumer confidence index (illustrative)',
+       data:[105,102,108,112,70,72,80,92,100,106,85,82,78,74],
+       borderColor:'#d40020',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.4,borderDash:[4,2]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{
+      legend:{labels:{color:'#2a3a50',font:{size:11,weight:'bold'},boxWidth:12}},
+      title:{display:true,text:'Real House Prices and Consumer Confidence — Closely Correlated',color:'#2a3a50',font:{size:11,weight:'bold'}}
+    },
+    scales:{
+      x:{ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'Index (2015=100)',color:'#2a3a50',font:{size:10,weight:'bold'}},
+         ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'}},
+         grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+// Property tax international comparison
+new Chart(document.getElementById('propertyTaxChart'),{
+  type:'bar',
+  data:{
+    labels:['UK 🇬🇧','USA','Israel','S. Korea','Canada','France','Australia','Germany','OECD Avg','Spain','Italy','Germany'],
+    datasets:[{
+      label:'Property Tax as % of Total Tax Revenue',
+      data:[10.5,11.2,11.8,11.5,9.8,8.2,8.9,2.8,5.1,4.2,3.9,2.8],
+      backgroundColor:['#d40020','#c97000','#c97000','#c97000','#0060cc','#0060cc','#0060cc','#008844','rgba(0,0,0,0.2)','#008844','#008844','#008844'],
+      borderRadius:3
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:function(c){return c.raw+'% of tax revenue'}}},
+      title:{display:true,text:'Property Tax as % of Total Tax Revenue — OECD Comparison',color:'#2a3a50',font:{size:11,weight:'bold'}}
+    },
+    scales:{
+      x:{ticks:{color:'#4a5a6e',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'% of Total Tax Revenue',color:'#2a3a50',font:{size:10,weight:'bold'}},
+         ticks:{color:'#4a5a6e',font:{size:9,weight:'bold'},callback:function(v){return v+'%'}},
+         grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+</script>
+</body>
+</html>

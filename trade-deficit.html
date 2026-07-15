@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Trade Deficit – Historical & Current | UK-Debt.info</title>
+<meta name="description" content="UK trade deficit historical data from 1980 to 2026. Goods deficit, services surplus, current account, and what it means for the economy.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#3d0000,#800000,#cc0000);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(80,0,0,0.4)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss-item{text-align:center}.ss-item .sv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}.ss-item .sl{font-size:10px;letter-spacing:2px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.ss-item.red .sv{color:var(--red)}.ss-item.green .sv{color:var(--green)}.ss-item.amber .sv{color:var(--amber)}.ss-item.blue .sv{color:var(--blue)}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.data-table{width:100%;border-collapse:collapse;font-size:12px}
+.data-table th{background:var(--panel2);padding:8px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border);text-align:left}
+.data-table td{padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid)}
+.data-table td.mono{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700}
+.data-table td.neg{color:var(--red)}.data-table td.pos{color:var(--green)}
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="money-in-out.html" class="done">Money In & Out</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+        <a href="trade-deficit.html" class="active">Trade Deficit</a>
+        <a href="obr-accuracy.html">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>UK TRADE DEFICIT — HISTORICAL & CURRENT</h1>
+    <div class="subtitle">Balance of Trade in Goods & Services · Current Account · 1980–2026 · ONS Balance of Payments</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss-item red"><div class="sv">-£39bn</div><div class="sl">Trade Deficit 2025 (goods+services)</div></div>
+  <div class="ss-item red"><div class="sv">-£242bn</div><div class="sl">Goods Trade Deficit 2025</div></div>
+  <div class="ss-item green"><div class="sv">+£203bn</div><div class="sl">Services Trade Surplus 2025</div></div>
+  <div class="ss-item red"><div class="sv">-£74bn</div><div class="sl">Current Account Deficit 2025</div></div>
+  <div class="ss-item amber"><div class="sv">2.4%</div><div class="sl">Current Account Deficit % GDP</div></div>
+</div>
+
+<div class="main">
+
+  <!-- MAIN TRADE CHART -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">UK Trade Balance 1980–2025 (£bn) — Goods, Services & Total</div>
+    <canvas id="tradeChart" height="300"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Trade in Goods (deficit)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Trade in Services (surplus)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Total Trade Balance</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc;border-style:dashed;border-width:1px"></div>Current Account (incl. investment income)</div>
+    </div>
+    <div class="red-box">
+      🚨 The UK has run a persistent trade deficit in goods since the 1980s — the de-industrialisation of the UK economy means we import far more manufactured goods than we export. The services surplus (financial services, professional services, education) partially offsets this, but the overall current account has been in deficit for most of the past 40 years.
+    </div>
+  </div>
+
+  <!-- ANNUAL TABLE -->
+  <div class="panel red-accent">
+    <div class="panel-label">Annual Trade Balance Data (£bn)</div>
+    <div style="overflow-y:auto;max-height:480px">
+      <table class="data-table">
+        <thead><tr><th>Year</th><th>Goods</th><th>Services</th><th>Total Trade</th><th>Current Acct</th><th>% GDP</th></tr></thead>
+        <tbody>
+          <tr><td>1980</td><td class="mono pos">+£1.4bn</td><td class="mono pos">+£3.2bn</td><td class="mono pos">+£4.6bn</td><td class="mono">-</td><td>-</td></tr>
+          <tr><td>1985</td><td class="mono neg">-£3.3bn</td><td class="mono pos">+£6.6bn</td><td class="mono pos">+£3.3bn</td><td class="mono">-</td><td>-</td></tr>
+          <tr><td>1988</td><td class="mono neg">-£21.5bn</td><td class="mono pos">+£4.3bn</td><td class="mono neg">-£17.2bn</td><td class="mono neg">-£17.8bn</td><td class="neg">-3.4%</td></tr>
+          <tr><td>1990</td><td class="mono neg">-£18.7bn</td><td class="mono pos">+£5.4bn</td><td class="mono neg">-£13.3bn</td><td class="mono neg">-£20.9bn</td><td class="neg">-3.8%</td></tr>
+          <tr><td>1995</td><td class="mono neg">-£12.0bn</td><td class="mono pos">+£10.1bn</td><td class="mono neg">-£1.9bn</td><td class="mono neg">-£3.7bn</td><td class="neg">-0.5%</td></tr>
+          <tr><td>2000</td><td class="mono neg">-£33.0bn</td><td class="mono pos">+£13.9bn</td><td class="mono neg">-£19.1bn</td><td class="mono neg">-£27.0bn</td><td class="neg">-2.7%</td></tr>
+          <tr><td>2005</td><td class="mono neg">-£66.5bn</td><td class="mono pos">+£23.9bn</td><td class="mono neg">-£42.6bn</td><td class="mono neg">-£40.2bn</td><td class="neg">-2.9%</td></tr>
+          <tr><td>2008</td><td class="mono neg">-£93.5bn</td><td class="mono pos">+£49.6bn</td><td class="mono neg">-£43.9bn</td><td class="mono neg">-£57.0bn</td><td class="neg">-3.7%</td></tr>
+          <tr><td>2010</td><td class="mono neg">-£97.8bn</td><td class="mono pos">+£55.7bn</td><td class="mono neg">-£42.1bn</td><td class="mono neg">-£60.9bn</td><td class="neg">-3.9%</td></tr>
+          <tr><td>2012</td><td class="mono neg">-£108.3bn</td><td class="mono pos">+£72.3bn</td><td class="mono neg">-£36.0bn</td><td class="mono neg">-£73.4bn</td><td class="neg">-4.2%</td></tr>
+          <tr><td>2015</td><td class="mono neg">-£123.7bn</td><td class="mono pos">+£89.7bn</td><td class="mono neg">-£34.0bn</td><td class="mono neg">-£86.8bn</td><td class="neg">-4.7%</td></tr>
+          <tr><td>2016</td><td class="mono neg">-£135.7bn</td><td class="mono pos">+£99.4bn</td><td class="mono neg">-£36.3bn</td><td class="mono neg">-£96.2bn</td><td class="neg">-5.2%</td></tr>
+          <tr><td>2019</td><td class="mono neg">-£119.2bn</td><td class="mono pos">+£105.7bn</td><td class="mono neg">-£13.5bn</td><td class="mono neg">-£79.4bn</td><td class="neg">-3.7%</td></tr>
+          <tr><td>2020</td><td class="mono neg">-£95.3bn</td><td class="mono pos">+£76.5bn</td><td class="mono neg">-£18.8bn</td><td class="mono neg">-£73.9bn</td><td class="neg">-3.6%</td></tr>
+          <tr><td>2021</td><td class="mono neg">-£120.4bn</td><td class="mono pos">+£86.5bn</td><td class="mono neg">-£33.9bn</td><td class="mono neg">-£52.0bn</td><td class="neg">-2.2%</td></tr>
+          <tr><td>2022</td><td class="mono neg">-£200.3bn</td><td class="mono pos">+£139.7bn</td><td class="mono neg">-£60.6bn</td><td class="mono neg">-£97.7bn</td><td class="neg">-3.6%</td></tr>
+          <tr><td>2023</td><td class="mono neg">-£175.5bn</td><td class="mono pos">+£162.8bn</td><td class="mono neg">-£12.7bn</td><td class="mono neg">-£93.2bn</td><td class="neg">-3.5%</td></tr>
+          <tr><td>2024</td><td class="mono neg">-£178.8bn</td><td class="mono pos">+£178.5bn</td><td class="mono neg">-£0.3bn</td><td class="mono neg">-£63.2bn</td><td class="neg">-2.2%</td></tr>
+          <tr style="background:var(--blue-light)"><td><strong>2025</strong></td><td class="mono neg"><strong>-£242bn</strong></td><td class="mono pos"><strong>+£203bn</strong></td><td class="mono neg"><strong>-£39bn</strong></td><td class="mono neg"><strong>-£74bn</strong></td><td class="neg"><strong>-2.4%</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- WHAT IT MEANS -->
+  <div class="panel blue-accent">
+    <div class="panel-label">What Does the Trade Deficit Mean?</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">📦 The Goods Deficit — £242bn</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">The UK imports far more goods than it exports — particularly manufactured goods, cars, electronics, food and energy. The 2022 spike was driven by soaring energy import costs. The goods deficit has been structural since de-industrialisation in the 1980s.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">💼 The Services Surplus — £203bn</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">The UK earns more from exporting services — financial services (City of London), law, insurance, education, professional services — than it pays for imported services. This surplus has grown significantly and now nearly offsets the goods deficit.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--amber);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">💰 The Current Account — -£74bn</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">The current account is broader than trade — it also includes investment income flows (dividends, interest) and transfers. UK companies pay large dividends to foreign investors, contributing to the wider deficit even when trade itself nearly balances.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">🇪🇺 The EU Relationship</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">In 2025 the UK had a trade deficit of £89bn with the EU and a surplus of £50bn with non-EU countries. Post-Brexit trade frictions have increased costs for UK-EU goods trade, particularly for smaller exporters.</div>
+      </div>
+    </div>
+    <div class="warn-box">
+      ⚠️ A persistent current account deficit means the UK consistently spends more abroad than it earns. This must be financed by foreign investment into the UK (the "financial account"). While this has worked so far, it creates a dependency on continued foreign appetite for UK assets — a vulnerability if confidence in the pound or UK assets falls.
+    </div>
+  </div>
+
+  <!-- CURRENT ACCOUNT % GDP CHART -->
+  <div class="panel full-width amber-accent">
+    <div class="panel-label">Current Account Balance as % of GDP — 1987 to 2025</div>
+    <canvas id="caChart" height="220"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Current Account Balance (% GDP) — below zero = deficit</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4a5a6e;border:1px dashed #4a5a6e"></div>Zero line (balance)</div>
+    </div>
+    <div class="info-box">
+      📋 The UK's current account deficit hit a record -5.2% of GDP in 2016. It has narrowed since Brexit partly due to lower import volumes and stronger services exports. The 2022 spike was driven by energy import costs. The long-run average since 1987 is approximately -1.5% of GDP, though recent years have been significantly worse than this average.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ Data from ONS Balance of Payments statistical releases. Historical data subject to revision.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: ONS Balance of Payments · Commons Library SN02815 · OBR</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+const tradeYrs=['1980','1985','1988','1990','1993','1995','1997','2000','2002','2005','2007','2008','2010','2012','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+const goods   =[ 1.4,-3.3,-21.5,-18.7,-13.1,-12.0,-12.9,-33.0,-46.0,-66.5,-89.2,-93.5,-97.8,-108.3,-121.4,-123.7,-135.7,-132.4,-136.3,-119.2,-95.3,-120.4,-200.3,-175.5,-178.8,-242];
+const services=[ 3.2, 6.6,  4.3,  5.4,  7.8, 10.1, 14.2, 13.9, 27.3, 23.9, 49.6, 49.6,  55.7,  72.3,  86.4,  89.7,  99.4, 103.2, 105.1, 105.7,  76.5,  86.5, 139.7, 162.8, 178.5, 203];
+const total   = goods.map((g,i)=>+(g+services[i]).toFixed(1));
+const ca      =[null,null,-17.8,-20.9,-14.1,-3.7,-3.6,-27.0,-26.3,-40.2,-39.5,-57.0,-60.9,-73.4,-93.2,-86.8,-96.2,-80.1,-78.5,-79.4,-73.9,-52.0,-97.7,-93.2,-63.2,-74];
+
+new Chart(document.getElementById('tradeChart'),{
+  type:'bar',
+  data:{
+    labels:tradeYrs,
+    datasets:[
+      {label:'Goods',data:goods,backgroundColor:'rgba(212,0,32,0.65)',stack:'trade'},
+      {label:'Services',data:services,backgroundColor:'rgba(0,136,68,0.65)',stack:'trade'},
+      {label:'Total Trade',data:total,type:'line',borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:2.5,pointRadius:2,tension:0.3},
+      {label:'Current Account',data:ca,type:'line',borderColor:'#6600cc',backgroundColor:'transparent',borderWidth:2,pointRadius:2,tension:0.3,borderDash:[4,2]}
+    ]
+  },
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: £${ctx.raw}bn`}}},
+    scales:{
+      x:{stacked:true,ticks:{color:'#2a3a50',font:{size:9,weight:'bold'}},grid:{display:false}},
+      y:{stacked:true,title:{display:true,text:'£bn',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{color:'rgba(0,0,0,0.05)'},min:-280,max:240}
+    }
+  }
+});
+
+const caYrs=['1987','1990','1993','1995','1997','1999','2001','2003','2005','2007','2008','2010','2012','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+const caPct= [-1.0,-3.8,-2.5,-0.5,-0.3,-2.4,-2.4,-1.6,-2.9,-2.4,-3.7,-3.9,-4.2,-5.1,-4.7,-5.2,-4.0,-3.9,-3.7,-3.6,-2.2,-3.6,-3.5,-2.2,-2.4];
+new Chart(document.getElementById('caChart'),{
+  type:'line',
+  data:{
+    labels:caYrs,
+    datasets:[
+      {label:'Current Account % GDP',data:caPct,borderColor:'#d40020',backgroundColor:ctx=>{const c=ctx.chart.ctx,g=c.createLinearGradient(0,0,0,200);g.addColorStop(0,'rgba(212,0,32,0.2)');g.addColorStop(1,'rgba(212,0,32,0.02)');return g},fill:true,borderWidth:2.5,pointRadius:3,tension:0.4},
+      {label:'Zero',data:caYrs.map(()=>0),borderColor:'#4a5a6e',backgroundColor:'transparent',borderWidth:1,pointRadius:0,borderDash:[4,2]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.datasetIndex===0?`${ctx.raw}% of GDP`:''}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'% of GDP',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'},min:-6,max:1}
+    }
+  }
+});
+</script>
+</body>
+</html>

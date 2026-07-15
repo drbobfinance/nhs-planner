@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Human Scale – UK Finances as One Household | UK-Debt.info</title>
+<meta name="description" content="What if the UK government were a single person? Convert GDP to salary, national debt to personal debt and government spending into a household budget.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#002244,#1a3a6a,#2d5a9e);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(0,34,68,0.4)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.compare-row{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.compare-row:last-child{border-bottom:none}
+.cr-gov{font-size:13px;font-weight:700;color:var(--ink-mid);text-align:right}
+.cr-label{font-size:11px;font-weight:700;color:var(--ink-light);text-align:center;text-transform:uppercase;letter-spacing:1px;padding:0 8px}
+.cr-person{font-size:13px;font-weight:700;color:var(--blue)}
+.cr-gov .cv{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700;color:var(--red)}
+.cr-person .cv{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700;color:var(--blue)}
+.budget-line{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;border-radius:5px;border:1px solid transparent;margin-bottom:5px}
+.budget-line .bl-label{font-size:13px;font-weight:700;color:var(--ink)}
+.budget-line .bl-national{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;text-align:right;width:110px}
+.budget-line .bl-human{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;text-align:right;width:110px;color:var(--blue)}
+.budget-line.income{background:var(--green-light);border-color:var(--green-mid)}.budget-line.income .bl-national{color:var(--green)}
+.budget-line.spend{background:var(--red-light);border-color:var(--red-mid)}.budget-line.spend .bl-national{color:var(--red)}
+.budget-line.debt-line{background:var(--amber-light);border-color:var(--amber-mid)}.budget-line.debt-line .bl-national{color:var(--amber)}
+.budget-line.surplus{background:#0d1520;border-color:#1a2535}.budget-line.surplus .bl-label{color:#fff}.budget-line.surplus .bl-national{color:#ff6666}.budget-line.surplus .bl-human{color:#ff6666}
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments History</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance Dashboard</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="active">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>THE HUMAN SCALE — IF THE UK WERE ONE PERSON</h1>
+    <div class="subtitle">National Figures Converted to a Single Household Budget · GDP = Salary · Debt = Personal Debt · Tax = Rent</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">The Concept — Making the Unimaginable Relatable</div>
+    <p style="font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:12px">It is impossible to intuitively grasp numbers like "£2.91 trillion of debt." So this page converts the entire UK national finances into the equivalent for a single working person earning the UK median salary of £39,039 per year. Every national figure is divided by GDP (£2,968bn) and multiplied by £39,039 to give a proportional personal equivalent.</p>
+    <div style="background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700">
+      📐 <strong>The formula:</strong> Human equivalent = (National figure ÷ UK GDP) × Median annual salary. For example, national debt of £2.92tn ÷ GDP of £2.97tn = 98% of GDP. 98% × £39,039 salary = £38,258 personal debt equivalent.
+    </div>
+  </div>
+
+  <!-- SIDE BY SIDE COMPARISON -->
+  <div class="panel full-width amber-accent">
+    <div class="panel-label">National Figures vs Your Personal Equivalent (Median Earner = UK GDP)</div>
+    <div style="display:grid;grid-template-columns:1fr 50px 1fr;gap:0;margin-top:8px">
+      <div style="text-align:right;padding-right:12px;font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:1px;padding-bottom:6px">NATIONAL</div>
+      <div></div>
+      <div style="text-align:left;padding-left:12px;font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;padding-bottom:6px">YOUR EQUIVALENT</div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">GDP<br><span class="cv">£2,968bn/yr</span></div>
+      <div class="cr-label">↔ Annual Income</div>
+      <div class="cr-person">Gross Salary<br><span class="cv">£39,039/yr</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">Tax Receipts<br><span class="cv">£1,098bn</span></div>
+      <div class="cr-label">↔ Take-Home Pay</div>
+      <div class="cr-person">Net Income (37% tax)<br><span class="cv">£24,595/yr</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">Total Spending<br><span class="cv">£1,263bn/yr</span></div>
+      <div class="cr-label">↔ Total Outgoings</div>
+      <div class="cr-person">All Annual Expenses<br><span class="cv" style="color:var(--red)">£29,197/yr</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">Deficit (borrowing)<br><span class="cv">£129bn/yr</span></div>
+      <div class="cr-label">↔ New Debt/yr</div>
+      <div class="cr-person">Added to credit card<br><span class="cv" style="color:var(--red)">£1,737/yr</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">National Debt<br><span class="cv">£2,917bn</span></div>
+      <div class="cr-label">↔ Total Debt</div>
+      <div class="cr-person">Outstanding loans<br><span class="cv" style="color:var(--red)">£38,258</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">Debt Interest<br><span class="cv">£110bn/yr</span></div>
+      <div class="cr-label">↔ Interest Paid</div>
+      <div class="cr-person">Annual interest bill<br><span class="cv" style="color:var(--red)">£1,447/yr</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">NHS Budget<br><span class="cv">£192bn/yr</span></div>
+      <div class="cr-label">↔ Healthcare</div>
+      <div class="cr-person">Health insurance/care<br><span class="cv">£2,527/yr</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">Welfare Bill<br><span class="cv">£287bn/yr</span></div>
+      <div class="cr-label">↔ Benefits Paid Out</div>
+      <div class="cr-person">Supporting others<br><span class="cv">£3,776/yr</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">Education<br><span class="cv">£77bn/yr</span></div>
+      <div class="cr-label">↔ School/University</div>
+      <div class="cr-person">Education costs<br><span class="cv">£1,013/yr</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">Defence<br><span class="cv">£54bn/yr</span></div>
+      <div class="cr-label">↔ Security</div>
+      <div class="cr-person">Home security/insurance<br><span class="cv">£710/yr</span></div>
+    </div>
+    <div class="compare-row">
+      <div class="cr-gov">Off-BS Pensions<br><span class="cv">£1.4tn</span></div>
+      <div class="cr-label">↔ Pension IOU</div>
+      <div class="cr-person">Promised pension<br><span class="cv" style="color:var(--red)">£18,412</span></div>
+    </div>
+    <div class="compare-row" style="background:var(--red-light);border-radius:6px;padding:8px">
+      <div class="cr-gov">Total Liabilities (WGA)<br><span class="cv">£5.02tn</span></div>
+      <div class="cr-label">↔ TRUE DEBT</div>
+      <div class="cr-person">Everything owed<br><span class="cv" style="color:var(--red);font-size:18px">£66,025</span></div>
+    </div>
+    <div class="red-box">
+      🚨 <strong>The sobering conclusion:</strong> If the UK government were a single person earning £39,039 a year, they would owe <strong>£66,025 in total liabilities</strong> — nearly <strong>1.7× their annual salary</strong>. They would be spending £4,602 more per year than they earn, adding to their debt every single day. And their "hidden" pension promise amounts to another £18,412 on top. This is the fiscal reality of modern Britain, made relatable.
+    </div>
+  </div>
+
+  <!-- ANNUAL BUDGET BREAKDOWN -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">The Annual Budget — National vs Human Scale</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;padding:8px 14px;background:var(--panel2);border-radius:5px;border:1px solid var(--border)">
+      <div style="font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:1px">Item</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;text-align:right">National (£bn)</div>
+      <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;text-align:right">Human (£/yr)</div>
+    </div>
+    <div class="budget-line income"><span class="bl-label">💰 Tax Revenue (income)</span><span class="bl-national">£1,098bn</span><span class="bl-human">£14,453</span></div>
+    <div style="font-size:10px;font-weight:700;color:var(--ink-light);letter-spacing:1px;text-transform:uppercase;margin:8px 0 4px;padding-left:4px">Spending</div>
+    <div class="budget-line spend"><span class="bl-label">🏥 Health (NHS)</span><span class="bl-national">£192bn</span><span class="bl-human">£2,527</span></div>
+    <div class="budget-line spend"><span class="bl-label">🤲 Welfare & Benefits</span><span class="bl-national">£287bn</span><span class="bl-human">£3,776</span></div>
+    <div class="budget-line debt-line"><span class="bl-label">💳 Debt Interest</span><span class="bl-national">£110bn</span><span class="bl-human">£1,447</span></div>
+    <div class="budget-line spend"><span class="bl-label">🎓 Education</span><span class="bl-national">£77bn</span><span class="bl-human">£1,013</span></div>
+    <div class="budget-line spend"><span class="bl-label">🛡️ Defence</span><span class="bl-national">£54bn</span><span class="bl-human">£710</span></div>
+    <div class="budget-line spend"><span class="bl-label">🚂 Transport & Infrastructure</span><span class="bl-national">£43bn</span><span class="bl-human">£566</span></div>
+    <div class="budget-line spend"><span class="bl-label">👮 Police & Justice</span><span class="bl-national">£22bn</span><span class="bl-human">£289</span></div>
+    <div class="budget-line spend"><span class="bl-label">📦 All Other Spending</span><span class="bl-national">£478bn</span><span class="bl-human">£6,289</span></div>
+    <div class="budget-line surplus"><span class="bl-label">💸 ANNUAL DEFICIT (borrowing)</span><span class="bl-national">-£132bn</span><span class="bl-human">-£1,737</span></div>
+    <div class="warn-box">
+      ⚠️ The government spends 45p of every £1 of national income. Debt interest alone — £1,447 in human terms — is the single third-largest spending item after welfare and health. Every year that the deficit continues, another £1,737 is added to the personal equivalent debt.
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ All conversions are illustrative estimates. Ratio = National figure ÷ GDP × median salary. Not financial advice.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: ONS · OBR · HM Treasury · BoE</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+</script>
+</body>
+</html>

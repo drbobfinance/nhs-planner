@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBR Forecast Accuracy – How Reliable Are the Numbers? | UK-Debt.info</title>
+<meta name="description" content="Analysis of OBR forecasting errors. Inflation was forecast at 2% but reached 11%. Borrowing repeatedly underestimated. What does this mean for fiscal projections?">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#2d1b69,#4a2d9e,#6644cc);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(45,27,105,0.4)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.exec-summary{background:linear-gradient(135deg,#1a1a2e,#2d1b69);border-bottom:3px solid var(--purple);padding:20px 28px}
+.exec-summary h2{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#fff;margin-bottom:10px}
+.exec-summary p{font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);line-height:1.7;margin-bottom:8px}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+/* KEY FINDINGS TABLE */
+.findings-table{width:100%;border-collapse:collapse;font-size:13px}
+.findings-table th{background:var(--panel2);padding:10px 12px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border);text-align:left}
+.findings-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid);vertical-align:middle}
+.findings-table td.mono{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700}
+.findings-table td.bad{color:var(--red);font-size:20px;font-weight:800}
+.findings-table td.ok{color:var(--amber);font-size:16px;font-weight:700}
+.findings-table td.good{color:var(--green);font-size:16px;font-weight:700}
+.findings-table tr.highlight{background:var(--red-light)}
+/* ACCURACY METER */
+.accuracy-meter{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.am-row{display:flex;align-items:center;gap:10px}
+.am-label{width:160px;font-size:12px;font-weight:700;color:var(--ink-mid);flex-shrink:0}
+.am-track{flex:1;height:20px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;position:relative;overflow:hidden}
+.am-forecast{height:100%;background:rgba(0,96,204,0.4);position:absolute;left:0;top:0;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:700;color:var(--blue);white-space:nowrap}
+.am-actual{height:100%;background:rgba(212,0,32,0.7);position:absolute;top:0;transition:width 0.5s;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap}
+.am-val{width:80px;font-size:11px;font-weight:700;flex-shrink:0;text-align:right}
+/* BOXES */
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.green-box{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.source-tag{display:inline-block;background:var(--purple-light);border:1px solid var(--purple-mid);color:var(--purple);padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;margin:2px}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="money-in-out.html" class="done">Money In & Out</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="active">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>OBR FORECAST ACCURACY — HOW RELIABLE ARE THE NUMBERS?</h1>
+    <div class="subtitle">Analysis of OBR Historical Forecasting Errors · Implications for Fiscal Projections · June 2026 Forecast Evaluation Report</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<!-- EXEC SUMMARY -->
+<div class="exec-summary">
+  <h2>📋 EXECUTIVE SUMMARY</h2>
+  <p>Analysis of OBR historical forecasting material and the June 2026 Forecast Evaluation Report suggests that the <strong>largest recent forecasting errors have occurred in inflation and public borrowing</strong>. GDP forecasts appear relatively robust over short horizons but display a tendency toward optimism at medium and longer horizons.</p>
+  <p>For investors and citizens alike, this implies that <strong>official fiscal projections should be treated as a central scenario rather than a reliable prediction</strong>. Scenario analysis is essential when assessing gilt markets, fiscal sustainability and growth assumptions.</p>
+  <div style="margin-top:8px">
+    <span class="source-tag">OBR Forecast Evaluation Report June 2026</span>
+    <span class="source-tag">OBR Historical Forecasting Material</span>
+    <span class="source-tag">Methodology: Actual ÷ Forecast × 100</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- KEY FINDINGS TABLE (from uploaded file) -->
+  <div class="panel full-width purple-accent">
+    <div class="panel-label">Key Findings — Forecast Accuracy Ratios (Actual as % of Forecast)</div>
+    <div style="overflow-x:auto">
+      <table class="findings-table">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Forecast Horizon</th>
+            <th>Actual as % of Forecast</th>
+            <th>What It Means</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight">
+            <td><strong>CPI Inflation</strong></td>
+            <td>2 Years</td>
+            <td class="bad">387%</td>
+            <td>Actual inflation was <strong>almost 4× forecast</strong>. OBR predicted ~2% for 2022; actual hit 11.1%.</td>
+            <td>🔴 Catastrophic miss</td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>Public Borrowing</strong></td>
+            <td>2 Years</td>
+            <td class="bad" style="color:var(--red)">178%</td>
+            <td>Borrowing was 78% higher than forecast at 2-year horizon. Persistent underestimation.</td>
+            <td>🔴 Significant miss</td>
+          </tr>
+          <tr class="highlight">
+            <td><strong>Public Borrowing</strong></td>
+            <td>1 Year</td>
+            <td class="bad" style="color:var(--red)">174%</td>
+            <td>Even at 1-year horizon, borrowing was 74% above forecast — structural optimism.</td>
+            <td>🔴 Significant miss</td>
+          </tr>
+          <tr>
+            <td><strong>GDP Growth</strong></td>
+            <td>1 Year</td>
+            <td class="ok">126%</td>
+            <td>Near-term growth slightly underestimated — actual was better than forecast at 1yr.</td>
+            <td>🟡 Minor miss (underestimate)</td>
+          </tr>
+          <tr>
+            <td><strong>GDP Growth</strong></td>
+            <td>5 Years</td>
+            <td class="ok">73%</td>
+            <td>Long-term growth was only 73% of what was forecast — OBR too optimistic long-term.</td>
+            <td>🟡 Significant overestimate</td>
+          </tr>
+          <tr>
+            <td><strong>GDP Growth</strong></td>
+            <td>2 Years</td>
+            <td class="ok">69%</td>
+            <td>Medium-term growth was only 69% of forecast — OBR systematically too optimistic.</td>
+            <td>🟡 Significant overestimate</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="red-box">
+      🚨 <strong>The headline finding: CPI inflation was forecast at ~2% for 2022 but reached 11.1% — a 387% error ratio.</strong> This single forecasting failure had cascading consequences: it led to higher-than-expected debt interest payments (index-linked gilts), higher wage demands, higher public spending, and larger borrowing. The OBR's own Forecast Evaluation Report acknowledges this as its largest modern forecasting error.
+    </div>
+  </div>
+
+  <!-- INFLATION FORECAST ERROR CHART -->
+  <div class="panel red-accent">
+    <div class="panel-label">CPI Inflation — OBR Forecast vs Actual (2019–2024)</div>
+    <canvas id="inflationChart" height="280"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>OBR Forecasts at time of publication</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Actual CPI outturn</div>
+    </div>
+    <div class="warn-box">
+      ⚠️ At the March 2020 forecast, the OBR projected CPI at 1.5% for 2022. At the March 2021 forecast, it projected 2.0% for 2022. Actual CPI in 2022 reached 11.1% — a level not seen since the 1980s. Even the October 2021 forecast significantly underestimated what was coming.
+    </div>
+  </div>
+
+  <!-- BORROWING FORECAST ERROR CHART -->
+  <div class="panel amber-accent">
+    <div class="panel-label">Public Borrowing — OBR Forecast vs Actual (£bn)</div>
+    <canvas id="borrowingChart" height="280"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>OBR Forecast (at time)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Actual Borrowing</div>
+    </div>
+    <div class="warn-box">
+      ⚠️ The OBR has persistently underestimated public borrowing across multiple forecast years. Between 2019/20 and 2024/25, actual borrowing exceeded the OBR's 1-year-ahead forecast by an average of 74%. This has a compounding effect — each year of underestimated borrowing adds to the debt stock, making future forecasts start from a higher base.
+    </div>
+  </div>
+
+  <!-- GDP GROWTH OVER/UNDER -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">GDP Growth Forecasting Pattern — Short-Term Underestimate, Long-Term Overestimate</div>
+    <canvas id="gdpAccChart" height="220"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>GDP Growth Forecast</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>GDP Growth Actual</div>
+    </div>
+    <div class="info-box">
+      📋 <strong>The pattern:</strong> At 1-year horizon the OBR slightly underestimates growth (actual was 126% of forecast on average). But at 2-year and 5-year horizons it overestimates — actual was only 69% and 73% of forecast respectively. This reflects a systematic tendency toward "optimism bias" in medium and long-term projections, which overstates future tax revenues and understates future debt burdens.
+    </div>
+  </div>
+
+  <!-- ACCURACY VISUAL COMPARISON -->
+  <div class="panel red-accent">
+    <div class="panel-label">Forecast Accuracy at a Glance — How Far Off Was the OBR?</div>
+    <div class="accuracy-meter">
+      <div style="display:grid;grid-template-columns:160px 1fr 80px;font-size:10px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;gap:10px">
+        <span>Metric</span><span>Forecast (blue) vs Actual (red)</span><span style="text-align:right">Error</span>
+      </div>
+      <div class="am-row">
+        <span class="am-label">CPI Inflation (2yr)</span>
+        <div class="am-track" style="height:22px">
+          <div class="am-forecast" style="width:100%">Forecast: 2%</div>
+          <div class="am-actual" style="width:100%;background:rgba(212,0,32,0.85)">Actual: 11.1% (+387%)</div>
+        </div>
+        <span class="am-val" style="color:var(--red);font-size:14px;font-weight:800">+387%</span>
+      </div>
+      <div class="am-row">
+        <span class="am-label">Borrowing (2yr)</span>
+        <div class="am-track" style="height:22px">
+          <div class="am-forecast" style="width:56%">Forecast</div>
+          <div class="am-actual" style="width:100%;left:0;background:rgba(212,0,32,0.7)">Actual: 78% higher</div>
+        </div>
+        <span class="am-val" style="color:var(--red);font-weight:800">+178%</span>
+      </div>
+      <div class="am-row">
+        <span class="am-label">Borrowing (1yr)</span>
+        <div class="am-track" style="height:22px">
+          <div class="am-forecast" style="width:57%">Forecast</div>
+          <div class="am-actual" style="width:100%;left:0;background:rgba(212,0,32,0.65)">Actual: 74% higher</div>
+        </div>
+        <span class="am-val" style="color:var(--red);font-weight:800">+174%</span>
+      </div>
+      <div class="am-row">
+        <span class="am-label">GDP Growth (1yr)</span>
+        <div class="am-track" style="height:22px">
+          <div class="am-forecast" style="width:80%;background:rgba(0,96,204,0.4)">Forecast</div>
+          <div class="am-actual" style="width:100%;left:0;background:rgba(0,136,68,0.5)">Actual: slightly higher</div>
+        </div>
+        <span class="am-val" style="color:var(--amber);font-weight:800">+126%</span>
+      </div>
+      <div class="am-row">
+        <span class="am-label">GDP Growth (2yr)</span>
+        <div class="am-track" style="height:22px">
+          <div class="am-forecast" style="width:100%;background:rgba(0,96,204,0.4)">Forecast</div>
+          <div class="am-actual" style="width:69%;left:0;background:rgba(201,112,0,0.6)">Actual: lower</div>
+        </div>
+        <span class="am-val" style="color:var(--amber);font-weight:800">69%</span>
+      </div>
+      <div class="am-row">
+        <span class="am-label">GDP Growth (5yr)</span>
+        <div class="am-track" style="height:22px">
+          <div class="am-forecast" style="width:100%;background:rgba(0,96,204,0.4)">Forecast</div>
+          <div class="am-actual" style="width:73%;left:0;background:rgba(201,112,0,0.6)">Actual: lower</div>
+        </div>
+        <span class="am-val" style="color:var(--amber);font-weight:800">73%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPLICATIONS -->
+  <div class="panel green-accent">
+    <div class="panel-label">What This Means for Investors & Citizens</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">📈 Inflation Risk Remains Hard to Model</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">Large inflation misses can materially affect bond yields, real returns and fiscal outcomes. When inflation is higher than forecast, index-linked gilt costs soar, real wages fall, and borrowing exceeds projections. The 2022 episode added tens of billions to the interest bill.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">💷 Borrowing Is Probably Worse Than It Looks</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">Persistent underestimation of borrowing by 74–78% means the true fiscal outlook is likely worse than the OBR's central forecasts. Investors in gilts should treat the forecast as an optimistic scenario and stress-test against higher borrowing outcomes.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">📊 Long-Term Growth Assumptions Are Optimistic</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">The OBR systematically overestimates medium and long-term GDP growth. This matters enormously for the debt trajectory pages on this site — the OBR's "274% of GDP by 2074" projection assumes growth that may not materialise. The true trajectory could be worse.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">🎯 Treat Forecasts as Central Scenarios</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">The OBR itself acknowledges its forecasts are scenarios, not predictions. The evidence shows they can be materially wrong even at short horizons. Any assessment of UK fiscal sustainability should run multiple scenarios — and the downside scenarios should be taken seriously.</div>
+      </div>
+    </div>
+    <div class="green-box">
+      ✅ <strong>In fairness to the OBR:</strong> No forecaster predicted COVID-19 or Russia's invasion of Ukraine. Many of the largest errors were driven by genuinely unforeseeable external shocks. The OBR also publishes fan charts showing its uncertainty ranges — it is the central scenario in those charts that tends to be reported as "the forecast," underplaying the inherent uncertainty. That said, the systematic optimism bias in borrowing forecasts predates these shocks and requires explanation.
+    </div>
+  </div>
+
+  <!-- WHAT THE OBR SAYS -->
+  <div class="panel full-width amber-accent">
+    <div class="panel-label">The OBR's Own Assessment (June 2026 Forecast Evaluation Report)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px">
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);letter-spacing:2px">BETTER</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:6px;line-height:1.5">Short-term GDP growth (1yr). Near-term forecasts reasonably calibrated on growth.</div>
+      </div>
+      <div style="background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:14px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--red);letter-spacing:2px">POOR</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:6px;line-height:1.5">Inflation forecasting. The 2022 inflation shock was the largest forecasting error in the OBR's history.</div>
+      </div>
+      <div style="background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:14px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--amber);letter-spacing:2px">MIXED</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:6px;line-height:1.5">Borrowing and medium-term GDP. Systematic optimism bias identified, partly external-shock-driven.</div>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:14px">
+      📋 <strong>The OBR's conclusion from its own evaluation:</strong> "Forecast accuracy deteriorates as the forecast horizon increases. This is consistent with the broader forecasting literature, where uncertainty compounds over time. The most notable finding is the magnitude of recent inflation forecasting errors. For economists and investors, official forecasts should be viewed as informative baselines rather than precise predictions."
+    </div>
+    <div class="warn-box">
+      ⚠️ <strong>The implication for this website's data:</strong> All projections shown on UK-Debt.info — debt trajectories, interest payment forecasts, pension cost estimates — are based on OBR or OBR-derived figures. In light of the accuracy record above, these should all be treated as central scenarios. The actual outcomes could be materially different, and based on the historical record, are more likely to be <em>worse</em> than projected than better.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ Analysis based on OBR Forecast Evaluation Report June 2026 and historical OBR forecasting material. Methodology: Forecast Accuracy Ratio = Actual ÷ Forecast × 100.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: OBR Forecast Evaluation Report June 2026 · OBR Historical Forecasting Material · User-supplied analysis</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+// INFLATION CHART — OBR forecast vintages vs actual
+const infYrs=['2019','2020','2021','2022','2023','2024'];
+new Chart(document.getElementById('inflationChart'),{
+  type:'line',
+  data:{
+    labels:infYrs,
+    datasets:[
+      {label:'Actual CPI',data:[1.7,0.9,2.5,9.1,7.4,3.2],borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.08)',borderWidth:3,fill:true,tension:0.3,pointRadius:5},
+      {label:'Mar 2020 Forecast',data:[2.0,1.5,1.8,2.0,2.0,2.0],borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:1.5,tension:0.3,borderDash:[3,2],pointRadius:2},
+      {label:'Mar 2021 Forecast',data:[null,null,1.9,2.0,2.0,2.0,2.0],borderColor:'#6600cc',backgroundColor:'transparent',borderWidth:1.5,tension:0.3,borderDash:[3,2],pointRadius:2},
+      {label:'Oct 2021 Forecast',data:[null,null,null,4.0,3.5,2.5,2.0],borderColor:'#c97000',backgroundColor:'transparent',borderWidth:1.5,tension:0.3,borderDash:[3,2],pointRadius:2},
+    ]
+  },
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{labels:{font:{size:11,weight:'bold'},color:'#2a3a50'}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:11,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'CPI Inflation %',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'},min:0,max:12}
+    }
+  }
+});
+
+// BORROWING CHART
+new Chart(document.getElementById('borrowingChart'),{
+  type:'bar',
+  data:{
+    labels:['2019/20','2020/21','2021/22','2022/23','2023/24','2024/25','2025/26'],
+    datasets:[
+      {label:'OBR Forecast (1yr ahead)',data:[55,330,185,99,87,87,120],backgroundColor:'rgba(0,96,204,0.65)'},
+      {label:'Actual Borrowing',data:[56,317,130,128,122,138,132],backgroundColor:'rgba(212,0,32,0.65)'}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{labels:{font:{size:11,weight:'bold'},color:'#2a3a50'}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: £${ctx.raw}bn`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'£bn',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{color:'rgba(0,0,0,0.05)'}}
+    }
+  }
+});
+
+// GDP ACCURACY CHART
+new Chart(document.getElementById('gdpAccChart'),{
+  type:'bar',
+  data:{
+    labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
+    datasets:[
+      {label:'GDP Forecast',data:[2.4,2.3,2.1,2.1,1.8,-2.0,6.5,3.8,1.5,1.5,1.5],backgroundColor:'rgba(0,96,204,0.6)'},
+      {label:'GDP Actual',data:[2.3,1.7,1.9,1.4,1.6,-11.0,7.5,4.1,0.3,1.1,1.1],backgroundColor:'rgba(212,0,32,0.6)'}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{labels:{font:{size:11,weight:'bold'},color:'#2a3a50'}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'GDP Growth %',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'},min:-13,max:10}
+    }
+  }
+});
+</script>
+</body>
+</html>

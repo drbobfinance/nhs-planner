@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Fiscal Trajectory – When Does It Become Unsustainable? | UK-Debt.info</title>
+<meta name="description" content="OBR long-term fiscal projections, pension liabilities, interest payments and debt trajectory to 2075. When do UK public finances become mathematically unsustainable?">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;
+  --red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;
+  --green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;
+  --amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;
+  --blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;
+  --purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;
+  --ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+
+/* NAV */
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:rgba(255,255,255,0.85);padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#0d0d0d,#1a1a2e,#2d1b69);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 16px rgba(0,0,0,0.5)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.7);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:1px;margin-top:2px}
+
+/* WARNING BANNER */
+.warning-banner{background:linear-gradient(135deg,#3d0000,#800000);border-bottom:3px solid var(--red);padding:16px 28px;text-align:center}
+.warning-banner h2{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:#fff;margin-bottom:6px}
+.warning-banner p{font-size:12px;color:rgba(255,255,255,0.8);font-weight:600;letter-spacing:1px;line-height:1.6}
+
+/* CONTROLS */
+.controls-bar{background:#fff;border-bottom:2px solid var(--border);padding:16px 28px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end}
+.control-group{display:flex;flex-direction:column;gap:5px}
+.control-group label{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--ink-mid)}
+.ctrl-row{display:flex;align-items:center;gap:10px}
+input[type=range]{-webkit-appearance:none;width:160px;height:7px;border-radius:4px;background:var(--border);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--blue);cursor:pointer;box-shadow:0 2px 5px rgba(0,96,204,0.4)}
+.ctrl-val{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:700;color:var(--blue);min-width:50px}
+.btn-recalc{background:var(--blue);border:none;color:#fff;padding:9px 20px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;cursor:pointer;border-radius:5px;align-self:flex-end;transition:opacity 0.2s}
+.btn-recalc:hover{opacity:0.85}
+
+/* KEY METRICS BAR */
+.metrics-bar{background:#0d1520;padding:14px 28px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-around}
+.metric{text-align:center}
+.metric .mv{font-family:'Share Tech Mono',monospace;font-size:22px;font-weight:700;letter-spacing:1px}
+.metric .ml{font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.55);text-transform:uppercase;margin-top:3px;font-weight:700}
+.metric.red .mv{color:#ff6666}
+.metric.amber .mv{color:#ffcc44}
+.metric.blue .mv{color:#66aaff}
+.metric.green .mv{color:#44cc88}
+.metric.purple .mv{color:#cc88ff}
+
+/* MAIN */
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent   {border-top:4px solid var(--red);   background:linear-gradient(180deg,var(--red-light)    0%,#fff 60%)}
+.panel.amber-accent {border-top:4px solid var(--amber); background:linear-gradient(180deg,var(--amber-light)  0%,#fff 60%)}
+.panel.blue-accent  {border-top:4px solid var(--blue);  background:linear-gradient(180deg,var(--blue-light)   0%,#fff 60%)}
+.panel.green-accent {border-top:4px solid var(--green); background:linear-gradient(180deg,var(--green-light)  0%,#fff 60%)}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* TIPPING POINT CARD */
+.tipping-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:8px}
+.tp-card{padding:14px;border-radius:8px;text-align:center;border:2px solid transparent}
+.tp-card .tc-year{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px}
+.tp-card .tc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px;line-height:1.4}
+.tp-card .tc-desc{font-size:10px;color:var(--ink-light);margin-top:6px;font-weight:600;line-height:1.5}
+.tp-card.amber{background:var(--amber-light);border-color:var(--amber-mid)}.tp-card.amber .tc-year{color:var(--amber)}.tp-card.amber .tc-label{color:var(--amber)}
+.tp-card.red  {background:var(--red-light);  border-color:var(--red-mid)  }.tp-card.red   .tc-year{color:var(--red)  }.tp-card.red   .tc-label{color:var(--red)}
+.tp-card.purple{background:var(--purple-light);border-color:var(--purple-mid)}.tp-card.purple .tc-year{color:var(--purple)}.tp-card.purple .tc-label{color:var(--purple)}
+.tp-card.dark{background:#0d1520;border-color:#1a2535}.tp-card.dark .tc-year{color:#ff6666}.tp-card.dark .tc-label{color:rgba(255,255,255,0.8)}.tp-card.dark .tc-desc{color:rgba(255,255,255,0.5)}
+
+/* BOXES */
+.warn-box {background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box  {background:var(--red-light);  border:1px solid var(--red-mid);  border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box {background:var(--blue-light); border:1px solid var(--blue-mid); border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.green-box{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.dark-box {background:#0d1520;border:1px solid #1a2535;border-radius:6px;padding:14px;font-size:12px;color:rgba(255,255,255,0.75);font-weight:700;line-height:1.7;margin-top:10px}
+
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* PENSION CASHFLOW TABLE */
+.cf-table{width:100%;border-collapse:collapse;font-size:12px}
+.cf-table th{background:var(--panel2);padding:8px 10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-mid);font-weight:700;border-bottom:2px solid var(--border);text-align:left}
+.cf-table td{padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;color:var(--ink-mid)}
+.cf-table td.mono{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700}
+.cf-table td.red{color:var(--red)}.cf-table td.green{color:var(--green)}.cf-table td.amber{color:var(--amber)}.cf-table td.blue{color:var(--blue)}
+.cf-table tr.forecast td{background:rgba(102,0,204,0.04);font-style:italic}
+
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+
+  
+    .nav-groups::-webkit-scrollbar{display:none}
+    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
+    .nav-brand span{font-size:18px;letter-spacing:2px}
+    
+    .top-nav{flex-wrap:nowrap;overflow:hidden}
+  }
+  @media(max-width:768px){
+    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+    .top-nav::-webkit-scrollbar{display:none}
+    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+    
+    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments History</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="active">Fiscal Trajectory</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html">Personal Finance Dashboard</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-title">
+    <h1>UK FISCAL TRAJECTORY — WHEN DOES IT BECOME UNSUSTAINABLE?</h1>
+    <div class="subtitle">Combined Debt · Interest · Pensions · Ageing Population · OBR Long-Term Projections to 2075</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<!-- WARNING -->
+<div class="warning-banner">
+  <h2>⚠️ THE OBR'S OWN WARNING: "SOMETHING HAS TO GIVE"</h2>
+  <p>The Office for Budget Responsibility — the UK government's own official forecaster — projects that on current policy settings, public debt will rise to <strong>274% of GDP by 2074</strong>. Public spending will reach 60%+ of GDP while revenues remain around 40%. The OBR states explicitly the public finances are on an <strong>unsustainable long-term path</strong>.</p>
+</div>
+
+<!-- INTERACTIVE CONTROLS -->
+<div class="controls-bar">
+  <div class="control-group">
+    <label>Gilt Yield Rise (above base)</label>
+    <div class="ctrl-row">
+      <input type="range" id="s_rates" min="0" max="3" step="0.25" value="0.5" oninput="recalc()">
+      <span class="ctrl-val" id="sv_rates">+0.50%</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <label>CPI Inflation (avg, %)</label>
+    <div class="ctrl-row">
+      <input type="range" id="s_cpi" min="1" max="6" step="0.25" value="2.5" oninput="recalc()">
+      <span class="ctrl-val" id="sv_cpi">2.50%</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <label>Public Sector Growth (%/yr)</label>
+    <div class="ctrl-row">
+      <input type="range" id="s_ps" min="-2" max="3" step="0.25" value="0.5" oninput="recalc()">
+      <span class="ctrl-val" id="sv_ps">+0.50%</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <label>GDP Growth (%/yr)</label>
+    <div class="ctrl-row">
+      <input type="range" id="s_gdp" min="0.5" max="3" step="0.25" value="1.5" oninput="recalc()">
+      <span class="ctrl-val" id="sv_gdp">1.50%</span>
+    </div>
+  </div>
+  <button class="btn-recalc" onclick="recalc()">▶ RECALCULATE</button>
+</div>
+
+<!-- KEY METRICS -->
+<div class="metrics-bar">
+  <div class="metric red"><div class="mv" id="m_debt2035">~£4.1tn</div><div class="ml">Debt 2035</div></div>
+  <div class="metric red"><div class="mv" id="m_debt2050">~£7.8tn</div><div class="ml">Debt 2050</div></div>
+  <div class="metric amber"><div class="mv" id="m_debtgdp2035">~108%</div><div class="ml">Debt/GDP 2035</div></div>
+  <div class="metric red"><div class="mv" id="m_debtgdp2050">~175%</div><div class="ml">Debt/GDP 2050</div></div>
+  <div class="metric purple"><div class="mv" id="m_pensionnet2035">+£18bn</div><div class="ml">Pension Net Cost 2035</div></div>
+  <div class="metric red"><div class="mv" id="m_crossover">~2038</div><div class="ml">Fiscal Stress Point</div></div>
+</div>
+
+<div class="main">
+
+  <!-- MASTER TRAJECTORY CHART -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">UK Debt as % of GDP — Historical, OBR Forecast & Long-Term Projection to 2075</div>
+    <canvas id="trajChart" height="320"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Historical (ONS)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>OBR Medium-Term Forecast (to 2031)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>OBR Long-Term Baseline (to 2074)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ff8800"></div>Your Scenario (interactive)</div>
+    </div>
+    <div class="red-box">
+      🚨 The OBR's own long-term projection shows debt reaching <strong>274% of GDP by 2074</strong> under current policy — driven by ageing population costs, rising NHS demand, pension liabilities and interest payments. This page combines all those pressures into one model. Adjust the sliders above to see how different assumptions change the trajectory.
+    </div>
+  </div>
+
+  <!-- SPENDING vs REVENUE -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">UK Government Spending vs Revenue as % of GDP — The Widening Gap (2000–2075)</div>
+    <canvas id="gapChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Total Spending % GDP</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Tax Revenue % GDP</div>
+      <div class="legend-item"><div class="legend-dot" style="background:rgba(212,0,32,0.2);border:2px dashed #d40020"></div>Deficit (gap)</div>
+    </div>
+    <div class="warn-box">
+      ⚠️ The OBR projects spending will rise from 45% to over 60% of GDP over the next 50 years, driven by health, social care, state pension triple lock and public sector pension costs — while revenues remain anchored around 37–40% of GDP. The gap between the two lines is the annual deficit that adds to the debt.
+    </div>
+  </div>
+
+  <!-- PENSION CASHFLOW MODEL -->
+  <div class="panel purple-accent">
+    <div class="panel-label">Public Sector Pension Cash Flow Model (£bn) — Contributions In vs Payments Out</div>
+    <div style="overflow-x:auto;max-height:380px;overflow-y:auto">
+      <table class="cf-table" id="pensionTable">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Workers</th>
+            <th>Contributions In</th>
+            <th>Payments Out</th>
+            <th>Net Cost</th>
+            <th>Pension Liability</th>
+            <th>% of GDP</th>
+          </tr>
+        </thead>
+        <tbody id="pensionTableBody"></tbody>
+      </table>
+    </div>
+    <div class="info-box">
+      📋 <strong>How this works:</strong> Contributions = public sector workforce × avg salary × ~29% employer + ~7% employee contribution rate. Payments = number of pensioners × avg pension × CPI uplift each year. Net cost is the taxpayer top-up required. Pension liability grows each year by new accruals minus payments made.
+    </div>
+  </div>
+
+  <!-- PENSION CASHFLOW CHART -->
+  <div class="panel purple-accent">
+    <div class="panel-label">Pension Contributions vs Payouts — Cash Flow Crossover (£bn)</div>
+    <canvas id="pensionChart" height="280"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Contributions In (£bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Pension Payments Out (£bn)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>Net Cost to Taxpayer (£bn)</div>
+    </div>
+    <div class="warn-box">
+      ⚠️ <strong>The critical dynamic:</strong> As the UK workforce ages and baby boomers retire, pension payments will accelerate while contributions grow more slowly. The NHS alone pays out £16.6bn/year in employer pension contributions. If the public sector workforce grows faster than shown, liabilities accrue faster. If CPI stays elevated, payments to existing pensioners rise faster still.
+    </div>
+  </div>
+
+  <!-- PUBLIC vs PRIVATE EMPLOYMENT -->
+  <div class="panel green-accent">
+    <div class="panel-label">Public vs Private Sector Employment — Historical & Projected (millions)</div>
+    <canvas id="employChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Public Sector (millions)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Private Sector (millions)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c97000"></div>Ratio: Private per Public worker</div>
+    </div>
+    <div class="info-box">
+      📋 <strong>Why this matters for pensions:</strong> Every public sector worker accrues future pension liability. Each additional public sector worker costs the taxpayer ~29% of their salary in employer pension contributions AND adds to the long-term unfunded liability. A growing public sector relative to a stagnant private sector means fewer taxpayers funding more pensioners — a structurally dangerous trend.
+    </div>
+  </div>
+
+  <!-- COMBINED PRESSURE CHART -->
+  <div class="panel amber-accent">
+    <div class="panel-label">Combined Fiscal Pressure — Interest + Pensions + Health + Welfare (% of GDP)</div>
+    <canvas id="pressureChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Debt Interest</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>Public Pensions (net)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>NHS / Health</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c97000"></div>State Pension / Welfare</div>
+    </div>
+    <div class="red-box">
+      🚨 These four spending categories alone — debt interest, public sector pensions, NHS and state pension/welfare — are projected to consume <strong>over 35% of GDP by 2050</strong>. Total tax revenues today are only ~37% of GDP. This leaves almost nothing for defence, education, infrastructure, policing or any other public service. <strong>This is the fiscal cliff.</strong>
+    </div>
+  </div>
+
+  <!-- TIPPING POINTS -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">Fiscal Tipping Points — Key Dates Under OBR Baseline</div>
+    <div class="tipping-grid">
+      <div class="tp-card amber">
+        <div class="tc-year" id="tp1">2031</div>
+        <div class="tc-label">Debt Exceeds 100% GDP</div>
+        <div class="tc-desc">PSND crosses triple figures as a share of the economy — a level last seen in the 1960s</div>
+      </div>
+      <div class="tp-card amber">
+        <div class="tc-year" id="tp2">2035</div>
+        <div class="tc-label">Interest Exceeds Education</div>
+        <div class="tc-desc">Annual debt interest payments overtake the entire England schools budget</div>
+      </div>
+      <div class="tp-card red">
+        <div class="tc-year" id="tp3">2038</div>
+        <div class="tc-label">Fiscal Stress Point</div>
+        <div class="tc-desc">Interest + pension net costs together exceed 8% of GDP — historical trigger for fiscal crises</div>
+      </div>
+      <div class="tp-card red">
+        <div class="tc-year" id="tp4">2045</div>
+        <div class="tc-label">Debt Exceeds 150% GDP</div>
+        <div class="tc-desc">Under OBR long-term baseline — requires sustained primary surplus to stabilise</div>
+      </div>
+      <div class="tp-card purple">
+        <div class="tc-year" id="tp5">2050</div>
+        <div class="tc-label">Spending Hits 55% GDP</div>
+        <div class="tc-desc">Ageing, health and pension costs drive total public spending above 55% of national income</div>
+      </div>
+      <div class="tp-card dark">
+        <div class="tc-year">2074</div>
+        <div class="tc-label">OBR Baseline: 274% GDP</div>
+        <div class="tc-desc">Without policy change, the OBR projects this endpoint — equivalent to a full sovereign debt crisis</div>
+      </div>
+    </div>
+    <div class="dark-box">
+      ⚡ <strong>What "unsustainable" actually means in practice:</strong> Long before the 274% figure is reached, bond markets would react. UK gilt yields would rise sharply as investors demand higher compensation for risk — which itself accelerates the debt spiral (see our <a href="future-interest.html" style="color:#88aaff">interest rate scenarios page</a>). The IMF or financial markets would force a fiscal adjustment — either through austerity, higher taxes, inflation, or in extremis, debt restructuring. The OBR says explicitly: "something has to give."
+    </div>
+  </div>
+
+  <!-- WHAT COULD SAVE IT -->
+  <div class="panel full-width green-accent">
+    <div class="panel-label">What Could Change the Trajectory — Policy Levers Available</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:8px">
+      <div style="background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">📈 Higher Growth</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">Each 0.5% extra annual GDP growth reduces debt/GDP by ~15pp by 2050. The OBR says returning to pre-2008 productivity trends would largely solve the problem.</div>
+      </div>
+      <div style="background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🏥 NHS Reform</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">Healthcare is the single biggest long-term pressure. Containing NHS cost growth to GDP growth (rather than above it) would save ~8% of GDP by 2075.</div>
+      </div>
+      <div style="background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">👴 Pension Age</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">Raising state pension age to 70 by 2050 would save ~2% of GDP annually. Switching public sector pensions to defined contribution would cap future liabilities.</div>
+      </div>
+      <div style="background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">💷 Tax Rises</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">Raising tax/GDP ratio from 37% to 42% (Scandinavian levels) would broadly close the gap — but would require the largest peacetime tax rise in UK history.</div>
+      </div>
+      <div style="background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">✂️ Spending Cuts</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">Reducing public spending by 3–4% of GDP (about £90bn in today's terms) would stabilise debt — but would require cuts deeper than the 2010–2019 austerity programme.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">📊 Combination</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">The OBR suggests a combination of higher growth, gradual pension reform, modest tax rises and spending efficiency — no single lever is sufficient alone.</div>
+      </div>
+    </div>
+    <div class="green-box" style="margin-top:14px">
+      ✅ <strong>The OBR's conclusion:</strong> The UK's fiscal challenge is severe but not unique — most advanced economies face similar ageing pressures. The key difference is the starting level of debt (already ~94% of GDP) which leaves less room to absorb shocks before intervention is forced. Early action is significantly cheaper than delayed action.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ Long-term projections are illustrative and highly uncertain. OBR baseline from Fiscal Risks and Sustainability Report, September 2024. Not financial advice.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: OBR FRS Sep 2024 · OBR FRS Jul 2025 · Institute for Government · ONS PSF · WGA 2023/24</span>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+
+<script>
+// ── NAV ──────────────────────────────────────────────────────────────────────
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+// ── CORE MODEL DATA ───────────────────────────────────────────────────────────
+// Years from 2000 to 2075 in 5-year steps
+const HIST_YEARS  = [2000,2005,2008,2010,2012,2015,2019,2020,2021,2022,2023,2024,2025,2026];
+const HIST_DEBT   = [40,  38,  44,  65,  77,  84,  85,  99, 101,  95,  97,  98,  94, 93.8];
+
+const PROJ_YEARS  = [2026,2028,2030,2032,2034,2036,2038,2040,2045,2050,2055,2060,2065,2070,2074];
+const OBR_BASELINE= [93.8,95,  95.5,98, 103, 112, 125, 140, 175, 210, 235, 250, 265, 272, 274];
+
+// Pension cashflow data (£bn, real)
+// [year, publicWorkersMn, contributionsIn, paymentsOut, netCost, liabilityBn, gdpBn]
+const PENSION_BASE = [
+  [2020, 5.7,  42,  47, -5,  1400, 2200],
+  [2021, 5.7,  44,  48, -4,  1450, 2240],
+  [2022, 5.9,  47,  50, -3,  1419, 2500],
+  [2023, 6.0,  49,  55, +5,  1400, 2600],
+  [2024, 6.1,  50,  55, +5,  1380, 2700],
+  [2025, 6.1,  51,  56, +5,  1400, 2800],
+  [2026, 6.1,  52,  57, +5,  1420, 2968],
+];
+
+// ── CHARTS ────────────────────────────────────────────────────────────────────
+let trajChart, gapChart, pensionChart, employChart, pressureChart;
+
+function buildCharts() {
+  // TRAJECTORY CHART
+  trajChart = new Chart(document.getElementById('trajChart'), {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: 'Historical',
+          data: HIST_YEARS.map((y,i) => ({x:y, y:HIST_DEBT[i]})),
+          borderColor: '#0060cc', backgroundColor: 'rgba(0,96,204,0.08)',
+          borderWidth: 3, pointRadius: 3, tension: 0.3, fill: true
+        },
+        {
+          label: 'OBR Forecast (to 2031)',
+          data: [{x:2026,y:93.8},{x:2027,y:94.5},{x:2028,y:95},{x:2029,y:96.5},{x:2030,y:96},{x:2031,y:95}],
+          borderColor: '#6600cc', backgroundColor: 'transparent',
+          borderWidth: 2.5, pointRadius: 2, tension: 0.3, borderDash: [4,2]
+        },
+        {
+          label: 'OBR Long-Term Baseline',
+          data: PROJ_YEARS.map((y,i) => ({x:y, y:OBR_BASELINE[i]})),
+          borderColor: '#d40020', backgroundColor: 'rgba(212,0,32,0.05)',
+          borderWidth: 2, pointRadius: 2, tension: 0.4, fill: true, borderDash: [6,3]
+        },
+        {
+          label: 'Your Scenario',
+          data: PROJ_YEARS.map((y,i) => ({x:y, y:OBR_BASELINE[i]})),
+          borderColor: '#ff8800', backgroundColor: 'transparent',
+          borderWidth: 3, pointRadius: 3, tension: 0.4
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: {mode:'index', intersect:false},
+      plugins: {
+        legend: {display:false},
+        tooltip: {callbacks: {label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y?.toFixed(1)}% GDP`}}
+      },
+      scales: {
+        x: {type:'linear', min:2000, max:2075, title:{display:true,text:'Year',color:'#2a3a50',font:{size:11,weight:'bold'}}, ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},stepSize:5}, grid:{color:'rgba(0,0,0,0.04)'}},
+        y: {title:{display:true,text:'Debt as % of GDP',color:'#2a3a50',font:{size:12,weight:'bold'}}, ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'}, grid:{color:'rgba(0,0,0,0.05)'}, min:30, max:290}
+      }
+    }
+  });
+
+  // GAP CHART — spending vs revenue
+  const gapYrs = [2000,2005,2010,2015,2019,2020,2023,2025,2030,2035,2040,2045,2050,2060,2075];
+  const spending= [37,  40,  46,  42,  40,  53,  45,  45,  47,  50,  53,  56,  60,  62,  65];
+  const revenue = [37,  37,  36,  36,  37,  36,  37,  37,  38,  39,  39,  39,  39,  40,  40];
+
+  gapChart = new Chart(document.getElementById('gapChart'), {
+    type:'line',
+    data:{
+      labels: gapYrs,
+      datasets: [
+        {label:'Spending % GDP',data:spending,borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.1)',borderWidth:2.5,fill:true,tension:0.4},
+        {label:'Revenue % GDP', data:revenue, borderColor:'#008844',backgroundColor:'rgba(0,136,68,0.1)',borderWidth:2.5,fill:true,tension:0.4}
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}},
+      scales:{
+        x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+        y:{title:{display:true,text:'% of GDP',color:'#2a3a50',font:{size:11,weight:'bold'}},
+           ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},
+           grid:{color:'rgba(0,0,0,0.05)'},min:30,max:70}
+      }
+    }
+  });
+
+  // EMPLOYMENT CHART
+  const empYrs = [2000,2005,2010,2015,2019,2020,2022,2024,2026,2028,2030,2032,2035,2040];
+  const pubSec  = [5.2, 5.9, 6.3, 5.4, 5.6, 5.7, 5.9, 6.1, 6.1, 6.1, 6.0, 5.9, 5.8, 5.7];
+  const privSec = [22.8,24.1,23.7,25.6,27.1,26.1,27.2,27.3,27.4,27.6,27.8,28.0,28.3,28.7];
+  const ratio   = privSec.map((p,i)=>+(p/pubSec[i]).toFixed(2));
+
+  employChart = new Chart(document.getElementById('employChart'), {
+    type:'bar',
+    data:{
+      labels:empYrs,
+      datasets:[
+        {label:'Public Sector (m)',data:pubSec,backgroundColor:'rgba(212,0,32,0.7)',yAxisID:'y'},
+        {label:'Private Sector (m)',data:privSec,backgroundColor:'rgba(0,96,204,0.7)',yAxisID:'y'},
+        {label:'Private per Public',data:ratio,type:'line',borderColor:'#c97000',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,yAxisID:'y2',tension:0.3}
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+        y:{title:{display:true,text:'Workers (millions)',color:'#2a3a50',font:{size:11,weight:'bold'}},stacked:false,ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.05)'},min:0,max:36},
+        y2:{position:'right',title:{display:true,text:'Ratio',color:'#c97000',font:{size:11,weight:'bold'}},ticks:{color:'#c97000',font:{size:10,weight:'bold'}},grid:{display:false},min:3,max:6}
+      }
+    }
+  });
+
+  // PRESSURE CHART — stacked spending pressures % GDP
+  const pYrs = [2025,2030,2035,2040,2045,2050,2060,2075];
+  pressureChart = new Chart(document.getElementById('pressureChart'), {
+    type:'bar',
+    data:{
+      labels:pYrs,
+      datasets:[
+        {label:'Debt Interest',   data:[3.6, 3.5, 4.2, 5.0, 5.8, 6.5, 8.0,10.0],backgroundColor:'rgba(212,0,32,0.8)',stack:'a'},
+        {label:'Public Pensions', data:[0.2, 0.4, 0.7, 1.0, 1.4, 1.8, 2.5, 3.5],backgroundColor:'rgba(102,0,204,0.8)',stack:'a'},
+        {label:'NHS / Health',    data:[7.5, 8.2, 9.0,10.0,11.2,12.5,14.5,18.0],backgroundColor:'rgba(0,96,204,0.8)',stack:'a'},
+        {label:'State Pension',   data:[5.5, 5.8, 6.3, 7.0, 7.8, 8.5, 9.5,11.0],backgroundColor:'rgba(201,112,0,0.8)',stack:'a'},
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}% GDP`},
+          footer:items=>`Total: ${items.reduce((s,i)=>s+i.raw,0).toFixed(1)}% GDP`}
+      },
+      scales:{
+        x:{ticks:{color:'#2a3a50',font:{size:11,weight:'bold'}},grid:{display:false}},
+        y:{title:{display:true,text:'% of GDP',color:'#2a3a50',font:{size:11,weight:'bold'}},
+           stacked:true,ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},
+           grid:{color:'rgba(0,0,0,0.05)'},max:45}
+      }
+    }
+  });
+}
+
+// ── INTERACTIVE MODEL ─────────────────────────────────────────────────────────
+function recalc() {
+  const rateRise  = parseFloat(document.getElementById('s_rates').value);
+  const cpi       = parseFloat(document.getElementById('s_cpi').value);
+  const psGrowth  = parseFloat(document.getElementById('s_ps').value);
+  const gdpGrowth = parseFloat(document.getElementById('s_gdp').value);
+
+  document.getElementById('sv_rates').textContent = (rateRise>=0?'+':'')+rateRise.toFixed(2)+'%';
+  document.getElementById('sv_cpi').textContent   = cpi.toFixed(2)+'%';
+  document.getElementById('sv_ps').textContent    = (psGrowth>=0?'+':'')+psGrowth.toFixed(2)+'%';
+  document.getElementById('sv_gdp').textContent   = gdpGrowth.toFixed(2)+'%';
+
+  // Build scenario trajectory
+  // Start from 2026 baseline
+  let debtPct = 93.8;
+  let gdpBn   = 2968;
+  const scenData = [{x:2026, y:debtPct}];
+
+  // Pension model
+  let psWorkers  = 6.1e6;
+  let liabilityBn = 1420;
+  let avgSalary  = 38000;
+  let numPensioners = 3200000; // est public sector pensioners
+  let avgPension = 17000;      // avg public sector pension pa
+
+  const REFI_BN  = 185; // gilt refinancing per year
+  const START_INTEREST_BN = 110;
+
+  let interestBn    = START_INTEREST_BN;
+  let pensionNetBn  = 5;
+  let scenDebt2035  = 0, scenDebt2050 = 0;
+  let stressYear    = 0;
+
+  for (let yr = 2027; yr <= 2075; yr++) {
+    // GDP grows at scenario rate
+    gdpBn *= (1 + gdpGrowth/100);
+
+    // Interest grows: OBR reduction + rate rise effect building each year
+    const baseInterestBn = Math.max(90, START_INTEREST_BN - (yr-2026)*1.5); // OBR baseline reduction
+    const rateExtra = REFI_BN * rateRise * Math.min((yr-2026), 15) / 100; // builds over 15yr
+    interestBn = baseInterestBn + rateExtra;
+
+    // Public sector workforce
+    psWorkers *= (1 + psGrowth/100);
+
+    // Pension contributions in
+    avgSalary  *= (1 + Math.max(gdpGrowth, cpi)/100);
+    const contributionsIn = psWorkers * avgSalary * 0.36 / 1e9; // 29% employer + 7% employee
+
+    // Pension payments out — grows with CPI + new retirees
+    numPensioners *= 1.018; // demographic growth
+    avgPension    *= (1 + cpi/100);
+    const paymentsOut = numPensioners * avgPension / 1e9;
+
+    pensionNetBn = Math.max(0, paymentsOut - contributionsIn);
+
+    // New pension liabilities accruing each year (new accruals)
+    const newAccruals = psWorkers * avgSalary * 0.25 / 1e9; // rough accrual rate
+    liabilityBn += newAccruals - (paymentsOut * 0.7); // payments reduce liability
+
+    // Age-related spending pressures (NHS, state pension) as % GDP — rising
+    const agePressPct = 0.1 * (yr - 2026); // each year adds 0.1% GDP pressure
+
+    // Total deficit: interest + pension net + age pressure - OBR baseline improvement
+    const deficitPct = 4.3 + (interestBn/gdpBn)*100 - 3.6 + (pensionNetBn/gdpBn)*100 + agePressPct - gdpGrowth*0.3;
+
+    debtPct += deficitPct * 0.6; // simplified debt accumulation
+    debtPct  = Math.max(debtPct, 80);
+
+    if(yr % 2 === 0 || yr >= 2040) scenData.push({x:yr, y:+debtPct.toFixed(1)});
+    if(yr === 2035) scenDebt2035 = debtPct;
+    if(yr === 2050) scenDebt2050 = debtPct;
+    if(stressYear === 0 && pensionNetBn + interestBn/gdpBn*100 > 8) stressYear = yr;
+  }
+
+  // Update chart
+  trajChart.data.datasets[3].data = scenData;
+  trajChart.update('none');
+
+  // Update metrics
+  const gdp2035 = 2968 * Math.pow(1+gdpGrowth/100, 9);
+  const gdp2050 = 2968 * Math.pow(1+gdpGrowth/100, 24);
+  document.getElementById('m_debt2035').textContent = '~£'+(gdp2035*scenDebt2035/100/1000).toFixed(1)+'tn';
+  document.getElementById('m_debt2050').textContent = '~£'+(gdp2050*scenDebt2050/100/1000).toFixed(1)+'tn';
+  document.getElementById('m_debtgdp2035').textContent = '~'+scenDebt2035.toFixed(0)+'%';
+  document.getElementById('m_debtgdp2050').textContent = '~'+scenDebt2050.toFixed(0)+'%';
+  document.getElementById('m_pensionnet2035').textContent = '+£'+(5 + (2035-2026)*1.5).toFixed(0)+'bn';
+  document.getElementById('m_crossover').textContent = '~'+(stressYear||2038);
+
+  // Build pension table
+  buildPensionTable(psGrowth, cpi, gdpGrowth);
+}
+
+function buildPensionTable(psGrowth, cpi, gdpGrowth) {
+  const tbody = document.getElementById('pensionTableBody');
+  tbody.innerHTML = '';
+  let workers = 6.1e6, salary = 38000, pensioners = 3.2e6, avgPension = 17000, liab = 1420, gdp = 2968;
+
+  const years = [2020,2021,2022,2023,2024,2025,2026,2027,2028,2030,2032,2035,2040,2045,2050];
+  const histIn  = [42,44,47,49,50,51,null,null,null,null,null,null,null,null,null];
+  const histOut = [47,48,50,55,55,56,null,null,null,null,null,null,null,null,null];
+
+  years.forEach((yr, idx) => {
+    const isForecast = yr >= 2026;
+    if(isForecast){
+      const yrs = yr - 2026;
+      workers    *= Math.pow(1+psGrowth/100, yrs > 0 ? 1 : 0);
+      salary     *= Math.pow(1+Math.max(gdpGrowth,cpi)/100, yrs > 0 ? 1 : 0);
+      pensioners *= Math.pow(1.018, yrs > 0 ? 1 : 0);
+      avgPension *= Math.pow(1+cpi/100, yrs > 0 ? 1 : 0);
+      gdp        *= Math.pow(1+gdpGrowth/100, yrs > 0 ? 1 : 0);
+    }
+
+    const contribIn  = histIn[idx]  !== null ? histIn[idx]  : +(workers * salary * 0.36 / 1e9).toFixed(1);
+    const paysOut    = histOut[idx] !== null ? histOut[idx] : +(pensioners * avgPension / 1e9).toFixed(1);
+    const net        = +(paysOut - contribIn).toFixed(1);
+    const liabPct    = (liab / gdp * 100).toFixed(1);
+    if(isForecast) liab = Math.max(liab + workers*salary*0.25/1e9 - paysOut*0.7, 1000);
+    const netClass   = net > 0 ? 'red' : 'green';
+    const trClass    = isForecast ? 'forecast' : '';
+
+    tbody.innerHTML += `<tr class="${trClass}">
+      <td style="font-weight:700;color:var(--ink)">${yr}${isForecast?'*':''}</td>
+      <td class="mono blue">${(workers/1e6).toFixed(2)}m</td>
+      <td class="mono green">£${contribIn}bn</td>
+      <td class="mono red">£${paysOut}bn</td>
+      <td class="mono ${netClass}">${net>0?'+':''}£${Math.abs(net)}bn</td>
+      <td class="mono amber">£${liab.toFixed(0)}bn</td>
+      <td class="mono">${liabPct}%</td>
+    </tr>`;
+  });
+}
+
+function buildPensionChart() {
+  const yrs  = [2020,2021,2022,2023,2024,2025,2026,2028,2030,2033,2036,2040,2045,2050];
+  const cin  = [42,  44,  47,  49,  50,  51,  52,  55,  58,  63,  70,  80,  95, 115];
+  const cout = [47,  48,  50,  55,  55,  56,  57,  62,  68,  76,  86, 100, 120, 145];
+  const net  = cout.map((c,i) => +(c - cin[i]).toFixed(1));
+
+  pensionChart = new Chart(document.getElementById('pensionChart'), {
+    type:'line',
+    data:{
+      labels:yrs,
+      datasets:[
+        {label:'Contributions In',data:cin,borderColor:'#008844',backgroundColor:'rgba(0,136,68,0.1)',borderWidth:2.5,fill:true,tension:0.3},
+        {label:'Payments Out',    data:cout,borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.1)',borderWidth:2.5,fill:true,tension:0.3},
+        {label:'Net Cost',        data:net, borderColor:'#6600cc',backgroundColor:'transparent',borderWidth:2,tension:0.3,borderDash:[4,2],yAxisID:'y2'}
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: £${ctx.raw}bn`}}},
+      scales:{
+        x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+        y:{title:{display:true,text:'£bn',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{color:'rgba(0,0,0,0.05)'},min:30},
+        y2:{position:'right',title:{display:true,text:'Net Cost £bn',color:'#6600cc',font:{size:11,weight:'bold'}},ticks:{color:'#6600cc',font:{size:10,weight:'bold'},callback:v=>'£'+v+'bn'},grid:{display:false},min:-10,max:50}
+      }
+    }
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildCharts();
+buildPensionChart();
+recalc();
+</script>
+</body>
+</html>

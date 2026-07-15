@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#002f6c">
+<title>Chancellor — Can You Save the UK? | UK-Debt.info</title>
+<link rel="manifest" href="chancellor-manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;
+  --red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;
+  --green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;
+  --amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;
+  --blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;
+  --blue-dark:#002f6c;
+  --purple:#6600cc;--purple-light:#f5eeff;
+  --ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);overflow:hidden}
+
+/* ── SCREENS ─────────────────────────────────────────────────── */
+.screen{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden}
+.screen.active{display:flex}
+
+/* ── TOP NAV (same as site) ──────────────────────────────────── */
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 20px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);flex-shrink:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:10px;padding:8px 0;text-decoration:none}
+.nav-brand svg{width:36px;height:22px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#fff}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-right a{color:rgba(255,255,255,0.8);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:1px;padding:5px 10px;border:1px solid rgba(255,255,255,0.25);border-radius:4px}
+.nav-right a:hover{background:rgba(255,255,255,0.1)}
+
+/* ── TITLE SCREEN ────────────────────────────────────────────── */
+#s-title{overflow-y:auto}
+.title-hero{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:32px 24px;text-align:center;flex-shrink:0}
+.title-flag{font-size:56px;margin-bottom:10px;display:block;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.title-main{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,11vw,80px);letter-spacing:6px;color:#fff;line-height:1;text-shadow:0 2px 20px rgba(0,0,0,0.3)}
+.title-sub{font-size:clamp(13px,3.5vw,17px);letter-spacing:3px;color:rgba(255,255,255,0.8);text-transform:uppercase;margin-top:6px;font-weight:600}
+.title-kpis{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.tkpi{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:10px 16px;text-align:center;backdrop-filter:blur(4px)}
+.tkpi .tv{font-family:'Share Tech Mono',monospace;font-size:clamp(16px,4vw,22px);font-weight:700;color:#fff}
+.tkpi .tl{font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.65);text-transform:uppercase;margin-top:3px;font-weight:700}
+
+.title-body{padding:20px 20px 24px;max-width:600px;margin:0 auto;width:100%}
+.title-intro{font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.8;margin-bottom:16px;text-align:center}
+.title-objectives{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px}
+.obj-section-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.obj-section-title.win{color:var(--green)}
+.obj-section-title.lose{color:var(--red)}
+.obj-row{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-mid);margin-bottom:5px}
+.obj-icon{font-size:16px;flex-shrink:0}
+.title-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+.tsg{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.tsg .tv{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700}
+.tsg .tl{font-size:10px;letter-spacing:1px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.tsg.danger .tv{color:var(--red)}
+.tsg.warn .tv{color:var(--amber)}
+.tsg.ok .tv{color:var(--green)}
+.btn-start{width:100%;background:linear-gradient(135deg,var(--red),#ff2233);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;padding:16px;border-radius:8px;cursor:pointer;box-shadow:0 4px 16px rgba(212,0,32,0.3);transition:.2s}
+.btn-start:active{transform:scale(.98)}
+.title-privacy{font-size:11px;color:var(--ink-light);text-align:center;margin-top:12px;letter-spacing:0.5px}
+.title-privacy a{color:var(--blue);text-decoration:none}
+
+/* ── GAME SCREEN ─────────────────────────────────────────────── */
+#s-game{background:var(--bg)}
+
+/* HUD STRIP */
+.hud{background:#fff;border-bottom:2px solid var(--border);padding:10px 16px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+.hud-row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.hud-date{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--ink)}
+.hud-turn{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--ink-light);font-weight:700}
+.meters{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mtr{display:flex;flex-direction:column;gap:3px}
+.mtr-top{display:flex;justify-content:space-between;align-items:center}
+.mtr-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;color:var(--ink-light)}
+.mtr-val{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700}
+.mtr-bar{height:7px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.mtr-fill{height:100%;border-radius:4px;transition:width .4s}
+
+/* VERDICT BANNER */
+.verdict{padding:8px 16px;font-size:12px;font-weight:700;letter-spacing:0.5px;flex-shrink:0;display:flex;align-items:center;gap:8px;transition:all .3s}
+.verdict.crisis{background:var(--red-light);border-bottom:2px solid var(--red);color:var(--red)}
+.verdict.warning{background:var(--amber-light);border-bottom:2px solid var(--amber);color:var(--amber)}
+.verdict.good{background:var(--green-light);border-bottom:2px solid var(--green);color:var(--green)}
+.verdict.neutral{background:var(--blue-light);border-bottom:2px solid var(--blue);color:var(--blue)}
+
+/* GAME CONTENT */
+.game-scroll{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+
+/* QUARTERLY REPORT */
+.q-report{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+.q-report-title{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;color:var(--blue);margin-bottom:8px}
+.q-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}
+.q-stat{display:flex;justify-content:space-between;padding:5px 8px;background:var(--panel2);border-radius:4px;border:1px solid var(--border)}
+.q-stat-label{font-size:11px;color:var(--ink-light);font-weight:700}
+.q-stat-val{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700}
+.q-stat-val.bad{color:var(--red)}.q-stat-val.warn{color:var(--amber)}.q-stat-val.ok{color:var(--green)}.q-stat-val.neu{color:var(--ink-mid)}
+
+/* EVENT CARD */
+.event-card{background:var(--panel);border-radius:8px;padding:14px;border:2px solid;box-shadow:0 2px 8px rgba(0,0,0,0.08);animation:slideIn .25s ease}
+@keyframes slideIn{from{transform:translateY(-8px);opacity:0}to{transform:translateY(0);opacity:1}}
+.event-card.crisis{border-color:var(--red-mid);background:var(--red-light)}
+.event-card.warning{border-color:var(--amber-mid);background:var(--amber-light)}
+.event-card.opportunity{border-color:var(--green-mid);background:var(--green-light)}
+.event-card.neutral{border-color:var(--blue-mid);background:var(--blue-light)}
+.ec-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.ec-icon{font-size:26px;flex-shrink:0}
+.ec-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px}
+.event-card.crisis .ec-title{color:var(--red)}
+.event-card.warning .ec-title{color:var(--amber)}
+.event-card.opportunity .ec-title{color:var(--green)}
+.event-card.neutral .ec-title{color:var(--blue)}
+.ec-body{font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.6;margin-bottom:10px}
+.ec-pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.ec-pill{font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px}
+.ec-pill.bad{background:var(--red-mid);color:var(--red)}
+.ec-pill.good{background:var(--green-mid);color:var(--green)}
+.ec-pill.warn{background:var(--amber-mid);color:var(--amber)}
+
+/* DECISIONS */
+.decisions-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;color:var(--ink-light);margin-bottom:6px}
+.decisions{display:flex;flex-direction:column;gap:6px}
+.dec-btn{background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:10px 12px;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.dec-btn:active{transform:scale(.98)}
+.dec-btn .di{font-size:22px;flex-shrink:0}
+.dec-btn .dt{flex:1}
+.dec-btn .dn{font-size:13px;font-weight:700;color:var(--ink)}
+.dec-btn .de{font-size:11px;color:var(--ink-light);margin-top:2px}
+.dec-btn .dtag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0;white-space:nowrap}
+.dec-btn.austerity{border-left:4px solid var(--amber)}.dec-btn.austerity .dtag{background:var(--amber-light);color:var(--amber)}
+.dec-btn.tax{border-left:4px solid var(--red)}.dec-btn.tax .dtag{background:var(--red-light);color:var(--red)}
+.dec-btn.investment{border-left:4px solid var(--blue)}.dec-btn.investment .dtag{background:var(--blue-light);color:var(--blue)}
+.dec-btn.radical{border-left:4px solid var(--purple)}.dec-btn.radical .dtag{background:var(--purple-light);color:var(--purple)}
+.dec-btn.default{border-left:4px solid var(--border)}.dec-btn.default .dtag{background:var(--panel2);color:var(--ink-light)}
+.dec-btn.selected{box-shadow:0 0 0 2px var(--blue);border-color:var(--blue);background:var(--blue-light)}
+.dec-btn.austerity.selected{box-shadow:0 0 0 2px var(--amber);border-color:var(--amber);background:var(--amber-light)}
+.dec-btn.tax.selected{box-shadow:0 0 0 2px var(--red);border-color:var(--red);background:var(--red-light)}
+.dec-btn.investment.selected{box-shadow:0 0 0 2px var(--blue);border-color:var(--blue);background:var(--blue-light)}
+.dec-btn.radical.selected{box-shadow:0 0 0 2px var(--purple);border-color:var(--purple);background:var(--purple-light)}
+
+/* NEXT TURN BTN */
+.btn-next{width:calc(100% - 28px);margin:6px 14px 12px;background:linear-gradient(135deg,#003311,#006622);border:2px solid var(--green);color:var(--green);font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;padding:13px;border-radius:8px;cursor:pointer;transition:.2s;flex-shrink:0}
+.btn-next:disabled{opacity:.35;cursor:not-allowed}
+.btn-next:not(:disabled):active{transform:scale(.98)}
+
+/* ── EVENT OVERLAY ───────────────────────────────────────────── */
+#s-event{background:rgba(10,20,40,0.75);justify-content:center;align-items:center;padding:16px;z-index:300}
+.ev-box{background:var(--panel);border-radius:12px;padding:20px;max-width:480px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.3);animation:pop .25s ease;border-top:4px solid var(--red)}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.ev-box.opportunity{border-top-color:var(--green)}
+.ev-box.warning{border-top-color:var(--amber)}
+.ev-box.neutral{border-top-color:var(--blue)}
+.ev-icon{font-size:48px;text-align:center;margin-bottom:8px}
+.ev-type{font-size:10px;letter-spacing:3px;font-weight:700;text-align:center;text-transform:uppercase;margin-bottom:4px}
+.ev-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;text-align:center;margin-bottom:10px;line-height:1.2;color:var(--ink)}
+.ev-body{font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:12px}
+.ev-effects{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.ev-effect{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:5px;font-size:12px;font-weight:700}
+.ev-effect.bad{background:var(--red-light);color:var(--red)}
+.ev-effect.good{background:var(--green-light);color:var(--green)}
+.ev-effect.warn{background:var(--amber-light);color:var(--amber)}
+.btn-ack{width:100%;background:linear-gradient(135deg,var(--blue-dark),var(--blue));border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;padding:13px;border-radius:8px;cursor:pointer}
+.btn-ack:active{transform:scale(.98)}
+
+/* ── END SCREEN ──────────────────────────────────────────────── */
+#s-end{overflow-y:auto;background:var(--bg)}
+.end-header{padding:28px 20px 20px;text-align:center}
+.end-icon{font-size:72px;display:block;margin-bottom:10px;animation:float 2s ease-in-out infinite}
+.end-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,8vw,56px);letter-spacing:4px;margin-bottom:6px}
+.end-title.win{color:var(--green)}
+.end-title.lose{color:var(--red)}
+.end-title.draw{color:var(--amber)}
+.end-sub{font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.7;max-width:480px;margin:0 auto}
+.end-body{padding:0 16px 24px;max-width:560px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px}
+.end-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.end-stat{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center}
+.end-stat .esv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}
+.end-stat .esl{font-size:10px;letter-spacing:1px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.end-log{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:12px}
+.end-log-title{font-size:10px;letter-spacing:2px;font-weight:700;color:var(--ink-light);text-transform:uppercase;margin-bottom:8px}
+.end-log-item{font-size:11px;font-weight:600;color:var(--ink-mid);padding:3px 0;border-bottom:1px solid var(--border);line-height:1.4}
+.end-log-item:last-child{border-bottom:none}
+.btn-again{width:100%;background:linear-gradient(135deg,var(--blue-dark),var(--blue));border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;padding:14px;border-radius:8px;cursor:pointer}
+.btn-again:active{transform:scale(.98)}
+
+/* MOBILE NAV FIX */
+@media(max-width:768px){
+  .top-nav{padding:0 8px;overflow-x:auto;flex-wrap:nowrap}
+  .top-nav::-webkit-scrollbar{display:none}
+  .nav-brand span{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ TITLE ═══ -->
+<div id="s-title" class="screen active">
+
+  <nav class="top-nav">
+    <a class="nav-brand" href="index.html">
+      <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+      <span>UK-DEBT.INFO</span>
+    </a>
+    <div class="nav-right">
+      <a href="save-the-uk.html">📊 Simulator</a>
+      <a href="index.html">← Home</a>
+    </div>
+  </nav>
+
+  <div class="title-hero">
+    <span class="title-flag">🇬🇧</span>
+    <div class="title-main">CHANCELLOR</div>
+    <div class="title-sub">Can You Save the UK?</div>
+    <div class="title-kpis">
+      <div class="tkpi"><div class="tv">£2.92tn</div><div class="tl">National Debt</div></div>
+      <div class="tkpi"><div class="tv">94% GDP</div><div class="tl">Debt Ratio</div></div>
+      <div class="tkpi"><div class="tv">£132bn</div><div class="tl">Annual Deficit</div></div>
+      <div class="tkpi"><div class="tv">274%</div><div class="tl">OBR Forecast 2074</div></div>
+    </div>
+  </div>
+
+  <div class="title-body">
+    <p class="title-intro">
+      You have just been appointed Chancellor of the Exchequer. You have inherited the worst public finances since World War II — debt at 94% of GDP, a £132bn annual deficit and interest payments of £110bn a year. You have <strong>five years</strong> and 20 quarterly decisions. The OBR is watching. The markets are watching. Can you turn it around?
+    </p>
+
+    <div class="title-stats-grid">
+      <div class="tsg danger"><div class="tv">94% GDP</div><div class="tl">Current Debt</div></div>
+      <div class="tsg danger"><div class="tv">£132bn</div><div class="tl">Annual Deficit</div></div>
+      <div class="tsg warn"><div class="tv">3.5%</div><div class="tl">CPI Inflation</div></div>
+      <div class="tsg warn"><div class="tv">52%</div><div class="tl">Approval Rating</div></div>
+    </div>
+
+    <div class="title-objectives">
+      <div class="obj-section-title win">🎯 Win — All Three Required After 5 Years</div>
+      <div class="obj-row"><span class="obj-icon">📉</span>Debt below 80% of GDP</div>
+      <div class="obj-row"><span class="obj-icon">📊</span>Inflation below 4%</div>
+      <div class="obj-row"><span class="obj-icon">🗳️</span>Approval rating above 30%</div>
+      <div class="obj-section-title lose" style="margin-top:10px">💀 Instant Game Over</div>
+      <div class="obj-row"><span class="obj-icon">💸</span>Debt above 200% GDP — IMF takeover</div>
+      <div class="obj-row"><span class="obj-icon">🔥</span>Inflation above 20% — Weimar scenario</div>
+      <div class="obj-row"><span class="obj-icon">📉</span>Approval below 15% — vote of no confidence</div>
+    </div>
+
+    <button class="btn-start" onclick="startGame()">▶ ENTER DOWNING STREET</button>
+    <p class="title-privacy">🔒 No data collected &nbsp;·&nbsp; No tracking &nbsp;·&nbsp; Works offline &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; Based on real OBR data</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ GAME ═══ -->
+<div id="s-game" class="screen">
+
+  <!-- HUD -->
+  <div class="hud">
+    <div class="hud-row1">
+      <div class="hud-date" id="hudDate">Q1 2027 — YEAR 1</div>
+      <div class="hud-turn" id="hudTurn">Turn 1 of 20</div>
+    </div>
+    <div class="meters">
+      <div class="mtr">
+        <div class="mtr-top">
+          <span class="mtr-label">Debt / GDP</span>
+          <span class="mtr-val" id="mv_debt" style="color:var(--red)">94%</span>
+        </div>
+        <div class="mtr-bar"><div class="mtr-fill" id="mf_debt" style="width:47%;background:linear-gradient(90deg,var(--green),var(--amber),var(--red))"></div></div>
+      </div>
+      <div class="mtr">
+        <div class="mtr-top">
+          <span class="mtr-label">Inflation</span>
+          <span class="mtr-val" id="mv_cpi" style="color:var(--amber)">3.5%</span>
+        </div>
+        <div class="mtr-bar"><div class="mtr-fill" id="mf_cpi" style="width:18%;background:linear-gradient(90deg,var(--blue),var(--amber),var(--red))"></div></div>
+      </div>
+      <div class="mtr">
+        <div class="mtr-top">
+          <span class="mtr-label">Approval</span>
+          <span class="mtr-val" id="mv_app" style="color:var(--green)">52%</span>
+        </div>
+        <div class="mtr-bar"><div class="mtr-fill" id="mf_app" style="width:52%;background:linear-gradient(90deg,var(--red),var(--amber),var(--green))"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT STRIP -->
+  <div class="verdict neutral" id="verdict">
+    📋 Choose a policy action below then advance the quarter.
+  </div>
+
+  <!-- SCROLLABLE CONTENT -->
+  <div class="game-scroll" id="gameScroll"></div>
+
+  <!-- NEXT TURN -->
+  <button class="btn-next" id="btnNext" onclick="nextTurn()" disabled>
+    ADVANCE TO NEXT QUARTER →
+  </button>
+
+</div>
+
+<!-- ══════════════════════════════════ EVENT OVERLAY ═══ -->
+<div id="s-event" class="screen">
+  <div class="ev-box" id="evBox">
+    <div class="ev-icon" id="evIcon">⚡</div>
+    <div class="ev-type" id="evType">BREAKING NEWS</div>
+    <div class="ev-title" id="evTitle">EVENT</div>
+    <div class="ev-body" id="evBody">Description</div>
+    <div class="ev-effects" id="evEffects"></div>
+    <button class="btn-ack" onclick="ackEvent()">ACKNOWLEDGE & CONTINUE</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ END ═══ -->
+<div id="s-end" class="screen">
+  <nav class="top-nav">
+    <a class="nav-brand" href="index.html">
+      <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+      <span>UK-DEBT.INFO</span>
+    </a>
+  </nav>
+  <div class="end-header">
+    <span class="end-icon" id="endIcon">🏆</span>
+    <div class="end-title" id="endTitle">RESULT</div>
+    <div class="end-sub" id="endSub">Summary</div>
+  </div>
+  <div class="end-body">
+    <div class="end-stats">
+      <div class="end-stat"><div class="esv" id="es_debt">--%</div><div class="esl">Final Debt/GDP</div></div>
+      <div class="end-stat"><div class="esv" id="es_cpi">--%</div><div class="esl">Final Inflation</div></div>
+      <div class="end-stat"><div class="esv" id="es_app">--%</div><div class="esl">Final Approval</div></div>
+    </div>
+    <div class="end-log">
+      <div class="end-log-title">📜 Your Record in Office</div>
+      <div id="endLog"></div>
+    </div>
+    <button class="btn-again" onclick="resetGame()">↺ PLAY AGAIN</button>
+    <a href="save-the-uk.html" style="display:block;text-align:center;padding:12px;font-size:13px;font-weight:700;color:var(--blue);text-decoration:none;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:8px">
+      📊 Try the full interactive fiscal simulator →
+    </a>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// CHANCELLOR GAME ENGINE
+// ════════════════════════════════════════════════════════
+
+var G = {
+  turn:1, maxTurns:20,
+  debt:94, cpi:3.5, approval:52,
+  gdpGrowth:1.5, giltRate:4.5, deficit:4.5,
+  selectedDecision:null, history:[], pendingEvent:null, usedDecisions:[], usedEvents:[]
+};
+
+// ── DECISIONS ─────────────────────────────────────────
+var DECISIONS = [
+  // ── AUSTERITY — one-time structural reforms ──
+  {id:'cut_welfare',type:'austerity',icon:'✂️',oneTime:true,
+   name:'Cut welfare spending 5%',
+   effect:'Saves £16bn/yr. Reduces deficit. Unpopular.',
+   tag:'AUSTERITY',
+   apply:function(){G.deficit-=0.5;G.approval-=4;G.cpi-=0.1;addLog('Welfare cut 5%: saves £16bn.');}},
+  {id:'freeze_pay',type:'austerity',icon:'🧊',oneTime:true,
+   name:'Freeze public sector pay',
+   effect:'Saves £8bn/yr. Triggers strike action.',
+   tag:'AUSTERITY',
+   apply:function(){G.deficit-=0.25;G.approval-=5;G.gdpGrowth-=0.1;addLog('Pay freeze: saves £8bn. Strikes.');}},
+  {id:'pension_age',type:'austerity',icon:'👴',oneTime:true,
+   name:'Raise pension age to 69',
+   effect:'Saves £18bn long-term. Very unpopular.',
+   tag:'AUSTERITY',
+   apply:function(){G.deficit-=0.3;G.approval-=7;addLog('Pension age 69: saves £18bn.');}},
+  {id:'pension_age_70',type:'austerity',icon:'👴',oneTime:true,
+   name:'Raise pension age further to 70',
+   effect:'Saves another £9bn. Extremely unpopular.',
+   tag:'AUSTERITY',
+   prereq:'pension_age',
+   apply:function(){G.deficit-=0.3;G.approval-=9;addLog('Pension age 70: saves further £9bn. Outrage.');}},
+  {id:'nhs_efficiency',type:'austerity',icon:'🏥',oneTime:true,
+   name:'NHS efficiency programme (−3%)',
+   effect:'Saves £6bn. Waiting lists grow.',
+   tag:'AUSTERITY',
+   apply:function(){G.deficit-=0.2;G.approval-=3;addLog('NHS efficiency: saves £6bn.');}},
+  {id:'nhs_cut2',type:'austerity',icon:'🏥',oneTime:true,
+   name:'Deeper NHS cuts (−8%)',
+   effect:'Saves £16bn but crisis point.',
+   tag:'AUSTERITY',
+   prereq:'nhs_efficiency',
+   apply:function(){G.deficit-=0.5;G.approval-=8;addLog('NHS deep cuts: saves £16bn. System at breaking point.');}},
+  {id:'abolish_aid',type:'austerity',icon:'🌍',oneTime:true,
+   name:'Cut foreign aid 50%',
+   effect:'Saves £5.6bn. International criticism.',
+   tag:'AUSTERITY',
+   apply:function(){G.deficit-=0.18;G.approval-=2;addLog('Foreign aid cut 50%: saves £5.6bn.');}},
+  {id:'sell_bbc',type:'austerity',icon:'📺',oneTime:true,
+   name:'Privatise the BBC',
+   effect:'One-off £5bn. Saves £4bn/yr licence fee.',
+   tag:'AUSTERITY',
+   apply:function(){G.deficit-=0.3;G.approval-=6;addLog('BBC privatised: £5bn one-off. Culture wars erupt.');}},
+  {id:'privatise_rail',type:'austerity',icon:'🚂',oneTime:true,
+   name:'Re-privatise nationalised railways',
+   effect:'One-off £8bn. Saves £2bn/yr subsidy.',
+   tag:'AUSTERITY',
+   apply:function(){G.deficit-=0.25;G.approval-=4;addLog('Railways re-privatised: £8bn raised.');}},
+  {id:'freeze_benefits',type:'austerity',icon:'📋',oneTime:true,
+   name:'Freeze benefit uprating for 2 years',
+   effect:'Saves £12bn/yr. Real-terms cut for claimants.',
+   tag:'AUSTERITY',
+   apply:function(){G.deficit-=0.4;G.approval-=5;addLog('Benefits frozen: saves £12bn. Poverty rising.');}},
+  // ── TAX RISES — one-time policy changes ──
+  {id:'it_rise',type:'tax',icon:'💷',oneTime:true,
+   name:'Income tax +2p (basic rate 22p)',
+   effect:'Raises £13bn/yr. Median earner pays £520 more.',
+   tag:'TAX RISE',
+   apply:function(){G.deficit-=0.4;G.approval-=5;addLog('IT +2p: raises £13bn.');}},
+  {id:'it_rise2',type:'tax',icon:'💷',oneTime:true,
+   name:'Income tax further +2p (to 24p)',
+   effect:'Raises another £13bn. Now 24p basic rate.',
+   tag:'TAX RISE',
+   prereq:'it_rise',
+   apply:function(){G.deficit-=0.4;G.approval-=6;addLog('IT +4p total: raises further £13bn. Taxpayer anger.');}},
+  {id:'vat_rise',type:'tax',icon:'🛒',oneTime:true,
+   name:'VAT +2.5% (to 22.5%)',
+   effect:'Raises £20bn/yr. Regressive.',
+   tag:'TAX RISE',
+   apply:function(){G.deficit-=0.6;G.approval-=6;G.cpi+=0.3;addLog('VAT +2.5%: raises £20bn. CPI +0.3%.');}},
+  {id:'wealth_tax',type:'tax',icon:'💎',oneTime:true,
+   name:'1% annual wealth tax (assets >£2m)',
+   effect:'Raises ~£12bn. Divisive.',
+   tag:'TAX RISE',
+   apply:function(){G.deficit-=0.35;G.approval+=1;G.gdpGrowth-=0.15;addLog('Wealth tax: raises £12bn.');}},
+  {id:'ni_rise',type:'tax',icon:'👷',oneTime:true,
+   name:'Employer NI +2% (to 17%)',
+   effect:'Raises £16bn but suppresses wages.',
+   tag:'TAX RISE',
+   apply:function(){G.deficit-=0.48;G.approval-=4;G.gdpGrowth-=0.1;addLog('NI +2%: raises £16bn. Wages squeezed.');}},
+  {id:'fuel_duty',type:'tax',icon:'⛽',oneTime:true,
+   name:'Unfreeze fuel duty (+5p/litre)',
+   effect:'Raises £3bn/yr. Long overdue.',
+   tag:'TAX RISE',
+   apply:function(){G.deficit-=0.1;G.approval-=3;G.cpi+=0.1;addLog('Fuel duty +5p: raises £3bn.');}},
+  {id:'council_tax',type:'tax',icon:'🏠',oneTime:true,
+   name:'Council tax reform — revalue bands',
+   effect:'Raises £8bn/yr from higher-value properties.',
+   tag:'TAX RISE',
+   apply:function(){G.deficit-=0.25;G.approval-=4;addLog('Council tax revalued: raises £8bn. Middle England furious.');}},
+  {id:'bank_levy',type:'tax',icon:'🏦',oneTime:true,
+   name:'New bank windfall levy',
+   effect:'One-off £6bn from excess bank profits.',
+   tag:'TAX RISE',
+   apply:function(){G.deficit-=0.2;G.approval+=2;addLog('Bank levy: one-off £6bn. Popular with public.');}},
+  // ── INVESTMENT / GROWTH ──
+  {id:'planning',type:'investment',icon:'🏗️',oneTime:true,
+   name:'Major planning reform',
+   effect:'£2bn upfront. +0.3% GDP growth in 2 years.',
+   tag:'GROWTH',
+   apply:function(){G.deficit+=0.06;G.gdpGrowth+=0.15;G.approval+=3;addLog('Planning reform: GDP boost building.');}},
+  {id:'ai_invest',type:'investment',icon:'🤖',oneTime:true,
+   name:'National AI investment (£20bn)',
+   effect:'Costs £20bn. Long-term productivity boost.',
+   tag:'INVESTMENT',
+   apply:function(){G.deficit+=0.6;G.gdpGrowth+=0.12;G.approval+=4;addLog('AI programme: £20bn. Productivity rising.');}},
+  {id:'trade',type:'investment',icon:'🤝',oneTime:true,
+   name:'Aggressive trade deal programme',
+   effect:'+0.2% GDP if deals ratified. One-time.',
+   tag:'GROWTH',
+   apply:function(){G.gdpGrowth+=0.1;G.approval+=2;addLog('Trade deals signed. GDP boost phasing in.');}},
+  {id:'green_energy',type:'investment',icon:'🌱',oneTime:true,
+   name:'Fast-track renewable energy (£15bn)',
+   effect:'Costs £15bn. Reduces energy costs long-term.',
+   tag:'INVESTMENT',
+   apply:function(){G.deficit+=0.45;G.cpi-=0.1;G.approval+=3;addLog('Green energy: £15bn. Future energy security.');}},
+  {id:'house_build',type:'investment',icon:'🏘️',oneTime:true,
+   name:'1.5m homes building programme',
+   effect:'£10bn/yr cost. Lower rents. +GDP.',
+   tag:'INVESTMENT',
+   apply:function(){G.deficit+=0.3;G.gdpGrowth+=0.08;G.approval+=4;addLog('House building: 1.5m target. Rents stabilising.');}},
+  {id:'nhs_invest',type:'investment',icon:'💊',oneTime:true,
+   name:'Major NHS capital investment (£25bn)',
+   effect:'Costs £25bn but reduces long-term demand.',
+   tag:'INVESTMENT',
+   apply:function(){G.deficit+=0.75;G.approval+=5;G.gdpGrowth+=0.05;addLog('NHS investment: £25bn. Productivity benefit long-term.');}},
+  // ── RADICAL ──
+  {id:'print',type:'radical',icon:'🖨️',oneTime:false,
+   name:'QE — instruct BoE to finance deficit',
+   effect:'Short-term relief. HIGH inflation risk.',
+   tag:'⚠️ RADICAL',
+   apply:function(){G.deficit-=1.5;G.cpi+=1.2;G.approval-=3;G.giltRate-=0.5;addLog('MONEY PRINTING: CPI surging!');}},
+  {id:'imf',type:'radical',icon:'🌐',oneTime:true,
+   name:'Pre-emptive IMF deal',
+   effect:'Forces 8% deficit cut. Massive approval hit.',
+   tag:'⚠️ RADICAL',
+   apply:function(){G.deficit-=2.5;G.approval-=18;G.gdpGrowth-=0.5;addLog('IMF DEAL: brutal cuts imposed.');}},
+  {id:'nothing',type:'default',icon:'😴',oneTime:false,
+   name:'Hold current policy — no change',
+   effect:'No immediate pain. Deficit keeps growing.',
+   tag:'HOLD',
+   apply:function(){addLog('No change. Deficit continues.');}},
+];
+
+// ── RANDOM EVENTS ─────────────────────────────────────
+var EVENTS = [
+  // ── ECONOMIC CRISES ──
+  {id:'pandemic',icon:'🦠',type:'crisis',
+   title:'PANDEMIC EMERGENCY',
+   body:'A novel respiratory virus has spread globally. Emergency support packages required. GDP falls sharply.',
+   effects:[{t:'Emergency spend: +£120bn deficit',c:'bad'},{t:'GDP growth: −8% this year',c:'bad'},{t:'Approval: +5 (rally effect)',c:'good'}],
+   apply:function(){G.deficit+=4.0;G.gdpGrowth-=8;G.approval+=5;G.cpi-=0.5;addLog('PANDEMIC: £120bn emergency spend. GDP −8%.');}},
+  {id:'gilt_crisis',icon:'📈',type:'crisis',
+   title:'GILT MARKET CRISIS',
+   body:'Markets have lost confidence in UK debt. Gilt yields spike sharply. The BoE is forced to intervene to prevent a doom loop.',
+   effects:[{t:'Gilt yield: +2%',c:'bad'},{t:'Interest bill: +£36bn/yr',c:'bad'},{t:'Approval: −10',c:'bad'}],
+   apply:function(){G.giltRate+=2;G.deficit+=1.2;G.approval-=10;addLog('GILT CRISIS: yields spike +2%. Interest costs surge.');}},
+  {id:'ai_shock',icon:'🤖',type:'crisis',
+   title:'AI UNEMPLOYMENT SHOCK',
+   body:'AI automation has eliminated 2.5 million white-collar jobs in 18 months. Benefits surge. Income tax receipts collapse. "What is UBI?" trends nationally.',
+   effects:[{t:'Tax receipts: −£40bn',c:'bad'},{t:'Unemployment: +3.5%',c:'bad'},{t:'Welfare bill: +£35bn',c:'bad'}],
+   apply:function(){G.deficit+=2.5;G.gdpGrowth-=1.2;G.approval-=5;addLog('AI SHOCK: 2.5m jobs gone. Tax base collapsing.');}},
+  {id:'sterling',icon:'💷',type:'crisis',
+   title:'STERLING CRISIS',
+   body:'The pound has fallen 22% against the dollar. Import costs are surging. Emergency BoE rate rises required. The Daily Mail blames you personally.',
+   effects:[{t:'Inflation: +3.5%',c:'bad'},{t:'BoE rate: +1.5%',c:'bad'},{t:'Approval: −8',c:'bad'}],
+   apply:function(){G.cpi+=3.5;G.giltRate+=1.5;G.deficit+=0.8;G.approval-=8;addLog('STERLING CRISIS: pound −22%. Inflation surge.');}},
+  {id:'bank_fail',icon:'🏦',type:'crisis',
+   title:'MAJOR BANK FAILURE',
+   body:'The UK third largest bank has collapsed after losses on commercial property loans. The government guarantee triggered. Depositors protected, taxpayers exposed.',
+   effects:[{t:'Contingent liability: £60bn',c:'bad'},{t:'GDP growth: −0.6%',c:'bad'},{t:'Approval: −8',c:'bad'}],
+   apply:function(){G.deficit+=2.0;G.gdpGrowth-=0.6;G.approval-=8;addLog('BANK FAILURE: £60bn liability. Credit markets freeze.');}},
+  {id:'war',icon:'⚔️',type:'crisis',
+   title:'WAR IN EUROPE',
+   body:'Armed conflict has broken out on NATO eastern flank. The UK is obligated to increase defence spending immediately and support allied nations.',
+   effects:[{t:'Defence: +£25bn/yr',c:'bad'},{t:'Energy costs surge',c:'bad'},{t:'Inflation: +1.5%',c:'bad'}],
+   apply:function(){G.deficit+=0.85;G.cpi+=1.5;G.approval-=3;addLog('WAR: defence surge, energy shock.');}},
+  {id:'trade_war',icon:'🚢',type:'warning',
+   title:'GLOBAL TRADE WAR',
+   body:'Major trading blocs have imposed tariffs on UK exports. The OBR cuts growth forecasts. Port queues return. Economists argue about whose fault it is.',
+   effects:[{t:'Exports: −12%',c:'bad'},{t:'GDP growth: −0.8%',c:'bad'},{t:'CPI: +0.6%',c:'bad'}],
+   apply:function(){G.gdpGrowth-=0.8;G.cpi+=0.6;G.deficit+=0.3;G.approval-=4;addLog('TRADE WAR: exports fall. OBR cuts forecasts.');}},
+  {id:'climate',icon:'🌊',type:'warning',
+   title:'MAJOR CLIMATE DISASTER',
+   body:'Catastrophic flooding has hit the Thames Valley and large parts of East Anglia. Insurance industry partially covers costs — you cover the rest.',
+   effects:[{t:'Emergency spend: £12bn',c:'bad'},{t:'GDP: −0.3%',c:'bad'},{t:'Approval: −2',c:'bad'}],
+   apply:function(){G.deficit+=0.4;G.gdpGrowth-=0.3;G.approval-=2;addLog('FLOOD DISASTER: £12bn emergency spend.');}},
+  // ── POSITIVE EVENTS ──
+  {id:'rate_cuts',icon:'📉',type:'opportunity',
+   title:'GLOBAL RATE CUT CYCLE',
+   body:'Global inflation has finally been tamed. Central banks worldwide are cutting rates. UK gilt yields fall sharply. The Chancellor is briefly popular.',
+   effects:[{t:'Gilt yield: −1.5%',c:'good'},{t:'Interest bill: −£28bn/yr',c:'good'},{t:'GDP growth: +0.5%',c:'good'}],
+   apply:function(){G.giltRate-=1.5;G.deficit-=0.9;G.gdpGrowth+=0.5;G.approval+=4;addLog('RATE CUTS: borrowing costs ease significantly.');}},
+  {id:'boom',icon:'🚀',type:'opportunity',
+   title:'PRODUCTIVITY SURGE',
+   body:'A combination of AI adoption, planning reform and new trade deals has triggered an unexpected productivity boom. The OBR upgrades its forecasts for the first time in a decade.',
+   effects:[{t:'GDP growth: +1.5%',c:'good'},{t:'Tax revenues: +£28bn',c:'good'},{t:'Approval: +8',c:'good'}],
+   apply:function(){G.gdpGrowth+=1.5;G.deficit-=0.9;G.approval+=8;addLog('PRODUCTIVITY BOOM: growth exceeds all forecasts.');}},
+  {id:'windfall',icon:'⚡',type:'opportunity',
+   title:'NORTH SEA ENERGY WINDFALL',
+   body:'New North Sea discoveries combined with high global energy prices generate an unexpected £22bn windfall for government.',
+   effects:[{t:'One-off revenue: +£22bn',c:'good'},{t:'Energy security improves',c:'good'},{t:'Approval: +5',c:'good'}],
+   apply:function(){G.deficit-=0.7;G.approval+=5;addLog('ENERGY WINDFALL: £22bn North Sea revenues.');}},
+  // ── POLITICAL SCANDALS ──
+  {id:'cv_scandal',icon:'📄',type:'crisis',
+   title:'CHANCELLOR CAUGHT LYING ON CV',
+   body:'The press have revealed you falsely claimed a first-class degree from Oxford. You actually attended a polytechnic in Wolverhampton. A full press conference is required.',
+   effects:[{t:'Approval: −12',c:'bad'},{t:'Political capital burned',c:'bad'},{t:'Opposition demands resignation',c:'bad'}],
+   apply:function(){G.approval-=12;addLog('CV SCANDAL: caught lying about degree. Approval collapses.');}},
+  {id:'spouse_scandal',icon:'💼',type:'crisis',
+   title:'SPOUSE LANDS JOB AT GOLDMAN WEAPONS BANK',
+   body:'Your husband has been appointed to the board of GoldMorgan Defence Partners — the same week you approved a £6bn weapons procurement contract with their subsidiary. Purely coincidental, you insist.',
+   effects:[{t:'Approval: −10',c:'bad'},{t:'Sleaze headlines for 3 weeks',c:'bad'},{t:'Select committee inquiry launched',c:'bad'}],
+   apply:function(){G.approval-=10;addLog('SPOUSE SCANDAL: conflict of interest headlines. Select committee launched.');}},
+  {id:'affair',icon:'💔',type:'crisis',
+   title:'TABLOID AFFAIR STORY',
+   body:'The Sunday Mirror has a story. A lobbyist, a private members club and your expense account. Your press secretary resigns. You remain.',
+   effects:[{t:'Approval: −8',c:'bad'},{t:'Distracted from fiscal work',c:'bad'}],
+   apply:function(){G.approval-=8;addLog('TABLOID SCANDAL: affair story. Press secretary gone.');}},
+  {id:'buy_popularity',icon:'🎁',type:'warning',
+   title:'BACKBENCHERS DEMAND GIVEAWAY',
+   body:'With polls collapsing, 47 of your own MPs have written demanding an emergency cost-of-living payment. You can pay up — or hold the fiscal line and risk a rebellion.',
+   effects:[{t:'Spend £8bn to boost approval',c:'warn'},{t:'Or refuse and risk rebellion',c:'warn'}],
+   apply:function(){
+     if(Math.random()>0.45){G.deficit+=0.25;G.approval+=7;addLog('GIVEAWAY: £8bn cost-of-living payment. Polls recover slightly.');}
+     else{G.approval-=5;addLog('HELD FIRM: refused giveaway. Backbench rebellion brewing.');}
+   }},
+  {id:'newspaper_attack',icon:'📰',type:'crisis',
+   title:'PRESS BARON DECLARES WAR',
+   body:'The owner of four national newspapers has turned against you after you refused to water down press regulation. Every front page is now hostile. Every statistic twisted.',
+   effects:[{t:'Approval: −7',c:'bad'},{t:'Every policy seen through hostile lens',c:'bad'}],
+   apply:function(){G.approval-=7;addLog('PRESS WAR: newspaper baron declares war. Every story negative.');}},
+  // ── GEOPOLITICAL COMEDY ──
+  {id:'gold_golf_club',icon:'⛳',type:'opportunity',
+   title:'GOLD GOLF CLUB DIPLOMACY',
+   body:'The US President has been gifted a gold-plated driver by the King during a state visit. Delighted, he has agreed to fast-track a UK-US trade deal. Markets surge. Nobody asks where the golf club came from.',
+   effects:[{t:'GDP growth: +0.4%',c:'good'},{t:'Trade deal signed',c:'good'},{t:'Approval: +4',c:'good'}],
+   apply:function(){G.gdpGrowth+=0.4;G.deficit-=0.2;G.approval+=4;addLog('GOLF CLUB DIPLOMACY: US trade deal fast-tracked. GDP boost.');}},
+  {id:'royal_tour',icon:'👑',type:'opportunity',
+   title:'ROYAL TRADE MISSION SUCCEEDS',
+   body:'A Royal tour of Southeast Asia has unlocked £12bn of inward investment commitments. The Chancellor had nothing to do with it but takes full credit at PMQs.',
+   effects:[{t:'Inward investment: +£12bn',c:'good'},{t:'GDP growth: +0.2%',c:'good'},{t:'Approval: +3',c:'good'}],
+   apply:function(){G.gdpGrowth+=0.2;G.deficit-=0.15;G.approval+=3;addLog('ROYAL TOUR: £12bn inward investment. Chancellor claims credit.');}},
+  {id:'world_cup',icon:'⚽',type:'opportunity',
+   title:'ENGLAND WIN THE WORLD CUP',
+   body:'It is coming home. Genuinely. Consumer confidence has surged to a 30-year high. Spending is up. Even the OBR revises its forecasts upward. You had nothing to do with this either.',
+   effects:[{t:'Consumer confidence surge',c:'good'},{t:'GDP growth: +0.3%',c:'good'},{t:'Approval: +9',c:'good'}],
+   apply:function(){G.gdpGrowth+=0.3;G.approval+=9;G.deficit-=0.1;addLog('WORLD CUP: England win. Consumer confidence explodes. GDP up.');}},
+  {id:'tech_giant',icon:'💻',type:'opportunity',
+   title:'TECH GIANT CHOOSES UK FOR HQ',
+   body:'A major US technology company announces it is moving its European headquarters to London, bringing 15,000 high-paying jobs and £4bn of annual corporation tax.',
+   effects:[{t:'Corporation tax: +£4bn/yr',c:'good'},{t:'Unemployment: −0.2%',c:'good'},{t:'Approval: +5',c:'good'}],
+   apply:function(){G.deficit-=0.13;G.gdpGrowth+=0.15;G.approval+=5;addLog('TECH HQ: 15,000 jobs. £4bn corp tax annually.');}},
+  {id:'refugee_crisis',icon:'🚤',type:'warning',
+   title:'CHANNEL CROSSING CRISIS',
+   body:'Record numbers of small boat crossings have created a political crisis. You must choose: expensive offshore processing (£4bn) or doing nothing and watching approval collapse.',
+   effects:[{t:'Costs £4bn OR approval −10',c:'warn'},{t:'No good options',c:'warn'}],
+   apply:function(){
+     if(Math.random()>0.5){G.deficit+=0.13;G.approval-=3;addLog('REFUGEE POLICY: £4bn offshore processing. Partial approval hit.');}
+     else{G.approval-=10;addLog('REFUGEE CRISIS: no action. Approval collapse. Front pages relentless.');}
+   }},
+  {id:'inflation_spike',icon:'🔥',type:'warning',
+   title:'UNEXPECTED INFLATION SPIKE',
+   body:'Global food and energy prices have surged. CPI hits 7.5%. The BoE demands emergency action. Your cost-of-living messaging is in ruins.',
+   effects:[{t:'CPI: +2.5%',c:'bad'},{t:'Real wages fall',c:'bad'},{t:'Approval: −6',c:'bad'}],
+   apply:function(){G.cpi+=2.5;G.approval-=6;addLog('INFLATION SPIKE: CPI +2.5%. Real wages falling.');}},
+  {id:'election_incoming',icon:'🗳️',type:'warning',
+   title:'SNAP ELECTION RUMOURS',
+   body:'The PM is considering a snap election. Your party demands you produce something popular — immediately. The phrase "rabbit from a hat" is used in cabinet.',
+   effects:[{t:'Political pressure to spend',c:'warn'},{t:'Approval needs to be above 40% to survive',c:'warn'}],
+   apply:function(){
+     if(G.approval>40){G.approval+=4;addLog('ELECTION RUMOURS: strong position. PM backs down.');}
+     else{G.approval-=6;G.deficit+=0.2;addLog('ELECTION PANIC: emergency spending announcement. Credibility hit.');}
+   }},
+  {id:'nhs_strike',icon:'🏥',type:'crisis',
+   title:'NHS STRIKE — LONGEST IN HISTORY',
+   body:'Doctors, nurses and paramedics have all walked out simultaneously in the longest NHS strike in history. Waiting lists hit 12 million. The optics are catastrophic.',
+   effects:[{t:'NHS crisis: approval −9',c:'bad'},{t:'Economic damage: −0.2% GDP',c:'bad'},{t:'Settlement will cost £6bn',c:'bad'}],
+   apply:function(){G.approval-=9;G.gdpGrowth-=0.2;G.deficit+=0.2;addLog('NHS STRIKE: longest ever. Settlement costs £6bn.');}},
+  {id:'local_council_bankrupt',icon:'🏛️',type:'warning',
+   title:'MAJOR COUNCIL BANKRUPTCY',
+   body:'Birmingham, the UK largest council, has issued a Section 114 notice — effectively declaring bankruptcy. Six more are close behind. Central government must act.',
+   effects:[{t:'Bailout cost: £3bn',c:'bad'},{t:'More councils wobbling',c:'bad'},{t:'Approval: −3',c:'bad'}],
+   apply:function(){G.deficit+=0.1;G.approval-=3;addLog('COUNCIL BANKRUPT: £3bn bailout. More at risk.');}},
+  {id:'pm_resigns',icon:'🚪',type:'crisis',
+   title:'THE PRIME MINISTER RESIGNS',
+   body:'The PM has resigned after a confidence vote. You are now running the government AND managing a leadership election. The markets are unimpressed. Gilt yields tick upward.',
+   effects:[{t:'Political chaos: approval −7',c:'bad'},{t:'Gilt yield: +0.5%',c:'bad'},{t:'Nothing gets done for 3 months',c:'bad'}],
+   apply:function(){G.approval-=7;G.giltRate+=0.5;G.deficit+=0.15;addLog('PM RESIGNS: political chaos. Markets nervous. Yields up.');}},
+  {id:'mini_budget',icon:'📋',type:'crisis',
+   title:'YOUR OWN MINI-BUDGET GOES WRONG',
+   body:'In a bold move to boost growth you announced unfunded tax cuts. Within 48 hours gilt yields spiked 1.5%, the pound fell 8% and the IMF issued a public rebuke. You are briefly the most famous Chancellor in the world.',
+   effects:[{t:'Gilt yield: +1.5%',c:'bad'},{t:'Pound falls 8%',c:'bad'},{t:'Approval: −15',c:'bad'}],
+   apply:function(){G.giltRate+=1.5;G.approval-=15;G.cpi+=1.0;G.deficit+=0.5;addLog('MINI-BUDGET DISASTER: markets panic. IMF intervenes. Sound familiar?');}},
+];
+
+// ── HELPERS ───────────────────────────────────────────
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+}
+function addLog(msg){G.history.push('Q'+G.turn+': '+msg);}
+function getYear(){return 2026+Math.ceil(G.turn/4);}
+function getQ(){return ((G.turn-1)%4)+1;}
+
+// ── START ─────────────────────────────────────────────
+function startGame(){
+  G={turn:1,maxTurns:20,debt:94,cpi:3.5,approval:52,
+     gdpGrowth:1.5,giltRate:4.5,deficit:4.5,
+     selectedDecision:null,history:[],pendingEvent:null,usedDecisions:[],usedEvents:[]};
+  showScreen('s-game');
+  renderTurn();
+}
+function resetGame(){showScreen('s-title');}
+
+// ── UPDATE HUD ────────────────────────────────────────
+function updateHUD(){
+  document.getElementById('hudDate').textContent='Q'+getQ()+' '+getYear()+' — YEAR '+Math.ceil(G.turn/4);
+  document.getElementById('hudTurn').textContent='Turn '+G.turn+' of '+G.maxTurns;
+  // Debt
+  var dEl=document.getElementById('mv_debt');
+  dEl.textContent=G.debt.toFixed(1)+'%';
+  dEl.style.color=G.debt>150?'var(--red)':G.debt>100?'var(--amber)':'var(--green)';
+  document.getElementById('mf_debt').style.width=Math.min(G.debt/200*100,100)+'%';
+  // CPI
+  var cEl=document.getElementById('mv_cpi');
+  cEl.textContent=G.cpi.toFixed(1)+'%';
+  cEl.style.color=G.cpi>10?'var(--red)':G.cpi>5?'var(--amber)':'var(--ink-mid)';
+  document.getElementById('mf_cpi').style.width=Math.min(G.cpi/25*100,100)+'%';
+  // Approval
+  var aEl=document.getElementById('mv_app');
+  aEl.textContent=Math.round(G.approval)+'%';
+  aEl.style.color=G.approval<25?'var(--red)':G.approval<40?'var(--amber)':'var(--green)';
+  document.getElementById('mf_app').style.width=Math.min(G.approval,100)+'%';
+  // Verdict strip
+  var v=document.getElementById('verdict');
+  if(G.debt>150){v.className='verdict crisis';v.textContent='🔴 DEBT CRISIS APPROACHING — Markets watching closely. Gilt yields rising.';}
+  else if(G.cpi>8){v.className='verdict crisis';v.textContent='🔴 INFLATION EMERGENCY — Cost of living surging. BoE under pressure to hike rates.';}
+  else if(G.approval<30){v.className='verdict crisis';v.textContent='🔴 POLITICAL CRISIS — Approval at '+Math.round(G.approval)+'%. Vote of confidence possible.';}
+  else if(G.debt>100){v.className='verdict warning';v.textContent='🟡 DEBT ABOVE 100% GDP — Fiscal position deteriorating. Action needed.';}
+  else if(G.debt<85&&G.cpi<4){v.className='verdict good';v.textContent='🟢 ON TRACK — Debt and inflation under control. Keep going.';}
+  else{v.className='verdict neutral';v.textContent='📋 Choose a policy action and advance the quarter.';}
+}
+
+// ── RENDER TURN ───────────────────────────────────────
+function renderTurn(){
+  updateHUD();
+  G.selectedDecision=null;
+  document.getElementById('btnNext').disabled=true;
+  var scroll=document.getElementById('gameScroll');
+  scroll.innerHTML='';
+
+  // Quarterly report card
+  var qr=document.createElement('div');
+  qr.className='q-report';
+  qr.innerHTML='<div class="q-report-title">📊 Q'+getQ()+' '+getYear()+' — ECONOMIC REPORT</div>'+
+    '<div class="q-grid">'+
+    qRow('Debt/GDP',G.debt.toFixed(1)+'%',G.debt>100?'bad':G.debt>85?'warn':'ok')+
+    qRow('Deficit/yr','£'+Math.round(G.deficit*29.7)+'bn',G.deficit>5?'bad':G.deficit>3?'warn':'ok')+
+    qRow('Gilt Rate',G.giltRate.toFixed(2)+'%',G.giltRate>6?'bad':G.giltRate>5?'warn':'neu')+
+    qRow('GDP Growth',G.gdpGrowth.toFixed(1)+'%/yr',G.gdpGrowth<0?'bad':G.gdpGrowth<1?'warn':'ok')+
+    '</div>';
+  scroll.appendChild(qr);
+
+  // Decision card — pick 5 random options including do_nothing
+  // Filter out one-time decisions already used
+  var available = DECISIONS.filter(function(d){
+    if(d.oneTime && G.usedDecisions.indexOf(d.id) > -1) return false;
+    if(d.id === 'nothing') return false; // add separately
+    return true;
+  });
+  var pool = available.sort(function(){return Math.random()-.5}).slice(0,4);
+  pool.push(DECISIONS[DECISIONS.length-1]); // always include do_nothing
+
+  var dc=document.createElement('div');
+  dc.className='event-card neutral';
+  dc.innerHTML='<div class="ec-header"><div class="ec-icon">⚡</div>'+
+    '<div class="ec-title">BUDGET DECISION REQUIRED</div></div>'+
+    '<div class="ec-body">Choose your fiscal policy for Q'+getQ()+' '+getYear()+'. Your decision will affect debt, inflation and approval.</div>'+
+    '<div class="decisions-label">SELECT ONE ACTION:</div>'+
+    '<div class="decisions" id="decList"></div>';
+  scroll.appendChild(dc);
+
+  var list=dc.querySelector('#decList');
+  pool.forEach(function(d){
+    var btn=document.createElement('button');
+    btn.className='dec-btn '+d.type;
+    btn.innerHTML='<span class="di">'+d.icon+'</span>'+
+      '<span class="dt"><span class="dn">'+d.name+'</span>'+
+      '<span class="de">'+d.effect+'</span></span>'+
+      '<span class="dtag">'+d.tag+'</span>';
+    btn.onclick=function(){selectDecision(d,btn);};
+    list.appendChild(btn);
+  });
+  scroll.scrollTop=0;
+}
+
+function qRow(label,val,cls){
+  return '<div class="q-stat">'+
+    '<span class="q-stat-label">'+label+'</span>'+
+    '<span class="q-stat-val '+cls+'">'+val+'</span></div>';
+}
+
+function selectDecision(d,btn){
+  document.querySelectorAll('.dec-btn').forEach(function(b){b.classList.remove('selected')});
+  btn.classList.add('selected');
+  G.selectedDecision=d;
+  document.getElementById('btnNext').disabled=false;
+}
+
+// ── NEXT TURN ─────────────────────────────────────────
+function nextTurn(){
+  if(!G.selectedDecision) return;
+  // Mark one-time decisions as used
+  if(G.selectedDecision.oneTime){
+    G.usedDecisions.push(G.selectedDecision.id);
+  }
+  G.selectedDecision.apply();
+
+  // Quarterly economic drift
+  G.debt+=(G.deficit/4)*2.5 - G.debt*(G.gdpGrowth/400);
+  G.cpi+=(Math.random()-.55)*0.3;
+  G.cpi=Math.max(0.5,G.cpi);
+  G.gdpGrowth+=(Math.random()-.5)*0.2;
+  G.gdpGrowth=Math.max(-4,Math.min(5,G.gdpGrowth));
+  G.approval-=0.8+Math.random()*0.4;
+  G.approval=Math.max(0,Math.min(100,G.approval));
+  // Interest feedback
+  G.deficit+=G.debt/100*G.giltRate/100*29.7/4*0.08;
+
+  if(checkLose()) return;
+
+  // Random event — 30% chance, higher if in trouble
+  var evtChance=0.28+(G.debt>120?0.12:0)+(G.cpi>6?0.08:0);
+  if(Math.random()<evtChance){
+    var used=G.history.map(function(h){return h});
+    var eligible=EVENTS.filter(function(e){
+      return !used.some(function(h){return h.indexOf(e.id)>-1});
+    });
+    if(eligible.length===0) eligible=EVENTS;
+    var evt=eligible[Math.floor(Math.random()*eligible.length)];
+    G.pendingEvent=evt;
+    G.turn++;
+    showEventOverlay(evt);
+    return;
+  }
+
+  G.turn++;
+  if(G.turn>G.maxTurns){endGame();return;}
+  renderTurn();
+}
+
+function checkLose(){
+  if(G.debt>=200){endGame('IMF');return true;}
+  if(G.cpi>=20){endGame('WEIMAR');return true;}
+  if(G.approval<=15){endGame('OUSTED');return true;}
+  return false;
+}
+
+// ── EVENT OVERLAY ─────────────────────────────────────
+function showEventOverlay(evt){
+  var box=document.getElementById('evBox');
+  box.className='ev-box '+(evt.type==='opportunity'?'opportunity':evt.type==='warning'?'warning':evt.type==='neutral'?'neutral':'');
+  document.getElementById('evIcon').textContent=evt.icon;
+  document.getElementById('evType').textContent=evt.type.toUpperCase()+' EVENT';
+  document.getElementById('evType').style.color=
+    evt.type==='crisis'?'var(--red)':evt.type==='opportunity'?'var(--green)':evt.type==='warning'?'var(--amber)':'var(--blue)';
+  document.getElementById('evTitle').textContent=evt.title;
+  document.getElementById('evTitle').style.color=
+    evt.type==='crisis'?'var(--red)':evt.type==='opportunity'?'var(--green)':evt.type==='warning'?'var(--amber)':'var(--blue)';
+  document.getElementById('evBody').textContent=evt.body;
+  var fxHtml='';
+  evt.effects.forEach(function(ef){
+    fxHtml+='<div class="ev-effect '+ef.c+'">'+(ef.c==='bad'?'📉':ef.c==='good'?'📈':'⚠️')+' '+ef.t+'</div>';
+  });
+  document.getElementById('evEffects').innerHTML=fxHtml;
+  showScreen('s-event');
+}
+
+function ackEvent(){
+  if(G.pendingEvent){
+    if(G.usedEvents.indexOf(G.pendingEvent.id)===-1) G.usedEvents.push(G.pendingEvent.id);
+    G.pendingEvent.apply();
+    G.pendingEvent=null;
+  }
+  showScreen('s-game');
+  if(checkLose()) return;
+  if(G.turn>G.maxTurns){endGame();return;}
+  renderTurn();
+}
+
+// ── END GAME ──────────────────────────────────────────
+function endGame(type){
+  var icon,title,titleCls,sub;
+  if(type==='IMF'){
+    icon='🏦';titleCls='lose';title='IMF TAKEOVER';
+    sub='Debt reached '+G.debt.toFixed(0)+'% of GDP. The IMF has imposed emergency austerity conditions and removed you from office. History will remember you as the Chancellor who broke Britain.';
+  } else if(type==='WEIMAR'){
+    icon='🔥';titleCls='lose';title='HYPERINFLATION';
+    sub='Inflation hit '+G.cpi.toFixed(0)+'%. The pound is near worthless. Britons are queuing at food banks. You have created a Weimar Republic scenario. An extraordinary failure.';
+  } else if(type==='OUSTED'){
+    icon='🗳️';titleCls='lose';title='VOTE OF NO CONFIDENCE';
+    sub='Approval fell to '+Math.round(G.approval)+'%. Parliament has passed a vote of no confidence. You are removed from office after just '+G.turn+' quarters. The party disowns you.';
+  } else if(G.debt<80&&G.cpi<4&&G.approval>30){
+    icon='🏆';titleCls='win';title='BRITAIN SAVED!';
+    sub='Debt at '+G.debt.toFixed(0)+'% GDP. Inflation '+G.cpi.toFixed(1)+'%. Approval '+Math.round(G.approval)+'%. You have defied the OBR\'s worst forecasts and put Britain back on a sustainable path. Extraordinary.';
+  } else if(G.debt<100){
+    icon='🤝';titleCls='draw';title='HONOURABLE DRAW';
+    sub='Debt at '+G.debt.toFixed(0)+'% GDP — better than the OBR\'s 274% forecast but not the full victory. A solid if unglamorous term in office.';
+  } else {
+    icon='😔';titleCls='draw';title='TERM EXPIRED';
+    sub='Five years over. Debt at '+G.debt.toFixed(0)+'% GDP and still rising. The next Chancellor has an even harder job. Sound familiar?';
+  }
+
+  document.getElementById('endIcon').textContent=icon;
+  var et=document.getElementById('endTitle');
+  et.textContent=title;
+  et.className='end-title '+titleCls;
+  document.getElementById('endSub').textContent=sub;
+
+  var debtEl=document.getElementById('es_debt');
+  debtEl.textContent=G.debt.toFixed(1)+'%';
+  debtEl.style.color=G.debt<80?'var(--green)':G.debt<100?'var(--amber)':'var(--red)';
+  var cpiEl=document.getElementById('es_cpi');
+  cpiEl.textContent=G.cpi.toFixed(1)+'%';
+  cpiEl.style.color=G.cpi<4?'var(--green)':G.cpi<8?'var(--amber)':'var(--red)';
+  var appEl=document.getElementById('es_app');
+  appEl.textContent=Math.round(G.approval)+'%';
+  appEl.style.color=G.approval>40?'var(--green)':G.approval>25?'var(--amber)':'var(--red)';
+
+  var logEl=document.getElementById('endLog');
+  logEl.innerHTML='';
+  G.history.slice(-14).forEach(function(h){
+    var d=document.createElement('div');d.className='end-log-item';d.textContent=h;logEl.appendChild(d);
+  });
+  showScreen('s-end');
+}
+
+// PWA
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('chancellor-sw.js').catch(function(){});
+}
+</script>
+</body>
+</html>

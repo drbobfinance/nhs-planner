@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Can You Save the UK? | UK-Debt.info</title>
+<meta name="description" content="Interactive UK fiscal simulator. Raise taxes, cut spending, grow the economy and see if you can get debt under control. Based on OBR projections.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;
+  --red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;
+  --green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;
+  --amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;
+  --blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;
+  --purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;
+  --ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+
+/* NAV */
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#002244,#003d7a,#005cb8);padding:20px 28px 16px;display:flex;align-items:center;justify-content:space-between}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:18px;color:#fff;letter-spacing:2px;font-weight:700}
+
+/* VERDICT BANNER */
+.verdict-banner{padding:14px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;font-weight:700;transition:all 0.4s}
+.verdict-banner.failing{background:linear-gradient(135deg,#3d0000,#800000);border-bottom:3px solid var(--red)}
+.verdict-banner.struggling{background:linear-gradient(135deg,#3d2200,#7a4400);border-bottom:3px solid var(--amber)}
+.verdict-banner.surviving{background:linear-gradient(135deg,#1a3300,#336600);border-bottom:3px solid #88cc00}
+.verdict-banner.saving{background:linear-gradient(135deg,#003300,#006600);border-bottom:3px solid var(--green)}
+.verdict-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;color:#fff}
+.verdict-sub{font-size:12px;color:rgba(255,255,255,0.75);letter-spacing:1px;font-weight:600}
+.verdict-stats{display:flex;gap:20px;flex-wrap:wrap}
+.vstat{text-align:center}
+.vstat .vv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:#fff}
+.vstat .vl{font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;font-weight:700}
+
+/* MAIN LAYOUT */
+.page-body{display:grid;grid-template-columns:380px 1fr;gap:0;min-height:calc(100vh - 160px)}
+@media(max-width:960px){.page-body{grid-template-columns:1fr}}
+
+/* LEFT PANEL — CONTROLS */
+.controls-panel{background:var(--panel);border-right:2px solid var(--border);overflow-y:auto;max-height:calc(100vh - 160px);position:sticky;top:112px}
+@media(max-width:960px){.controls-panel{max-height:none;position:static;border-right:none;border-bottom:2px solid var(--border)}}
+
+.ctrl-section{border-bottom:1px solid var(--border)}
+.ctrl-section-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;user-select:none;background:var(--panel2)}
+.ctrl-section-hdr:hover{background:var(--border)}
+.ctrl-section-hdr .csh-icon{font-size:18px}
+.ctrl-section-hdr .csh-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;color:var(--ink)}
+.ctrl-section-hdr .csh-saving{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;margin-left:auto}
+.ctrl-section-hdr .csh-saving.positive{color:var(--green)}
+.ctrl-section-hdr .csh-saving.negative{color:var(--red)}
+.ctrl-section-body{padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+
+/* INDIVIDUAL LEVERS */
+.lever{display:flex;flex-direction:column;gap:4px}
+.lever-top{display:flex;justify-content:space-between;align-items:center}
+.lever-name{font-size:12px;font-weight:700;color:var(--ink-mid)}
+.lever-val{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;min-width:60px;text-align:right}
+.lever-val.positive{color:var(--green)}
+.lever-val.negative{color:var(--red)}
+.lever-val.neutral{color:var(--blue)}
+.lever input[type=range]{width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:var(--border);outline:none;cursor:pointer}
+.lever input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.2)}
+.lever.tax input[type=range]::-webkit-slider-thumb{background:var(--red)}
+.lever.spend input[type=range]::-webkit-slider-thumb{background:var(--amber)}
+.lever.growth input[type=range]::-webkit-slider-thumb{background:var(--green)}
+.lever.rate input[type=range]::-webkit-slider-thumb{background:var(--blue)}
+.lever-impact{font-size:10px;font-weight:600;color:var(--ink-light)}
+
+/* PERSONAL TAX IMPACT BOX */
+.tax-impact-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:10px 12px;margin-top:8px}
+.tib-title{font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.tib-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tib-item .tiv{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700;color:var(--ink)}
+.tib-item .til{font-size:10px;color:var(--ink-light);font-weight:600}
+
+/* RESET BTN */
+.btn-reset{width:calc(100% - 32px);margin:12px 16px;background:var(--ink);color:#fff;border:none;padding:10px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;cursor:pointer;border-radius:5px}
+.btn-reset:hover{background:#1a2535}
+
+/* RIGHT PANEL — CHART */
+.chart-panel{padding:20px;display:flex;flex-direction:column;gap:16px}
+.chart-container{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;flex:1}
+.chart-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--ink);margin-bottom:4px}
+.chart-sub{font-size:11px;color:var(--ink-light);font-weight:600;margin-bottom:14px}
+
+/* TARGETS */
+.targets-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.target-chip{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;border:2px solid transparent;cursor:default}
+.target-chip.hit{background:var(--green-light);border-color:var(--green-mid);color:var(--green)}
+.target-chip.miss{background:var(--red-light);border-color:var(--red-mid);color:var(--red)}
+.target-chip.close{background:var(--amber-light);border-color:var(--amber-mid);color:var(--amber)}
+
+/* SCORECARD */
+.scorecard{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.score-box{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center}
+.score-box .sbv{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700}
+.score-box .sbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--ink-light);margin-top:3px}
+.score-box.good{border-color:var(--green-mid);background:var(--green-light)}.score-box.good .sbv{color:var(--green)}
+.score-box.warn{border-color:var(--amber-mid);background:var(--amber-light)}.score-box.warn .sbv{color:var(--amber)}
+.score-box.bad {border-color:var(--red-mid);  background:var(--red-light)  }.score-box.bad  .sbv{color:var(--red)}
+
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7}
+
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+
+@media(max-width:768px){
+  .top-nav{padding:0 8px;overflow-x:auto;flex-wrap:nowrap}
+  .top-nav::-webkit-scrollbar{display:none}
+  .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+  .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important}
+  .nav-brand span{font-size:16px}
+  
+  .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="money-in-out.html" class="done">Money In &amp; Out</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="fiscal-gap.html" class="done">True Fiscal Gap</a>
+        <a href="save-the-uk.html" class="active">Can You Save the UK?</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money &amp; Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 &amp; GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People &amp; Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Public vs Private Employment</a>
+        <a href="pensions.html" class="done">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="done">Historical Timeline</a>
+        <a href="cost-of-living.html" class="done">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>🇬🇧 CAN YOU SAVE THE UK?</h1>
+    <div class="subtitle">Interactive Fiscal Simulator · Adjust Tax · Spending · Growth · Interest Rates · See the Debt Trajectory</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+  </div>
+</div>
+
+<!-- LIVE VERDICT BANNER -->
+<div class="verdict-banner failing" id="verdictBanner">
+  <div>
+    <div class="verdict-title" id="verdictTitle">🔴 DEBT SPIRALLING — CRISIS AHEAD</div>
+    <div class="verdict-sub" id="verdictSub">On current OBR baseline. Adjust the levers to change the outcome.</div>
+  </div>
+  <div class="verdict-stats">
+    <div class="vstat"><div class="vv" id="v_debt2050">~210%</div><div class="vl">Debt/GDP 2050</div></div>
+    <div class="vstat"><div class="vv" id="v_debt2074">~274%</div><div class="vl">Debt/GDP 2074</div></div>
+    <div class="vstat"><div class="vv" id="v_annualGap">+£132bn</div><div class="vl">Annual Gap Now</div></div>
+    <div class="vstat"><div class="vv" id="v_saving">£0bn saved</div><div class="vl">Your Measures</div></div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- LEFT: CONTROLS -->
+  <div class="controls-panel">
+
+    <!-- SECTION: TAXATION -->
+    <div class="ctrl-section">
+      <div class="ctrl-section-hdr" onclick="toggleSection('tax')">
+        <span class="csh-icon">💷</span>
+        <span class="csh-title">Tax Changes</span>
+        <span class="csh-saving positive" id="tax-saving">+£0bn/yr</span>
+      </div>
+      <div class="ctrl-section-body" id="tax-body">
+
+        <div class="lever tax">
+          <div class="lever-top">
+            <span class="lever-name">Basic Rate Income Tax (currently 20p)</span>
+            <span class="lever-val positive" id="lv_it">+0p</span>
+          </div>
+          <input type="range" id="l_it" min="-2" max="10" step="1" value="0" oninput="recalc()">
+          <span class="lever-impact" id="li_it">Each 1p raises ~£6.5bn/yr</span>
+        </div>
+
+        <div class="lever tax">
+          <div class="lever-top">
+            <span class="lever-name">Higher Rate Tax (currently 40p, top 10%)</span>
+            <span class="lever-val positive" id="lv_hr">+0p</span>
+          </div>
+          <input type="range" id="l_hr" min="-5" max="15" step="1" value="0" oninput="recalc()">
+          <span class="lever-impact" id="li_hr">Each 1p raises ~£3.0bn/yr (affects top 10% of earners)</span>
+        </div>
+
+        <div class="lever tax">
+          <div class="lever-top">
+            <span class="lever-name">Additional Rate (currently 45p, top 1%)</span>
+            <span class="lever-val positive" id="lv_ar">+0p</span>
+          </div>
+          <input type="range" id="l_ar" min="-5" max="20" step="1" value="0" oninput="recalc()">
+          <span class="lever-impact" id="li_ar">Each 1p raises ~£0.65bn (Laffer curve applies above ~55p)</span>
+        </div>
+
+        <div class="lever tax">
+          <div class="lever-top">
+            <span class="lever-name">VAT (currently 20%)</span>
+            <span class="lever-val positive" id="lv_vat">+0%</span>
+          </div>
+          <input type="range" id="l_vat" min="-5" max="10" step="0.5" value="0" oninput="recalc()">
+          <span class="lever-impact" id="li_vat">Each 1% raises ~£8bn/yr. Regressive — hits lower incomes hardest.</span>
+        </div>
+
+        <div class="lever tax">
+          <div class="lever-top">
+            <span class="lever-name">Employer NI (currently 15%)</span>
+            <span class="lever-val positive" id="lv_ni">+0%</span>
+          </div>
+          <input type="range" id="l_ni" min="-3" max="8" step="0.5" value="0" oninput="recalc()">
+          <span class="lever-impact" id="li_ni">Each 1% raises ~£8bn/yr but partly reduces wages.</span>
+        </div>
+
+        <div class="lever tax">
+          <div class="lever-top">
+            <span class="lever-name">Corporation Tax (currently 25%)</span>
+            <span class="lever-val positive" id="lv_ct">+0%</span>
+          </div>
+          <input type="range" id="l_ct" min="-5" max="10" step="1" value="0" oninput="recalc()">
+          <span class="lever-impact" id="li_ct">Each 1% raises ~£3.8bn. Risk of profit-shifting above ~28%.</span>
+        </div>
+
+        <div class="lever tax">
+          <div class="lever-top">
+            <span class="lever-name">Wealth Tax (new, on assets &gt;£1m)</span>
+            <span class="lever-val positive" id="lv_wt">+0%</span>
+          </div>
+          <input type="range" id="l_wt" min="0" max="3" step="0.25" value="0" oninput="recalc()">
+          <span class="lever-impact" id="li_wt">Each 0.5% raises ~£10bn. Requires valuation infrastructure.</span>
+        </div>
+
+        <!-- PERSONAL TAX IMPACT BOX -->
+        <div class="tax-impact-box">
+          <div class="tib-title">👤 Impact on a £39,039 Median Earner</div>
+          <div class="tib-grid">
+            <div class="tib-item"><div class="tiv" id="ti_gross">£39,039</div><div class="til">Gross Salary</div></div>
+            <div class="tib-item"><div class="tiv" id="ti_it">£5,486</div><div class="til">Income Tax Paid</div></div>
+            <div class="tib-item"><div class="tiv" id="ti_ni">£2,012</div><div class="til">Employee NI</div></div>
+            <div class="tib-item"><div class="tiv" id="ti_takehome">£31,541</div><div class="til">Take-Home Pay</div></div>
+            <div class="tib-item"><div class="tiv" id="ti_effrate">19.3%</div><div class="til">Effective Rate</div></div>
+            <div class="tib-item"><div class="tiv" id="ti_freeday">12 Mar</div><div class="til">Tax Freedom Day</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION: SPENDING CUTS -->
+    <div class="ctrl-section">
+      <div class="ctrl-section-hdr" onclick="toggleSection('spend')">
+        <span class="csh-icon">✂️</span>
+        <span class="csh-title">Spending Changes</span>
+        <span class="csh-saving positive" id="spend-saving">+£0bn/yr</span>
+      </div>
+      <div class="ctrl-section-body" id="spend-body">
+
+        <div class="lever spend">
+          <div class="lever-top">
+            <span class="lever-name">NHS Budget (currently £204bn)</span>
+            <span class="lever-val neutral" id="lv_nhs">0%</span>
+          </div>
+          <input type="range" id="l_nhs" min="-20" max="20" step="1" value="0" oninput="recalc()">
+          <span class="lever-impact">Each -1% real cut saves ~£2bn. -10% = A&amp;E waiting times double.</span>
+        </div>
+
+        <div class="lever spend">
+          <div class="lever-top">
+            <span class="lever-name">Welfare &amp; Benefits (currently £334bn)</span>
+            <span class="lever-val neutral" id="lv_wel">0%</span>
+          </div>
+          <input type="range" id="l_wel" min="-20" max="10" step="1" value="0" oninput="recalc()">
+          <span class="lever-impact">Each -1% saves ~£3.3bn. -10% affects ~4m households.</span>
+        </div>
+
+        <div class="lever spend">
+          <div class="lever-top">
+            <span class="lever-name">State Pension Triple Lock</span>
+            <span class="lever-val neutral" id="lv_tl">Keep</span>
+          </div>
+          <input type="range" id="l_tl" min="0" max="2" step="1" value="0" oninput="recalc()">
+          <span class="lever-impact" id="li_tl">0=Keep triple lock · 1=Double lock (CPI/earnings) · 2=CPI only</span>
+        </div>
+
+        <div class="lever spend">
+          <div class="lever-top">
+            <span class="lever-name">Defence Spending (currently 2.3% GDP)</span>
+            <span class="lever-val neutral" id="lv_def">+0%</span>
+          </div>
+          <input type="range" id="l_def" min="-0.5" max="2" step="0.1" value="0" oninput="recalc()">
+          <span class="lever-impact">Each +0.1% GDP adds ~£3bn/yr. 3.5% target = +£36bn vs today.</span>
+        </div>
+
+        <div class="lever spend">
+          <div class="lever-top">
+            <span class="lever-name">Civil Service Efficiency (%)</span>
+            <span class="lever-val neutral" id="lv_civ">0%</span>
+          </div>
+          <input type="range" id="l_civ" min="-10" max="30" step="1" value="0" oninput="recalc()">
+          <span class="lever-impact">Each -1% real cut to non-protected depts saves ~£1.5bn/yr.</span>
+        </div>
+
+        <div class="lever spend">
+          <div class="lever-top">
+            <span class="lever-name">Foreign Aid (currently £11.2bn)</span>
+            <span class="lever-val neutral" id="lv_aid">0%</span>
+          </div>
+          <input type="range" id="l_aid" min="-100" max="50" step="5" value="0" oninput="recalc()">
+          <span class="lever-impact">-100% abolishes foreign aid (saves £11.2bn — about 1 week of NHS costs).</span>
+        </div>
+
+        <div class="lever spend">
+          <div class="lever-top">
+            <span class="lever-name">Pension Age (currently rising to 67)</span>
+            <span class="lever-val neutral" id="lv_spa">67</span>
+          </div>
+          <input type="range" id="l_spa" min="67" max="72" step="1" value="67" oninput="recalc()">
+          <span class="lever-impact">Each year added saves ~£8-10bn/yr in state pension costs.</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION: ECONOMIC LEVERS -->
+    <div class="ctrl-section">
+      <div class="ctrl-section-hdr" onclick="toggleSection('econ')">
+        <span class="csh-icon">📈</span>
+        <span class="csh-title">Economic Levers</span>
+        <span class="csh-saving neutral" id="econ-saving">±£0bn/yr</span>
+      </div>
+      <div class="ctrl-section-body" id="econ-body">
+
+        <div class="lever growth">
+          <div class="lever-top">
+            <span class="lever-name">GDP Growth Rate (%/yr above OBR baseline)</span>
+            <span class="lever-val positive" id="lv_gdp">+0.0%</span>
+          </div>
+          <input type="range" id="l_gdp" min="-1" max="2" step="0.25" value="0" oninput="recalc()">
+          <span class="lever-impact">Each +0.5% extra growth raises ~£15bn more revenue within 5 years.</span>
+        </div>
+
+        <div class="lever rate">
+          <div class="lever-top">
+            <span class="lever-name">Gilt Yield Change (vs current ~4.5%)</span>
+            <span class="lever-val neutral" id="lv_rate">+0.0%</span>
+          </div>
+          <input type="range" id="l_rate" min="-2" max="3" step="0.25" value="0" oninput="recalc()">
+          <span class="lever-impact" id="li_rate">Each +1% adds ~£18bn/yr as gilts refinance. Full effect takes ~13 years to feed through — by 2039 at the earliest.</span>
+        </div>
+
+        <div class="lever growth">
+          <div class="lever-top">
+            <span class="lever-name">Productivity Reform Boost (%/yr extra)</span>
+            <span class="lever-val positive" id="lv_prod">+0.0%</span>
+          </div>
+          <input type="range" id="l_prod" min="0" max="1.5" step="0.25" value="0" oninput="recalc()">
+          <span class="lever-impact">Planning reform, AI adoption, trade deals. Takes 5-10 years to materialise.</span>
+        </div>
+
+        <div class="lever growth">
+          <div class="lever-top">
+            <span class="lever-name">Net Migration (000s/yr, currently ~700k)</span>
+            <span class="lever-val neutral" id="lv_mig">0k</span>
+          </div>
+          <input type="range" id="l_mig" min="-500" max="300" step="50" value="0" oninput="recalc()">
+          <span class="lever-impact">Each +100k working migrants adds ~£2bn/yr net tax. Reduces only slowly.</span>
+        </div>
+
+        <div class="lever rate">
+          <div class="lever-top">
+            <span class="lever-name">Inflation Target (BoE, currently 2%)</span>
+            <span class="lever-val neutral" id="lv_cpi">2.0%</span>
+          </div>
+          <input type="range" id="l_cpi" min="1" max="5" step="0.5" value="2" oninput="recalc()">
+          <span class="lever-impact">Higher inflation erodes real debt but raises index-linked gilt costs &amp; wages.</span>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="btn-reset" onclick="resetAll()">↺ RESET TO OBR BASELINE</button>
+
+  </div><!-- end controls-panel -->
+
+  <!-- RIGHT: CHART + SCORECARD -->
+  <div class="chart-panel">
+
+    <!-- TARGETS -->
+    <div class="chart-container">
+      <div class="chart-title">DEBT/GDP TRAJECTORY — YOUR SCENARIO vs OBR BASELINE</div>
+      <div class="chart-sub">Adjust the levers on the left. The blue line is the OBR baseline. The green/red line is your scenario.</div>
+
+      <div class="targets-row" id="targetsRow">
+        <div class="target-chip miss" id="t_100">⬜ Debt below 100% GDP by 2035</div>
+        <div class="target-chip miss" id="t_stable">⬜ Debt stabilising by 2040</div>
+        <div class="target-chip miss" id="t_falling">⬜ Debt falling by 2050</div>
+        <div class="target-chip miss" id="t_60">⬜ Debt below 60% GDP by 2075 (Maastricht)</div>
+      </div>
+
+      <canvas id="mainChart" height="320"></canvas>
+
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#0060cc;border:2px dashed #0060cc"></div>OBR Baseline (no changes)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Your Scenario</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d40020;border:1px dashed #d40020"></div>OBR "With shocks" worst case</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,0,0,0.15)"></div>100% GDP danger line</div>
+      </div>
+    </div>
+
+    <!-- SCORECARD -->
+    <div class="scorecard" id="scorecard">
+      <div class="score-box bad"><div class="sbv" id="sc_gap30">£132bn</div><div class="sbl">Annual Gap 2030</div></div>
+      <div class="score-box bad"><div class="sbv" id="sc_gap40">£180bn</div><div class="sbl">Annual Gap 2040</div></div>
+      <div class="score-box bad"><div class="sbv" id="sc_d2035">~100%</div><div class="sbl">Debt/GDP 2035</div></div>
+      <div class="score-box bad"><div class="sbv" id="sc_d2050">~210%</div><div class="sbl">Debt/GDP 2050</div></div>
+      <div class="score-box warn"><div class="sbv" id="sc_interest">£110bn</div><div class="sbl">Interest Bill 2030</div></div>
+      <div class="score-box warn"><div class="sbv" id="sc_saving">£0bn</div><div class="sbl">Total Saved/yr</div></div>
+    </div>
+
+    <div class="info-box">
+      📋 <strong>How to use this:</strong> Each lever on the left changes the UK's fiscal position. Tax rises and spending cuts reduce the annual deficit immediately. Growth improvements take 3-5 years to feed into revenues. Interest rate changes affect costs gradually as gilts refinance over ~13 years. The chart shows the resulting debt/GDP ratio to 2075 — your job is to get the green line below the 100% danger line and keep it there.
+    </div>
+
+  </div><!-- end chart-panel -->
+
+</div><!-- end page-body -->
+
+<div class="disclaimer-strip">
+  ⚠️ This simulator uses OBR baseline projections. Multipliers are simplified estimates. Real policy effects involve complex economic interactions not captured here. For education only.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="fiscal-gap.html">Full Fiscal Gap Analysis</a>
+</div>
+
+<script>
+// ── NAV ──────────────────────────────────────────────────────────────────
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(function(g){if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(function(g){g.classList.remove('open')})});
+function tick(){var n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8)}
+setInterval(tick,1000);tick();
+
+function toggleSection(id){
+  var body = document.getElementById(id+'-body');
+  body.style.display = body.style.display==='none' ? '' : 'none';
+}
+
+// ── BASELINE MODEL ────────────────────────────────────────────────────────
+// OBR baseline: debt ~94% GDP in 2026, rising to 274% by 2074
+// Key parameters
+var GDP0    = 2968;   // £bn 2026
+var DEBT0   = 2911;   // £bn 2026
+var INTEREST0 = 110; // £bn 2026
+var DEFICIT0  = 132; // £bn 2026 baseline
+var GDP_GROWTH_BASE = 0.015; // OBR baseline ~1.5%/yr real + ~2% CPI = ~3.5% nominal
+var CPI_BASE = 0.025;
+var GILT_RATE = 0.045;
+var YEARS = Array.from({length:50},function(_,i){return 2026+i});
+
+// Ageing/structural spending pressure: spending grows ~0.5% GDP per decade above revenue
+var STRUCTURAL_PRESSURE = 0.0005; // per year
+
+function buildBaseline(){
+  var rows=[];
+  var gdp=GDP0, debt=DEBT0, interest=INTEREST0;
+  for(var i=0;i<50;i++){
+    var yr=2026+i;
+    gdp *= (1 + GDP_GROWTH_BASE + CPI_BASE);
+    // Baseline assumes gilt rates creep up slightly as debt/GDP rises (risk premium)
+    var avgRate = GILT_RATE + Math.min(i*0.003, 0.01); // +0 to +1% risk premium over 50yr
+    interest = debt * avgRate;
+    var structuralGap = DEFICIT0*(gdp/GDP0) + (STRUCTURAL_PRESSURE*i*gdp);
+    var deficit = structuralGap; // baseline = just keeps borrowing
+    rows.push({yr:yr, debtPct:+(debt/gdp*100).toFixed(1), gdp:gdp, debt:debt, deficit:deficit, interest:interest});
+    debt += deficit;
+    debt *= (1+CPI_BASE*0.3); // slight real debt growth
+  }
+  return rows;
+}
+
+function buildScenario(levers){
+  var rows=[];
+  var gdp=GDP0, debt=DEBT0, interest=INTEREST0;
+  var giltRate = GILT_RATE + levers.rateExtra;
+  var cpiActual = levers.cpi;
+  var gdpGrowthActual = GDP_GROWTH_BASE + levers.gdpExtra + levers.prodExtra*0.5; // prod takes time
+
+  for(var i=0;i<50;i++){
+    var yr=2026+i;
+    var prodBoost = levers.prodExtra * Math.min(i/5, 1); // phases in over 5 years
+    var migBoost  = levers.migExtra  * Math.min(i/3, 1) * 0.7; // migration phases in
+    gdp *= (1 + gdpGrowthActual + prodBoost*0.003 + cpiActual);
+
+    // Interest: refinances at new rate gradually (avg maturity 13yr)
+    var effectiveRate = GILT_RATE + levers.rateExtra * Math.min(i/13, 1);
+    interest = debt * effectiveRate;
+
+    // Fiscal savings from levers (all grow with GDP)
+    var gdpRatio = gdp/GDP0;
+    var taxExtra = (
+      levers.itExtra  * 6.5  +
+      levers.hrExtra  * 3.0  +
+      levers.arExtra  * 0.65 * (levers.arExtra > 10 ? 0.7 : 1) + // Laffer above 10p
+      levers.vatExtra * 8.0  +
+      levers.niExtra  * 8.0  * 0.85 + // 15% lost to wage suppression
+      levers.ctExtra  * 3.8  * (levers.ctExtra > 3 ? 0.85 : 1) + // profit shifting risk
+      levers.wtExtra  * 20.0 +
+      levers.migExtra/100 * 2.0 // migration net tax contribution
+    ) * gdpRatio;
+
+    var spendSave = (
+      levers.nhsCut   * 2.0  +
+      levers.welCut   * 3.3  +
+      levers.tlSave   * gdpRatio + // triple lock savings
+      levers.defExtra * (-30) * gdpRatio/1 + // defence cost (negative save = extra cost)
+      levers.civCut   * 1.5  +
+      levers.aidCut   * 0.112+
+      levers.spaSave  * gdpRatio // pension age savings grow with demographics
+    ) * (i < 5 ? 0.5 + i*0.1 : 1); // some cuts phase in
+
+    var totalSaving = taxExtra + spendSave;
+    var structuralGap = DEFICIT0*(gdp/GDP0) + (STRUCTURAL_PRESSURE*i*gdp);
+    var deficit = Math.max(-200, structuralGap - totalSaving); // can't surplus more than £200bn
+
+    rows.push({yr:yr,debtPct:+(debt/gdp*100).toFixed(1),gdp:gdp,debt:debt,deficit:deficit,interest:interest,
+               totalSaving:totalSaving, taxExtra:taxExtra, spendSave:spendSave});
+    debt += deficit;
+    debt *= (1 + cpiActual*0.3);
+  }
+  return rows;
+}
+
+function buildWorstCase(){
+  // OBR "with shocks" scenario — adds ~50pp to debt by 2074
+  var base = buildBaseline();
+  return base.map(function(r,i){
+    return {yr:r.yr, debtPct:Math.min(r.debtPct + i*1.0, 400)};
+  });
+}
+
+// ── PERSONAL TAX CALCULATOR ───────────────────────────────────────────────
+function calcPersonalTax(itExtra, salary){
+  salary = salary || 39039;
+  var PA = 12570;
+  // Taper PA above 100k
+  var taxable = Math.max(0, salary - PA);
+  var basicRate = 0.20 + itExtra/100;
+  var it = 0;
+  it += Math.min(taxable, 37700) * basicRate;
+  it += Math.min(Math.max(0,taxable-37700), 87430) * 0.40;
+  it += Math.max(0, taxable-125130) * 0.45;
+  // Employee NI
+  var ni = 0;
+  if(salary > 12570){
+    ni += Math.min(Math.max(0,salary-12570),37700)*0.08;
+    ni += Math.max(0,salary-50270)*0.02;
+  }
+  var takeHome = salary - it - ni;
+  var effRate = (it+ni)/salary;
+  var freedayDayNum = Math.round(effRate * 365);
+  var fd = new Date(2026,0,1); fd.setDate(fd.getDate()+freedayDayNum-1);
+  return {it:it,ni:ni,takeHome:takeHome,effRate:effRate,
+          freeday:fd.toLocaleDateString('en-GB',{day:'numeric',month:'short'})};
+}
+
+// ── CHART ─────────────────────────────────────────────────────────────────
+var mainChart;
+
+function buildChart(baseRows, scenRows, worstRows){
+  if(mainChart) mainChart.destroy();
+  var labels = [];
+  var baseData = [];
+  var scenData = [];
+  var worstData = [];
+  var dangerLine = [];
+  var maastricht = [];
+  for(var i=0;i<baseRows.length;i++){
+    labels.push(baseRows[i].yr);
+    baseData.push(+baseRows[i].debtPct.toFixed(1));
+    scenData.push(+scenRows[i].debtPct.toFixed(1));
+    worstData.push(+worstRows[i].debtPct.toFixed(1));
+    dangerLine.push(100);
+    maastricht.push(60);
+  }
+  mainChart = new Chart(document.getElementById('mainChart'),{
+    type:'line',
+    data:{
+      labels:labels,
+      datasets:[
+        {label:'OBR "With shocks" worst case',
+         data:worstData,
+         borderColor:'rgba(212,0,32,0.25)',
+         backgroundColor:'rgba(212,0,32,0.06)',
+         fill:true,borderWidth:1,pointRadius:0,tension:0.4,borderDash:[2,4]},
+        {label:'OBR Baseline (no changes)',
+         data:baseData,
+         borderColor:'#0060cc',
+         backgroundColor:'transparent',
+         borderWidth:2.5,pointRadius:0,tension:0.4,borderDash:[6,3]},
+        {label:'Your Scenario',
+         data:scenData,
+         borderColor:'#d40020',
+         backgroundColor:'transparent',
+         borderWidth:3.5,pointRadius:0,tension:0.4},
+        {label:'100% GDP danger line',
+         data:dangerLine,
+         borderColor:'rgba(212,0,32,0.5)',
+         backgroundColor:'transparent',
+         borderWidth:1.5,pointRadius:0,borderDash:[4,2]},
+        {label:'60% Maastricht target',
+         data:maastricht,
+         borderColor:'rgba(0,136,68,0.4)',
+         backgroundColor:'transparent',
+         borderWidth:1,pointRadius:0,borderDash:[3,3]}
+      ]
+    },
+    options:{
+      responsive:true,
+      animation:{duration:300},
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:function(ctx){
+            var names = ['Worst case','OBR Baseline','Your Scenario','100% danger','60% Maastricht'];
+            return (names[ctx.datasetIndex]||ctx.dataset.label)+': '+ctx.raw+'% GDP';
+          }
+        }}
+      },
+      scales:{
+        x:{ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},maxTicksLimit:14},
+           grid:{color:'rgba(0,0,0,0.04)'}},
+        y:{title:{display:true,text:'National Debt as % of GDP',color:'#2a3a50',
+                  font:{size:11,weight:'bold'}},
+           ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},
+                  callback:function(v){return v+'%'}},
+           grid:{color:'rgba(0,0,0,0.05)'},
+           min:0, max:350}
+      }
+    }
+  });
+}
+
+
+function buildWorstCase(){
+  // OBR "with shocks" scenario — adds ~50pp to debt by 2074
+  var base = buildBaseline();
+  return base.map(function(r,i){
+    return {yr:r.yr, debtPct:Math.min(r.debtPct + i*1.0, 400)};
+  });
+}
+
+// ── PERSONAL TAX CALCULATOR ───────────────────────────────────────────────
+function calcPersonalTax(itExtra, salary){
+  salary = salary || 39039;
+  var PA = 12570;
+  // Taper PA above 100k
+  var taxable = Math.max(0, salary - PA);
+  var basicRate = 0.20 + itExtra/100;
+  var it = 0;
+  it += Math.min(taxable, 37700) * basicRate;
+  it += Math.min(Math.max(0,taxable-37700), 87430) * 0.40;
+  it += Math.max(0, taxable-125130) * 0.45;
+  // Employee NI
+  var ni = 0;
+  if(salary > 12570){
+    ni += Math.min(Math.max(0,salary-12570),37700)*0.08;
+    ni += Math.max(0,salary-50270)*0.02;
+  }
+  var takeHome = salary - it - ni;
+  var effRate = (it+ni)/salary;
+  var freedayDayNum = Math.round(effRate * 365);
+  var fd = new Date(2026,0,1); fd.setDate(fd.getDate()+freedayDayNum-1);
+  return {it:it,ni:ni,takeHome:takeHome,effRate:effRate,
+          freeday:fd.toLocaleDateString('en-GB',{day:'numeric',month:'short'})};
+}
+
+// ── CHART ─────────────────────────────────────────────────────────────────
+var mainChart;
+
+function buildChart(baseRows, scenRows, worstRows){
+  if(mainChart) mainChart.destroy();
+  mainChart = new Chart(document.getElementById('mainChart'),{
+    type:'line',
+    data:{
+      labels:YEARS,
+      datasets:[
+        // Worst case shaded area
+        {label:'Worst case',
+         data:worstRows.map(function(r){return r.debtPct}),
+         borderColor:'rgba(212,0,32,0.2)',
+         backgroundColor:'rgba(212,0,32,0.05)',
+         fill:true,borderWidth:1,pointRadius:0,tension:0.4,borderDash:[2,4]},
+        // OBR Baseline
+        {label:'OBR Baseline',
+         data:baseRows.map(function(r){return r.debtPct}),
+         borderColor:'rgba(0,96,204,0.7)',
+         backgroundColor:'transparent',
+         borderWidth:2,pointRadius:0,tension:0.4,borderDash:[5,3]},
+        // Your scenario
+        {label:'Your Scenario',
+         data:scenRows.map(function(r){return r.debtPct}),
+         borderColor:'#d40020',
+         backgroundColor:'transparent',
+         borderWidth:3,pointRadius:0,tension:0.4},
+        // 100% danger line
+        {label:'100% GDP line',
+         data:YEARS.map(function(){return 100}),
+         borderColor:'rgba(212,0,32,0.4)',
+         backgroundColor:'transparent',
+         borderWidth:1.5,pointRadius:0,borderDash:[4,2]},
+        // 60% Maastricht line
+        {label:'60% Maastricht',
+         data:YEARS.map(function(){return 60}),
+         borderColor:'rgba(0,136,68,0.3)',
+         backgroundColor:'transparent',
+         borderWidth:1,pointRadius:0,borderDash:[3,3]},
+      ]
+    },
+    options:{
+      responsive:true,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:function(ctx){
+            if(ctx.datasetIndex===3) return '100% GDP danger line';
+            if(ctx.datasetIndex===4) return '60% Maastricht target';
+            return ctx.dataset.label+': '+ctx.raw.toFixed(1)+'% GDP';
+          }
+        }}
+      },
+      scales:{
+        x:{ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},maxTicksLimit:14},grid:{color:'rgba(0,0,0,0.04)'}},
+        y:{title:{display:true,text:'National Debt as % of GDP',color:'#2a3a50',font:{size:11,weight:'bold'}},
+           ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:function(v){return v+'%'}},
+           grid:{color:'rgba(0,0,0,0.05)'},min:0,max:350}
+      }
+    }
+  });
+}
+
+// ── RECALCULATE ───────────────────────────────────────────────────────────
+function getVal(id){return parseFloat(document.getElementById(id).value)}
+function fmt(n){return Math.round(Math.abs(n)).toLocaleString('en-GB')}
+function fmtBn(n){return (n>=0?'+':'-')+'£'+fmt(n)+'bn'}
+
+function recalc(){
+  var l = {
+    itExtra:  getVal('l_it'),
+    hrExtra:  getVal('l_hr'),
+    arExtra:  getVal('l_ar'),
+    vatExtra: getVal('l_vat'),
+    niExtra:  getVal('l_ni'),
+    ctExtra:  getVal('l_ct'),
+    wtExtra:  getVal('l_wt'),
+    nhsCut:   -getVal('l_nhs'),
+    welCut:   -getVal('l_wel'),
+    tlSave:   [0,12,20][Math.round(getVal('l_tl'))],
+    defExtra: getVal('l_def'),
+    civCut:   -getVal('l_civ'),
+    aidCut:   -getVal('l_aid')/100 * 11.2,
+    spaSave:  (getVal('l_spa')-67)*9,
+    gdpExtra: getVal('l_gdp')/100,
+    rateExtra:getVal('l_rate')/100,
+    prodExtra:getVal('l_prod')/100,
+    migExtra: getVal('l_mig'),
+    cpi:      getVal('l_cpi')/100,
+  };
+
+  // Update lever display values
+  var el = function(id){return document.getElementById(id)};
+  el('lv_it').textContent  = (l.itExtra>=0?'+':'')+l.itExtra+'p';
+  el('lv_hr').textContent  = (l.hrExtra>=0?'+':'')+l.hrExtra+'p';
+  el('lv_ar').textContent  = (l.arExtra>=0?'+':'')+l.arExtra+'p';
+  el('lv_vat').textContent = (l.vatExtra>=0?'+':'')+l.vatExtra+'%';
+  el('lv_ni').textContent  = (l.niExtra>=0?'+':'')+l.niExtra+'%';
+  el('lv_ct').textContent  = (l.ctExtra>=0?'+':'')+l.ctExtra+'%';
+  el('lv_wt').textContent  = (l.wtExtra>=0?'+':'')+l.wtExtra+'%';
+  el('lv_nhs').textContent = getVal('l_nhs')+'%';
+  el('lv_wel').textContent = getVal('l_wel')+'%';
+  el('lv_tl').textContent  = ['Keep triple lock','Double lock','CPI only'][Math.round(getVal('l_tl'))];
+  el('lv_def').textContent = (l.defExtra>=0?'+':'')+l.defExtra+'%';
+  el('lv_civ').textContent = getVal('l_civ')+'%';
+  el('lv_aid').textContent = getVal('l_aid')+'%';
+  el('lv_spa').textContent = getVal('l_spa');
+  el('lv_gdp').textContent = (l.gdpExtra>=0?'+':'')+(l.gdpExtra*100).toFixed(2)+'%';
+  var newRate = (4.5 + l.rateExtra*100).toFixed(2);
+  el('lv_rate').textContent= newRate+'% ('+(l.rateExtra>=0?'+':'')+(l.rateExtra*100).toFixed(2)+'%)';
+  // Update rate impact description
+  if(document.getElementById('li_rate')){
+    var rateSaving = Math.round(-l.rateExtra*100 * 18);
+    var rateDir = rateSaving > 0 ? 'saves' : 'costs';
+    var rateAbs = Math.abs(rateSaving);
+    document.getElementById('li_rate').textContent = 
+      'New gilt rate: '+newRate+'%. '+(rateAbs>0 ? 'This '+rateDir+' ~£'+rateAbs+'bn/yr by 2039 as gilts refinance over 13 years.' : 'No change from baseline.');
+  }
+  el('lv_prod').textContent= '+'+(l.prodExtra*100).toFixed(2)+'%';
+  el('lv_mig').textContent = (l.migExtra>=0?'+':'')+l.migExtra+'k';
+  el('lv_cpi').textContent = (l.cpi*100).toFixed(1)+'%';
+
+  // Run models
+  var baseRows = buildBaseline();
+  var scenRows = buildScenario(l);
+  var worstRows = buildWorstCase();
+
+  // Calculate total annual saving in year 1
+  var saving = scenRows[0] ? (baseRows[0].deficit - scenRows[0].deficit) : 0;
+  var gap30 = scenRows.find(function(r){return r.yr===2030});
+  var gap40 = scenRows.find(function(r){return r.yr===2040});
+  var d2035 = scenRows.find(function(r){return r.yr===2035});
+  var d2050 = scenRows.find(function(r){return r.yr===2050});
+  var d2074 = scenRows[scenRows.length-1];
+
+  // Colour code scenario line based on outcome
+  var finalDebt = d2074.debtPct;
+  var scenColor = finalDebt < 80 ? '#008844' : finalDebt < 150 ? '#c97000' : '#d40020';
+
+  buildChart(baseRows, scenRows, worstRows);
+  // Re-colour scenario line - green if improving, red if not
+  if(mainChart && mainChart.data && mainChart.data.datasets[2]){
+    mainChart.data.datasets[2].borderColor = scenColor;
+    mainChart.update();
+  }
+
+  // Targets
+  var d35val = d2035 ? d2035.debtPct : 999;
+  var d50val = d2050 ? d2050.debtPct : 999;
+  var d74val = d2074.debtPct;
+  var isStable = scenRows.slice(14,20).every(function(r,i,a){return i===0||r.debtPct<=a[i-1].debtPct+2});
+  var isFalling = d50val < (d2035?d2035.debtPct:999);
+
+  function setTarget(id, hit, label){
+    var el2 = document.getElementById(id);
+    el2.className = 'target-chip '+(hit?'hit':'miss');
+    el2.textContent = (hit?'✅':'❌')+' '+label;
+  }
+  setTarget('t_100', d35val < 100, 'Debt below 100% GDP by 2035');
+  setTarget('t_stable', isStable, 'Debt stabilising by 2040');
+  setTarget('t_falling', isFalling, 'Debt falling by 2050');
+  setTarget('t_60', d74val < 60, 'Below 60% GDP by 2075 (Maastricht)');
+
+  // Verdict
+  var banner = document.getElementById('verdictBanner');
+  var title  = document.getElementById('verdictTitle');
+  var sub    = document.getElementById('verdictSub');
+  banner.className = 'verdict-banner';
+  if(finalDebt > 200){
+    banner.classList.add('failing');
+    title.textContent = '🔴 DEBT SPIRALLING — CRISIS AHEAD';
+    sub.textContent = 'Debt reaches '+Math.round(finalDebt)+'% GDP by 2074. Markets would intervene long before. Try the levers.';
+  } else if(finalDebt > 120){
+    banner.classList.add('struggling');
+    title.textContent = '🟡 STRUGGLING — BETTER BUT NOT ENOUGH';
+    sub.textContent = 'Debt peaks at '+Math.round(finalDebt)+'% GDP. Improved but still unsustainable long-term.';
+  } else if(finalDebt > 80){
+    banner.classList.add('surviving');
+    title.textContent = '🟢 SURVIVING — DEBT UNDER CONTROL';
+    sub.textContent = 'Debt stabilises near '+Math.round(finalDebt)+'% GDP. Painful but manageable. Well done.';
+  } else {
+    banner.classList.add('saving');
+    title.textContent = '🏆 SAVED! UK FINANCES RESTORED';
+    sub.textContent = 'Debt falls to '+Math.round(finalDebt)+'% GDP. Extraordinary achievement — or extraordinary sacrifice.';
+  }
+
+  // Verdict stats
+  el('v_debt2050').textContent = '~'+Math.round(d50val)+'%';
+  el('v_debt2074').textContent = '~'+Math.round(finalDebt)+'%';
+  el('v_annualGap').textContent= fmtBn(gap30?gap30.deficit:132);
+  el('v_saving').textContent   = fmtBn(saving)+'/yr';
+
+  // Scorecard
+  function scClass(val, goodBelow, warnBelow){
+    return val<goodBelow?'score-box good':val<warnBelow?'score-box warn':'score-box bad';
+  }
+  var g30 = gap30 ? gap30.deficit : 132;
+  var g40 = gap40 ? gap40.deficit : 180;
+  document.getElementById('sc_gap30').textContent = fmtBn(g30);
+  document.getElementById('sc_gap40').textContent = fmtBn(g40);
+  document.getElementById('sc_d2035').textContent = '~'+Math.round(d35val)+'%';
+  document.getElementById('sc_d2050').textContent = '~'+Math.round(d50val)+'%';
+  var int30 = gap30 ? gap30.interest : 110;
+  document.getElementById('sc_interest').textContent = '£'+Math.round(int30)+'bn';
+  document.getElementById('sc_saving').textContent   = fmtBn(saving);
+
+  // Update scorecard colours
+  ['sc_gap30','sc_gap40'].forEach(function(id,i){
+    var v = i===0?g30:g40;
+    document.getElementById(id).parentElement.className = v<0?'score-box good':v<100?'score-box warn':'score-box bad';
+  });
+
+  // Section savings
+  var taxSave = scenRows[0] ? scenRows[0].taxExtra : 0;
+  var spendSave = scenRows[0] ? scenRows[0].spendSave : 0;
+  el('tax-saving').textContent   = (taxSave>=0?'+':'')+Math.round(taxSave)+'bn/yr';
+  el('tax-saving').className     = 'csh-saving '+(taxSave>0?'positive':'negative');
+  el('spend-saving').textContent = (spendSave>=0?'+':'')+Math.round(spendSave)+'bn/yr';
+  el('spend-saving').className   = 'csh-saving '+(spendSave>0?'positive':'negative');
+  var econEffect = saving - taxSave - spendSave;
+  el('econ-saving').textContent  = (econEffect>=0?'+':'')+Math.round(econEffect)+'bn/yr';
+  el('econ-saving').className    = 'csh-saving '+(econEffect>0?'positive':econEffect<0?'negative':'neutral');
+
+  // Personal tax impact
+  var pt = calcPersonalTax(l.itExtra, 39039);
+  el('ti_it').textContent       = '£'+Math.round(pt.it).toLocaleString();
+  el('ti_ni').textContent       = '£'+Math.round(pt.ni).toLocaleString();
+  el('ti_takehome').textContent = '£'+Math.round(pt.takeHome).toLocaleString();
+  el('ti_effrate').textContent  = (pt.effRate*100).toFixed(1)+'%';
+  el('ti_freeday').textContent  = pt.freeday;
+  // Colour take-home
+  var baseHome = calcPersonalTax(0,39039).takeHome;
+  el('ti_takehome').style.color = pt.takeHome < baseHome ? 'var(--red)' : 'var(--green)';
+}
+
+function resetAll(){
+  ['l_it','l_hr','l_ar','l_nhs','l_wel','l_civ'].forEach(function(id){document.getElementById(id).value=0});
+  ['l_def'].forEach(function(id){document.getElementById(id).value=0});
+  ['l_aid'].forEach(function(id){document.getElementById(id).value=0});
+  document.getElementById('l_vat').value=0;
+  document.getElementById('l_ni').value=0;
+  document.getElementById('l_ct').value=0;
+  document.getElementById('l_wt').value=0;
+  document.getElementById('l_tl').value=0;
+  document.getElementById('l_spa').value=67;
+  document.getElementById('l_gdp').value=0;
+  document.getElementById('l_rate').value=0;
+  document.getElementById('l_prod').value=0;
+  document.getElementById('l_mig').value=0;
+  document.getElementById('l_cpi').value=2;
+  recalc();
+}
+
+try {
+  var testRows = buildBaseline(); console.log('baseline rows:', testRows.length, 'first debtPct:', testRows[0].debtPct);
+  recalc();
+} catch(e) {
+  document.body.insertAdjacentHTML('afterbegin',
+    '<div style="background:red;color:white;padding:16px;font-size:14px;font-family:monospace;position:fixed;top:0;left:0;right:0;z-index:9999">' +
+    'JS ERROR: ' + e.message + ' — ' + (e.stack||'').split('\n')[1] + '</div>');
+  console.error(e);
+}
+</script>
+</body>
+</html>

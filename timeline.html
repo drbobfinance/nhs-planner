@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Fiscal History Timeline – Debt from 1900 to Today | UK-Debt.info</title>
+<meta name="description" content="The history of UK public finances from 1900 to 2026 — wars, crises, booms and austerity plotted against national debt. Every major fiscal event explained.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#1a1200,#3d2c00,#7a5800);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr;gap:16px;padding:20px 32px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+/* TIMELINE ENTRIES */
+.timeline{display:flex;flex-direction:column;gap:0;position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-entry{position:relative;padding:0 0 20px 20px}
+.tl-entry::before{content:'';position:absolute;left:-8px;top:6px;width:14px;height:14px;border-radius:50%;border:2px solid #fff;z-index:1}
+.tl-entry.war::before{background:var(--red)}
+.tl-entry.crisis::before{background:var(--amber)}
+.tl-entry.policy::before{background:var(--blue)}
+.tl-entry.boom::before{background:var(--green)}
+.tl-entry.modern::before{background:var(--purple)}
+.tl-year{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:2px}
+.tl-entry.war .tl-year{color:var(--red)}
+.tl-entry.crisis .tl-year{color:var(--amber)}
+.tl-entry.policy .tl-year{color:var(--blue)}
+.tl-entry.boom .tl-year{color:var(--green)}
+.tl-entry.modern .tl-year{color:var(--purple)}
+.tl-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.tl-desc{font-size:14px;font-weight:600;color:var(--ink-mid);line-height:1.6}
+.tl-debt{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;margin-top:5px;padding:4px 8px;border-radius:4px;display:inline-block}
+.tl-entry.war .tl-debt{background:var(--red-light);color:var(--red)}
+.tl-entry.crisis .tl-debt{background:var(--amber-light);color:var(--amber)}
+.tl-entry.policy .tl-debt{background:var(--blue-light);color:var(--blue)}
+.tl-entry.boom .tl-debt{background:var(--green-light);color:var(--green)}
+.tl-entry.modern .tl-debt{background:var(--purple-light);color:var(--purple)}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.legend-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.legend-chip{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+@media(max-width:768px){
+  .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .top-nav::-webkit-scrollbar{display:none}
+  .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+  .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+  .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+  
+  .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="money-in-out.html" class="done">Money In & Out</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Public vs Private Employment</a>
+        <a href="pensions.html" class="done">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="active">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>UK FISCAL HISTORY — 1900 TO TODAY</h1>
+    <div class="subtitle">Wars · Crises · Booms · Austerity · Every Major Event Plotted Against the Debt · OBR Historical Series · Bank of England Millennium Dataset</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- DEBT HISTORY CHART -->
+  <div class="panel blue-accent">
+    <div class="panel-label">UK National Debt as % of GDP — 1900 to 2026 (Bank of England Millennium Dataset / OBR)</div>
+    <canvas id="histChart" height="340"></canvas>
+    <div class="info-box">
+      📋 The UK has been here before — debt peaked at 252% of GDP in 1946 after World War II. It took 50 years of sustained growth, inflation and fiscal discipline to reduce it to below 40% by 1990. The current trajectory, without policy change, looks nothing like the post-war reduction — it lacks the structural advantages of that era: full employment, rapid productivity growth, and captive domestic bond markets.
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="panel amber-accent">
+    <div class="panel-label">Key Events in UK Fiscal History</div>
+    <div class="legend-row">
+      <div class="legend-chip"><div class="legend-dot" style="background:var(--red)"></div>War / Crisis</div>
+      <div class="legend-chip"><div class="legend-dot" style="background:var(--amber)"></div>Economic Crisis</div>
+      <div class="legend-chip"><div class="legend-dot" style="background:var(--blue)"></div>Policy Change</div>
+      <div class="legend-chip"><div class="legend-dot" style="background:var(--green)"></div>Boom / Recovery</div>
+      <div class="legend-chip"><div class="legend-dot" style="background:var(--purple)"></div>Modern Era</div>
+    </div>
+    <div class="timeline">
+      <div class="tl-entry war">
+        <div class="tl-year">1914–18</div>
+        <div class="tl-title">World War I</div>
+        <div class="tl-desc">The UK spent unprecedented sums on the war effort, mostly financed by borrowing from the US and domestic war bonds. National debt quadrupled in four years, rising from 26% to 140% of GDP.</div>
+        <div class="tl-debt">Debt: 26% → 140% GDP</div>
+      </div>
+      <div class="tl-entry crisis">
+        <div class="tl-year">1929–33</div>
+        <div class="tl-title">The Great Depression</div>
+        <div class="tl-desc">US stock market crash triggered global recession. UK unemployment hit 22%. Government pursued austerity (spending cuts, tax rises) — the opposite of today's policy consensus. Debt rose modestly.</div>
+        <div class="tl-debt">Debt: ~170% GDP — stubborn</div>
+      </div>
+      <div class="tl-entry war">
+        <div class="tl-year">1939–45</div>
+        <div class="tl-title">World War II — Peak Debt</div>
+        <div class="tl-desc">The UK spent everything it had and borrowed the rest. Lend-Lease from the US (finally repaid in full in 2006), domestic borrowing and rationing. Debt peaked at 252% of GDP in 1946 — the highest in UK history.</div>
+        <div class="tl-debt">Peak: 252% GDP (1946)</div>
+      </div>
+      <div class="tl-entry policy">
+        <div class="tl-year">1948</div>
+        <div class="tl-title">Creation of the NHS & Welfare State</div>
+        <div class="tl-desc">Attlee government created the NHS, National Insurance and modern welfare state while simultaneously paying down wartime debt. Possible because of strong post-war growth, full employment and financial repression (capped interest rates).</div>
+        <div class="tl-debt">Debt: 245% → declining</div>
+      </div>
+      <div class="tl-entry boom">
+        <div class="tl-year">1950s–70s</div>
+        <div class="tl-title">Post-War Growth Era — Debt Falls</div>
+        <div class="tl-desc">Strong economic growth, full employment, inflation that eroded the real value of debt, and interest rates kept below inflation ("financial repression") allowed debt to fall from 252% to ~50% over 30 years. The golden era of UK fiscal reduction.</div>
+        <div class="tl-debt">Debt: 252% → 50% GDP</div>
+      </div>
+      <div class="tl-entry crisis">
+        <div class="tl-year">1976</div>
+        <div class="tl-title">IMF Bailout</div>
+        <div class="tl-desc">The UK was forced to seek a $3.9bn IMF loan — the largest ever at the time — after the pound collapsed and markets lost confidence in UK finances. Conditions included public spending cuts. A defining moment of fiscal humiliation.</div>
+        <div class="tl-debt">IMF loan: $3.9bn</div>
+      </div>
+      <div class="tl-entry policy">
+        <div class="tl-year">1979–90</div>
+        <div class="tl-title">Thatcher — Monetarism & De-industrialisation</div>
+        <div class="tl-desc">Tight monetary policy, privatisation of state assets, deregulation of financial markets, and suppression of trade unions. Unemployment hit 3 million. Debt fell from 45% to 26% of GDP by 1991. North Sea oil revenues crucial.</div>
+        <div class="tl-debt">Debt: 45% → 26% GDP</div>
+      </div>
+      <div class="tl-entry boom">
+        <div class="tl-year">1993–2007</div>
+        <div class="tl-title">The Long Boom — "No More Boom and Bust"</div>
+        <div class="tl-desc">15 years of uninterrupted growth under Major and Blair/Brown. Debt stabilised then fell as tax revenues surged. Gordon Brown introduced fiscal rules (golden rule, sustainable investment rule) — then broke them in the early 2000s as spending increased sharply.</div>
+        <div class="tl-debt">Debt: 38% → 43% GDP</div>
+      </div>
+      <div class="tl-entry crisis">
+        <div class="tl-year">2008–09</div>
+        <div class="tl-title">Global Financial Crisis — Bank Bailouts</div>
+        <div class="tl-desc">The UK banking system collapsed. Government spent £500bn on bank bailouts (RBS, Lloyds, Northern Rock). GDP fell 4.2%. Deficit hit 10% of GDP — the largest peacetime deficit since WWII. Debt began its modern surge.</div>
+        <div class="tl-debt">Deficit: 10% GDP · Debt surging</div>
+      </div>
+      <div class="tl-entry policy">
+        <div class="tl-year">2010–19</div>
+        <div class="tl-title">Coalition & Tory Austerity</div>
+        <div class="tl-desc">Osborne's deficit reduction programme cut public spending by ~£40bn but took longer than planned. Public sector workforce shrunk from 6.3m to 5.3m. Deficit reduced but debt/GDP continued rising as growth remained sluggish. Debate still rages about whether austerity was necessary or self-defeating.</div>
+        <div class="tl-debt">Debt: 65% → 85% GDP</div>
+      </div>
+      <div class="tl-entry war">
+        <div class="tl-year">2020</div>
+        <div class="tl-title">COVID-19 Pandemic — £400bn Spent</div>
+        <div class="tl-desc">The UK spent over £400bn on the pandemic response — furlough scheme, vaccine programme, NHS, business support. Deficit reached £327bn in 2020/21. GDP fell 10.3% — the worst annual contraction since 1709. Debt crossed 100% of GDP for the first time since the 1960s.</div>
+        <div class="tl-debt">Deficit: £327bn · Debt: 100%+ GDP</div>
+      </div>
+      <div class="tl-entry crisis">
+        <div class="tl-year">2021–23</div>
+        <div class="tl-title">Energy Crisis & Inflation Spike</div>
+        <div class="tl-desc">Russia's invasion of Ukraine triggered an energy price shock. UK CPI hit 11.1% — a 41-year high. Government spent £37bn on the Energy Price Guarantee. Bank Rate rose from 0.1% to 5.25% — pushing mortgage costs and debt interest to 50-year highs. Index-linked gilt costs soared.</div>
+        <div class="tl-debt">Inflation: 11.1% · Interest: £110bn/yr</div>
+      </div>
+      <div class="tl-entry crisis">
+        <div class="tl-year">Sept 2022</div>
+        <div class="tl-title">Kwarteng Mini-Budget — Market Panic</div>
+        <div class="tl-desc">Chancellor Kwasi Kwarteng announced £45bn of unfunded tax cuts. Gilt yields spiked, the pound fell to near-parity with the dollar, pension funds faced margin calls. The BoE intervened to buy gilts. Kwarteng was sacked after 38 days; Truss resigned after 45 days. The most dramatic demonstration of market power over government policy in modern UK history.</div>
+        <div class="tl-debt">10yr gilt yield: 4.5% → 4.9% in days</div>
+      </div>
+      <div class="tl-entry modern">
+        <div class="tl-year">2024–26</div>
+        <div class="tl-title">Today — Debt at 94% GDP & Rising</div>
+        <div class="tl-desc">Labour elected with mandate to "fix the foundations." October 2024 budget raised employer NI, increased spending by £70bn, extended borrowing. OBR forecasts debt stabilising near 95% of GDP in medium term — but long-term projections show it rising sharply due to ageing population, pension costs and NHS demand.</div>
+        <div class="tl-debt">Current: 94% GDP · Borrowing: £129bn/yr</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ Historical debt data from Bank of England Millennium Dataset, OBR and ONS. Events are summarised for educational purposes.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: Bank of England Millennium Dataset · OBR Historical Series · ONS · House of Commons Library</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+const years=[1900,1905,1910,1914,1918,1920,1925,1929,1933,1938,1940,1942,1944,1946,1948,1950,1955,1960,1965,1970,1975,1976,1980,1985,1990,1995,2000,2005,2007,2008,2010,2012,2015,2017,2019,2020,2021,2022,2023,2024,2025,2026];
+const debt=[28,26,27,26,140,170,175,168,190,150,180,220,235,252,245,230,180,130,80,60,55,58,45,44,26,38,40,40,38,48,65,77,84,87,85,99,101,95,97,98,94,93.8];
+
+const events=[
+  {x:1914,label:'WWI Starts'},
+  {x:1939,label:'WWII Starts'},
+  {x:1946,label:'Peak 252%'},
+  {x:1948,label:'NHS Created'},
+  {x:1976,label:'IMF Bailout'},
+  {x:2008,label:'Financial Crisis'},
+  {x:2020,label:'COVID-19'},
+  {x:2022,label:'Mini-Budget'},
+];
+
+new Chart(document.getElementById('histChart'),{
+  type:'line',
+  data:{
+    labels:years,
+    datasets:[
+      {label:'Debt % GDP',data:debt,borderColor:'#0060cc',backgroundColor:'rgba(0,96,204,0.08)',fill:true,borderWidth:2.5,pointRadius:2,tension:0.3},
+      ...events.map(e=>({
+        label:e.label,
+        data:years.map(y=>y===e.x?debt[years.indexOf(y)]:null),
+        type:'scatter',
+        pointRadius:8,
+        pointStyle:'triangle',
+        backgroundColor:'#d40020',
+        borderColor:'#fff',
+        borderWidth:2
+      }))
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{
+        label:ctx=>ctx.datasetIndex===0?`Debt: ${ctx.raw}% GDP`:ctx.dataset.label
+      }}
+    },
+    scales:{
+      x:{title:{display:true,text:'Year',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},maxTicksLimit:15},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'Debt as % of GDP',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'},min:0,max:280}
+    }
+  }
+});
+</script>
+</body>
+</html>

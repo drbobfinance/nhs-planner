@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK-Debt.info — Monthly Update Checklist</title>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Segoe UI',Rajdhani,sans-serif;color:var(--ink);min-height:100vh;padding:20px}
+.header{background:linear-gradient(135deg,#002f6c,#0057b8);padding:24px 28px;border-radius:10px;margin-bottom:20px}
+.header h1{font-size:24px;font-weight:800;letter-spacing:2px;color:#fff;text-transform:uppercase}
+.header .sub{font-size:12px;color:rgba(255,255,255,.75);margin-top:4px;letter-spacing:1px}
+.month-strip{background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.current-month{font-size:22px;font-weight:800;color:var(--blue)}
+.next-dates{font-size:13px;color:var(--ink-mid);font-weight:600}
+.section{background:#fff;border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:14px}
+.section-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-icon{font-size:24px}
+.section-title{font-size:16px;font-weight:800;color:var(--ink);text-transform:uppercase;letter-spacing:1px}
+.section-when{font-size:11px;font-weight:700;color:var(--ink-light);letter-spacing:1px;text-transform:uppercase;margin-left:auto;background:var(--panel2);border:1px solid var(--border);padding:3px 8px;border-radius:4px}
+.task{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--panel2)}
+.task:last-child{border-bottom:none}
+.task-check{width:22px;height:22px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.2s;margin-top:1px}
+.task-check:hover{border-color:var(--blue);background:var(--blue-light)}
+.task-check.done{background:var(--green);border-color:var(--green);color:#fff}
+.task-body{flex:1}
+.task-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.task-desc{font-size:12px;color:var(--ink-light);font-weight:600;line-height:1.5}
+.task-link{display:inline-block;margin-top:4px;font-size:11px;font-weight:700;color:var(--blue);text-decoration:none;background:var(--blue-light);padding:2px 8px;border-radius:3px}
+.task-link:hover{background:var(--blue-mid)}
+.task-body.done-text .task-title{text-decoration:line-through;color:var(--ink-light)}
+.priority{display:inline-block;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-left:8px;vertical-align:middle}
+.priority.high{background:var(--red-light);color:var(--red)}
+.priority.med{background:var(--amber-light);color:var(--amber)}
+.priority.low{background:var(--green-light);color:var(--green)}
+.progress-bar{background:var(--panel2);border-radius:20px;height:10px;margin:10px 0;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#00cc66);border-radius:20px;transition:.3s}
+.progress-text{font-size:12px;color:var(--ink-light);font-weight:700;text-align:right}
+.social-post{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px;margin-top:10px}
+.social-post-label{font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.social-post-text{font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6;font-style:italic}
+.copy-btn{background:var(--blue);color:#fff;border:none;border-radius:4px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;margin-top:8px;letter-spacing:1px}
+.copy-btn:hover{background:#0048aa}
+.copy-btn.copied{background:var(--green)}
+.reset-btn{background:var(--panel2);border:1px solid var(--border);color:var(--ink-mid);border-radius:6px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:1px}
+.reset-btn:hover{background:var(--border)}
+.sources-box{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px 16px;font-size:12px;color:var(--ink-mid);line-height:1.8}
+.sources-box a{color:var(--blue);font-weight:700;text-decoration:none}
+.sources-box a:hover{text-decoration:underline}
+.sources-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.sources-row:last-child{margin-bottom:0}
+.src-label{font-size:10px;font-weight:800;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px;white-space:nowrap;width:120px;flex-shrink:0}
+.footer{text-align:center;font-size:11px;color:var(--ink-light);margin-top:20px;padding-top:14px;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 Monthly Update Checklist</h1>
+  <div class="sub">UK-Debt.info · Keep your data current · Update the site · Post on social media</div>
+</div>
+
+<div class="month-strip">
+  <div>
+    <div class="current-month" id="current-month">Loading...</div>
+    <div class="next-dates" id="next-dates">Calculating release dates...</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div>
+      <div class="progress-text" id="progress-text">0 of 0 tasks done</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
+  </div>
+</div>
+
+<!-- WEEK 3 — ONS DATA -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon">🏛️</div>
+    <div class="section-title">ONS Public Sector Finances <span class="priority high">HIGHEST PRIORITY</span></div>
+    <div class="section-when">3rd week of month</div>
+  </div>
+
+  <div class="task" id="t1">
+    <div class="task-check" onclick="toggle('t1')"></div>
+    <div class="task-body">
+      <div class="task-title">Check ONS release for new borrowing and debt figures</div>
+      <div class="task-desc">Released around the 21st of each month. Look for: PSND (Public Sector Net Debt), PSNB (Public Sector Net Borrowing), and the monthly deficit figure. These are the headline numbers for your site.</div>
+      <a class="task-link" href="https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance" target="_blank">→ ONS Public Sector Finances page</a>
+    </div>
+  </div>
+
+  <div class="task" id="t2">
+    <div class="task-check" onclick="toggle('t2')"></div>
+    <div class="task-body">
+      <div class="task-title">Update debt-clock.html with new PSND figure</div>
+      <div class="task-desc">The live debt clock uses the PSND figure as its base. Update the starting value and the date it was recorded. Ask Claude to do this — paste in the new ONS figures and say "update the debt clock."</div>
+    </div>
+  </div>
+
+  <div class="task" id="t3">
+    <div class="task-check" onclick="toggle('t3')"></div>
+    <div class="task-body">
+      <div class="task-title">Update index.html stats strip with new figures</div>
+      <div class="task-desc">The homepage shows headline debt, borrowing and per-person figures. Update these to match the new ONS release. Ask Claude: "update the homepage stats with the latest ONS figures: [paste figures here]"</div>
+    </div>
+  </div>
+
+  <div class="task" id="t4">
+    <div class="task-check" onclick="toggle('t4')"></div>
+    <div class="task-body">
+      <div class="task-title">Post on X about the new figures</div>
+      <div class="task-desc">This is timely content — post it the day the ONS releases the data. Use this template:</div>
+      <div class="social-post">
+        <div class="social-post-label">📱 X Post Template — replace [FIGURES] with actual numbers</div>
+        <div class="social-post-text" id="ons-post">ONS just released the latest UK borrowing figures.
+
+Debt: £[NEW DEBT FIGURE]bn — [UP/DOWN] from last month.
+Monthly deficit: £[MONTHLY FIGURE]bn.
+Year-to-date borrowing: £[YTD FIGURE]bn — [above/below] OBR forecast.
+
+Full picture 👇
+uk-debt.info/debt-clock.html</div>
+        <button class="copy-btn" onclick="copyPost('ons-post', this)">Copy Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BANK OF ENGLAND -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon">🏦</div>
+    <div class="section-title">Bank of England MPC Decision <span class="priority high">HIGH</span></div>
+    <div class="section-when">Every 6 weeks</div>
+  </div>
+
+  <div class="task" id="t5">
+    <div class="task-check" onclick="toggle('t5')"></div>
+    <div class="task-body">
+      <div class="task-title">Check Bank Rate decision</div>
+      <div class="task-desc">The Monetary Policy Committee meets every 6 weeks. Check bankofengland.co.uk for the decision. If rates change, this affects your QE/QT cost calculations and future interest scenarios.</div>
+      <a class="task-link" href="https://www.bankofengland.co.uk/monetary-policy/the-interest-rate-bank-rate" target="_blank">→ Bank of England Bank Rate page</a>
+    </div>
+  </div>
+
+  <div class="task" id="t6">
+    <div class="task-check" onclick="toggle('t6')"></div>
+    <div class="task-body">
+      <div class="task-title">If rate changes: update understanding-qe-qt.html and future-interest.html</div>
+      <div class="task-desc">The QE/QT page shows the annual cost at current Bank Rate. If the rate changes, ask Claude to update the figures. The future interest page shows scenarios — check the current rate is correctly shown.</div>
+    </div>
+  </div>
+
+  <div class="task" id="t7">
+    <div class="task-check" onclick="toggle('t7')"></div>
+    <div class="task-body">
+      <div class="task-title">Post on X if rates change</div>
+      <div class="task-desc">Rate decisions get a lot of engagement on social media. Post immediately after the 12 noon announcement.</div>
+      <div class="social-post">
+        <div class="social-post-label">📱 X Post Template — rate cut version</div>
+        <div class="social-post-text" id="boe-post">Bank of England just cut rates to [NEW RATE]%.
+
+What this means for UK debt interest costs:
+At [NEW RATE]%: costs £[FIGURE]bn/year
+At previous [OLD RATE]%: was £[FIGURE]bn/year
+
+Every cut saves real money on the QE bill.
+
+uk-debt.info/understanding-qe-qt.html</div>
+        <button class="copy-btn" onclick="copyPost('boe-post', this)">Copy Post</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ONS LFS / JOBS -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon">👥</div>
+    <div class="section-title">ONS Labour Market Data <span class="priority med">MEDIUM</span></div>
+    <div class="section-when">2nd or 3rd Tuesday of month</div>
+  </div>
+
+  <div class="task" id="t8">
+    <div class="task-check" onclick="toggle('t8')"></div>
+    <div class="task-body">
+      <div class="task-title">Check unemployment rate and employment figures</div>
+      <div class="task-desc">Released monthly. Look for: unemployment rate, employment rate, and real wage growth. If unemployment moves significantly (above 5.5% or below 4.5%), update your employment.html page.</div>
+      <a class="task-link" href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes" target="_blank">→ ONS Labour Market Statistics</a>
+    </div>
+  </div>
+
+  <div class="task" id="t9">
+    <div class="task-check" onclick="toggle('t9')"></div>
+    <div class="task-body">
+      <div class="task-title">Check if US jobs revision is significant this month</div>
+      <div class="task-desc">Released first Friday of each month (US time — early afternoon UK). Check if the revision to previous months is large (over 50,000). If so, it's worth posting about on X — your jobs data accuracy page is very relevant.</div>
+      <a class="task-link" href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank">→ BLS Employment Situation release</a>
+    </div>
+  </div>
+</div>
+
+<!-- OBR / BUDGET -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon">📊</div>
+    <div class="section-title">OBR / Budget Events <span class="priority high">HIGH when they happen</span></div>
+    <div class="section-when">March + Autumn</div>
+  </div>
+
+  <div class="task" id="t10">
+    <div class="task-check" onclick="toggle('t10')"></div>
+    <div class="task-body">
+      <div class="task-title">Autumn Budget 2026 — update obr-spring-2026.html with new forecasts</div>
+      <div class="task-desc">The next major fiscal event is the Autumn Budget, likely October or November 2026. When it happens, ask Claude to update the OBR forecast table and all the key figures. This is your biggest content opportunity of the year.</div>
+      <a class="task-link" href="https://obr.uk" target="_blank">→ OBR website</a>
+    </div>
+  </div>
+
+  <div class="task" id="t11">
+    <div class="task-check" onclick="toggle('t11')"></div>
+    <div class="task-body">
+      <div class="task-title">When Budget happens: post a thread on X and a long LinkedIn post</div>
+      <div class="task-desc">The Budget is your highest-traffic moment of the year. Post immediately after the Chancellor sits down. Ask Claude to draft your X thread and LinkedIn post based on the new OBR figures — takes 5 minutes.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ANNUAL -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon">📅</div>
+    <div class="section-title">Annual Data Releases <span class="priority med">MEDIUM</span></div>
+    <div class="section-when">Various months</div>
+  </div>
+
+  <div class="task" id="t12">
+    <div class="task-check" onclick="toggle('t12')"></div>
+    <div class="task-body">
+      <div class="task-title">UBS Global Wealth Report (July each year) — update uk-wealth-decline.html</div>
+      <div class="task-desc">Published annually in July. This is the source for your wealth decline page. When the new report comes out, ask Claude to update the figures and the country comparison chart.</div>
+      <a class="task-link" href="https://www.ubs.com/global/en/family-office-uhnw/reports/global-wealth-report.html" target="_blank">→ UBS Global Wealth Report</a>
+    </div>
+  </div>
+
+  <div class="task" id="t13">
+    <div class="task-check" onclick="toggle('t13')"></div>
+    <div class="task-body">
+      <div class="task-title">BLS Annual Benchmark Revision (February each year) — update jobs-data-accuracy.html</div>
+      <div class="task-desc">The US Bureau of Labor Statistics publishes its annual benchmark revision every February. This is when major job count revisions are announced. Always worth a social media post — it's your most-shared content type.</div>
+      <a class="task-link" href="https://www.bls.gov/ces/publications/benchmark.htm" target="_blank">→ BLS Benchmark Revision page</a>
+    </div>
+  </div>
+
+  <div class="task" id="t14">
+    <div class="task-check" onclick="toggle('t14')"></div>
+    <div class="task-body">
+      <div class="task-title">OBR Fiscal Risks Report (every 2 years) — update fiscal-trajectory.html</div>
+      <div class="task-desc">The OBR publishes a Fiscal Risks and Sustainability report every two years. This contains the long-term debt projections (the 275% by 2070s figure). When it updates, check if the long-term forecast has changed.</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW TO UPDATE -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon">🔧</div>
+    <div class="section-title">How to Ask Claude to Update Pages</div>
+  </div>
+  <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.8">
+    <p style="margin-bottom:10px">When you have new figures and need to update the site, open a new Claude conversation and paste this template:</p>
+    <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px;font-family:monospace;font-size:12px;color:var(--ink-mid);line-height:1.8">
+      "Please update uk-debt.info with the latest ONS figures released today.<br><br>
+      New figures:<br>
+      PSND (total debt): £[X]bn / [X]% GDP<br>
+      Monthly borrowing: £[X]bn<br>
+      Year-to-date borrowing: £[X]bn<br>
+      [Any other figures from the release]<br><br>
+      Please update debt-clock.html, index.html, and any other pages where these figures appear. Also draft me an X post and LinkedIn post about the new data."
+    </div>
+    <p style="margin-top:10px">Claude will update all the relevant files and give you downloadable versions to upload to GitHub.</p>
+  </div>
+</div>
+
+<!-- DATA SOURCES -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-icon">🔗</div>
+    <div class="section-title">Your Key Data Sources — Bookmark These</div>
+  </div>
+  <div class="sources-box">
+    <div class="sources-row">
+      <span class="src-label">Monthly debt</span>
+      <a href="https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/previousReleases" target="_blank">ons.gov.uk — Public Sector Finances bulletin</a>
+    </div>
+    <div class="sources-row">
+      <span class="src-label">Bank Rate</span>
+      <a href="https://www.bankofengland.co.uk/monetary-policy/the-interest-rate-bank-rate" target="_blank">bankofengland.co.uk — Bank Rate page</a>
+    </div>
+    <div class="sources-row">
+      <span class="src-label">UK jobs</span>
+      <a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/bulletins/uklabourmarket/previousReleases" target="_blank">ons.gov.uk — Labour Market Statistics</a>
+    </div>
+    <div class="sources-row">
+      <span class="src-label">US jobs</span>
+      <a href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank">bls.gov — Employment Situation release</a>
+    </div>
+    <div class="sources-row">
+      <span class="src-label">OBR forecasts</span>
+      <a href="https://obr.uk/efo/economic-and-fiscal-outlook-march-2026/" target="_blank">obr.uk — Economic and Fiscal Outlook</a>
+    </div>
+    <div class="sources-row">
+      <span class="src-label">QE/QT costs</span>
+      <a href="https://www.bankofengland.co.uk/asset-purchase-facility/2026" target="_blank">bankofengland.co.uk — Asset Purchase Facility</a>
+    </div>
+    <div class="sources-row">
+      <span class="src-label">UK wealth</span>
+      <a href="https://www.ubs.com/global/en/family-office-uhnw/reports/global-wealth-report.html" target="_blank">ubs.com — Global Wealth Report (annual, July)</a>
+    </div>
+    <div class="sources-row">
+      <span class="src-label">Russia economy</span>
+      <a href="https://www.kiel-institute.org/publications/kiel-reports" target="_blank">kiel-institute.org — Kiel Reports on Russia</a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  uk-debt.info Monthly Update Checklist · Bookmark this page and open it at the start of each month · Tasks reset when you click Reset
+</div>
+
+<script>
+// Current month display
+const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const now = new Date();
+document.getElementById('current-month').textContent = months[now.getMonth()] + ' ' + now.getFullYear() + ' Checklist';
+
+// Next release dates (approximate)
+const nextONS = new Date(now.getFullYear(), now.getMonth(), 21);
+if(nextONS < now) nextONS.setMonth(nextONS.getMonth() + 1);
+const nextMPC = 'Check bankofengland.co.uk for next MPC date';
+document.getElementById('next-dates').textContent = 'Next ONS release: approx ' + nextONS.toDateString() + '  |  ' + nextMPC;
+
+// Task toggle
+function toggle(id) {
+  const task = document.getElementById(id);
+  const check = task.querySelector('.task-check');
+  const body = task.querySelector('.task-body');
+  if(check.classList.contains('done')) {
+    check.classList.remove('done');
+    check.textContent = '';
+    body.classList.remove('done-text');
+  } else {
+    check.classList.add('done');
+    check.textContent = '✓';
+    body.classList.add('done-text');
+  }
+  updateProgress();
+  saveState();
+}
+
+function updateProgress() {
+  const total = document.querySelectorAll('.task-check').length;
+  const done = document.querySelectorAll('.task-check.done').length;
+  document.getElementById('progress-text').textContent = done + ' of ' + total + ' tasks done';
+  document.getElementById('progress-fill').style.width = (done/total*100) + '%';
+}
+
+function saveState() {
+  const state = {};
+  document.querySelectorAll('.task').forEach(t => {
+    state[t.id] = t.querySelector('.task-check').classList.contains('done');
+  });
+  localStorage.setItem('checklist-' + now.getMonth() + '-' + now.getFullYear(), JSON.stringify(state));
+}
+
+function loadState() {
+  const saved = localStorage.getItem('checklist-' + now.getMonth() + '-' + now.getFullYear());
+  if(!saved) return;
+  const state = JSON.parse(saved);
+  Object.entries(state).forEach(([id, done]) => {
+    if(done) {
+      const task = document.getElementById(id);
+      if(task) {
+        const check = task.querySelector('.task-check');
+        const body = task.querySelector('.task-body');
+        check.classList.add('done');
+        check.textContent = '✓';
+        body.classList.add('done-text');
+      }
+    }
+  });
+  updateProgress();
+}
+
+function resetAll() {
+  if(!confirm('Reset all tasks for this month?')) return;
+  document.querySelectorAll('.task-check').forEach(c => {
+    c.classList.remove('done');
+    c.textContent = '';
+  });
+  document.querySelectorAll('.task-body').forEach(b => b.classList.remove('done-text'));
+  updateProgress();
+  localStorage.removeItem('checklist-' + now.getMonth() + '-' + now.getFullYear());
+}
+
+function copyPost(id, btn) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy Post'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+loadState();
+updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Cost of Living Crisis – Energy, Food, Rent & Wages | UK-Debt.info</title>
+<meta name="description" content="How UK costs have risen since 2020 — energy bills, grocery prices, rent, mortgages and wages. The full cost of living crisis in data.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#2d0044,#600090,#8800cc);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss-item{text-align:center}.ss-item .sv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}.ss-item .sl{font-size:10px;letter-spacing:2px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.ss-item.red .sv{color:var(--red)}.ss-item.green .sv{color:var(--green)}.ss-item.amber .sv{color:var(--amber)}.ss-item.blue .sv{color:var(--blue)}.ss-item.purple .sv{color:var(--purple)}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.price-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:5px;border:1px solid var(--border);margin-bottom:6px;background:#fff}
+.price-icon{font-size:20px;flex-shrink:0;width:30px;text-align:center}
+.price-name{flex:1;font-size:13px;font-weight:700;color:var(--ink)}
+.price-2020{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:var(--green);width:75px;text-align:right;flex-shrink:0}
+.price-now{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;color:var(--red);width:75px;text-align:right;flex-shrink:0}
+.price-change{font-size:12px;font-weight:700;width:55px;text-align:right;flex-shrink:0}
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.green-box{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+@media(max-width:768px){
+  .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .top-nav::-webkit-scrollbar{display:none}
+  .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+  .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+  .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+  
+  .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="money-in-out.html" class="done">Money In & Out</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="done">Public vs Private Employment</a>
+        <a href="pensions.html" class="done">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html" class="done">UK vs The World</a>
+        <a href="timeline.html" class="done">Historical Timeline</a>
+        <a href="cost-of-living.html" class="active">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>UK COST OF LIVING — 2020 TO TODAY</h1>
+    <div class="subtitle">Energy · Food · Rent · Mortgages · Transport · Real Wages · ONS · Ofgem · Bank of England</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss-item red"><div class="sv">+£1,900</div><div class="sl">Extra Annual Cost Per Household</div></div>
+  <div class="ss-item red"><div class="sv">+25%</div><div class="sl">Food Prices Since Early 2022</div></div>
+  <div class="ss-item amber"><div class="sv">£1,568/yr</div><div class="sl">Average Energy Bill 2025/26</div></div>
+  <div class="ss-item red"><div class="sv">+35%</div><div class="sl">Average Rents Since 2021</div></div>
+  <div class="ss-item purple"><div class="sv">79%</div><div class="sl">Adults Reporting Higher Costs Apr 2026</div></div>
+</div>
+
+<div class="main">
+
+  <!-- INFLATION CHART -->
+  <div class="panel full-width red-accent">
+    <div class="panel-label">UK CPI Inflation — The Crisis in One Chart (2019–2026)</div>
+    <canvas id="inflChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>CPI Inflation % (annual)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc;border:1px dashed #0060cc"></div>BoE 2% Target</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Real Wage Growth %</div>
+    </div>
+    <div class="red-box">
+      🚨 The annual rate of inflation peaked at 11.1% in October 2022 — a 41-year high — before easing over the subsequent 18 months. During the worst period, 91% of adults in Great Britain reported a higher cost of living than the previous month. Real wages fell for two consecutive years — the sharpest drop in recorded UK history.
+    </div>
+  </div>
+
+  <!-- PRICE COMPARISON TABLE -->
+  <div class="panel red-accent">
+    <div class="panel-label">What Things Actually Cost — 2020 vs 2026</div>
+    <div style="display:grid;grid-template-columns:1fr 70px 70px 55px;gap:4px;padding:6px 12px;background:var(--panel2);border-radius:5px;border:1px solid var(--border);margin-bottom:8px">
+      <span style="font-size:10px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:1px">Item</span>
+      <span style="font-size:10px;font-weight:700;color:var(--green);text-align:right;text-transform:uppercase;letter-spacing:1px">2020</span>
+      <span style="font-size:10px;font-weight:700;color:var(--red);text-align:right;text-transform:uppercase;letter-spacing:1px">2026</span>
+      <span style="font-size:10px;font-weight:700;color:var(--ink-mid);text-align:right;text-transform:uppercase;letter-spacing:1px">Change</span>
+    </div>
+    ${[
+      ['⚡','Annual energy bill','£1,042','£1,568','+51%'],
+      ['🥛','4 pints of milk','£1.09','£1.55','+42%'],
+      ['🍞','800g sliced bread','£0.89','£1.35','+52%'],
+      ['🧈','250g butter','£1.15','£1.85','+61%'],
+      ['🥚','6 free range eggs','£1.49','£2.85','+91%'],
+      ['🍗','Whole chicken (1.4kg)','£3.50','£4.80','+37%'],
+      ['☕','200g instant coffee','£2.49','£4.20','+69%'],
+      ['🚌','Average bus fare','£1.85','£2.50','+35%'],
+      ['🏠','Avg London rent (1-bed)','£1,580/mo','£2,180/mo','+38%'],
+      ['🏠','Avg UK rent (1-bed)','£750/mo','£1,020/mo','+36%'],
+      ['⛽','Litre of petrol','£1.10','£1.34','+22%'],
+      ['📱','Mobile contract (avg)','£19/mo','£28/mo','+47%'],
+      ['💇','Haircut (avg)','£18','£28','+56%'],
+      ['🍺','Pint of lager (pub)','£3.80','£5.20','+37%'],
+    ].map(([i,n,a,b,c])=>`
+    <div class="price-row">
+      <span class="price-icon">${i}</span>
+      <span class="price-name">${n}</span>
+      <span class="price-2020">${a}</span>
+      <span class="price-now">${b}</span>
+      <span class="price-change" style="color:var(--red)">${c}</span>
+    </div>`).join('')}
+    <div class="warn-box">
+      ⚠️ Energy bills peaked at £3,549/year in early 2023 before settling around £1,560/year in 2025 — still 20% above pre-crisis levels. Food prices rose approximately 25% in total between early 2022 and 2025.
+    </div>
+  </div>
+
+  <!-- ENERGY CHART -->
+  <div class="panel amber-accent">
+    <div class="panel-label">Ofgem Energy Price Cap — Annual Household Bill 2019–2026</div>
+    <canvas id="energyChart" height="260"></canvas>
+    <div class="warn-box">
+      ⚠️ The energy price cap rose from £1,042 in 2020 to a peak of £3,549 in Q1 2023. The Government's Energy Price Guarantee capped bills at £2,500 for most of 2023, costing £37bn in taxpayer subsidies. Bills have since fallen but remain ~20% above pre-crisis levels. Over 6.5 million households are in fuel poverty.
+    </div>
+  </div>
+
+  <!-- REAL WAGES vs INFLATION -->
+  <div class="panel green-accent">
+    <div class="panel-label">Real Wages vs Inflation — The Squeeze & Partial Recovery</div>
+    <canvas id="wageChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>CPI Inflation %</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Nominal Wage Growth %</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>Real Wage Growth % (wage minus CPI)</div>
+    </div>
+    <div class="info-box">
+      📋 In April 2026, 21% of adults in Great Britain said they had to borrow more money or use more credit than usual in the last month. 23% said they would not be able to afford an unexpected but necessary expense of £850. The partial recovery in real wages since 2023 has not fully reversed the losses of 2022–23.
+    </div>
+  </div>
+
+  <!-- FOOD BANK & HARDSHIP -->
+  <div class="panel full-width purple-accent">
+    <div class="panel-label">The Human Cost — Food Banks, Debt & Financial Distress</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:8px">
+      <div style="background:var(--red-light);border:2px solid var(--red-mid);border-radius:8px;padding:16px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:28px;font-weight:700;color:var(--red)">2.6m</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:6px">Emergency food parcels distributed by Trussell in 2025 — down 12% from 2024 peak as inflation eased</div>
+      </div>
+      <div style="background:var(--amber-light);border:2px solid var(--amber-mid);border-radius:8px;padding:16px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:28px;font-weight:700;color:var(--amber)">6.5m</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:6px">Households in fuel poverty — unable to heat their home adequately</div>
+      </div>
+      <div style="background:var(--red-light);border:2px solid var(--red-mid);border-radius:8px;padding:16px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:28px;font-weight:700;color:var(--red)">126k</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:6px">Personal insolvencies in 2025 — highest since 2010</div>
+      </div>
+      <div style="background:var(--purple-light);border:2px solid var(--purple-mid);border-radius:8px;padding:16px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:28px;font-weight:700;color:var(--purple)">24%</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:6px">Adults finding it difficult to cope financially (FCA May 2024) — down from 36% in Jan 2023</div>
+      </div>
+      <div style="background:var(--blue-light);border:2px solid var(--blue-mid);border-radius:8px;padding:16px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:28px;font-weight:700;color:var(--blue)">23%</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:6px">Adults unable to cover an unexpected £850 expense</div>
+      </div>
+      <div style="background:var(--amber-light);border:2px solid var(--amber-mid);border-radius:8px;padding:16px;text-align:center">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:28px;font-weight:700;color:var(--amber)">79%</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-mid);margin-top:6px">Adults reporting higher costs of living in April 2026 vs previous month</div>
+      </div>
+    </div>
+    <div class="red-box" style="margin-top:14px">
+      🚨 <strong>The legacy of the crisis:</strong> Even as inflation has fallen back, the damage is permanent — prices don't reverse. A household basket that cost £400/month in 2020 now costs ~£520. The extra £120/month compounds year after year. For the bottom 40% of earners, who spend a much higher share of income on essentials, the real living standard loss is severe and ongoing.
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ Price data from ONS Consumer Price Inflation, Ofgem, supermarket price trackers. Rent data from ONS Private Rental Index. Food bank data from Trussell Trust.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: ONS CPI · Ofgem · Trussell Trust · FCA · House of Commons Library CBP-9428</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+const infYrs=['Jan 20','Jul 20','Jan 21','Jul 21','Jan 22','Apr 22','Jul 22','Oct 22','Jan 23','Apr 23','Jul 23','Oct 23','Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Jan 26','Apr 26'];
+const cpiVals=[1.8,0.6,0.7,2.1,5.5,7.0,10.1,11.1,10.1,8.7,6.8,4.6,4.0,3.2,2.2,2.3,3.0,3.4,3.2,2.3,3.0,3.2];
+const realWage=[-0.2,0.1,-0.3,0.2,-4.0,-5.0,-5.8,-6.2,-5.7,-4.1,-2.1,-0.5,1.0,1.8,1.5,1.8,1.5,1.2,1.0,0.8,0.5,0.6];
+
+new Chart(document.getElementById('inflChart'),{
+  type:'line',
+  data:{
+    labels:infYrs,
+    datasets:[
+      {label:'CPI',data:cpiVals,borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.08)',fill:true,borderWidth:2.5,pointRadius:2,tension:0.4},
+      {label:'2% Target',data:infYrs.map(()=>2),borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,borderDash:[4,3]},
+      {label:'Real Wages',data:realWage,borderColor:'#008844',backgroundColor:'transparent',borderWidth:2,pointRadius:2,tension:0.4}
+    ]
+  },
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:8,weight:'bold'},maxRotation:45,maxTicksLimit:12},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'%',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'},min:-8,max:13}
+    }
+  }
+});
+
+const energyYrs=['Q1 2019','Q3 2019','Q1 2020','Q3 2020','Q1 2021','Q3 2021','Q1 2022','Q3 2022','Q1 2023','Q3 2023','Q1 2024','Q3 2024','Q1 2025','Q3 2025','Q1 2026'];
+const energyCap=[1254,1285,1042,1100,1042,1277,2017,3549,3549,2074,1928,1717,1690,1622,1568];
+const energyActual=[1254,1285,1042,1100,1042,1277,2017,2500,2500,2074,1928,1717,1690,1622,1568];
+
+new Chart(document.getElementById('energyChart'),{
+  type:'line',
+  data:{
+    labels:energyYrs,
+    datasets:[
+      {label:'Ofgem Price Cap',data:energyCap,borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.08)',fill:true,borderWidth:2.5,pointRadius:3,tension:0.2},
+      {label:'Effective Bill (incl. EPG)',data:energyActual,borderColor:'#c97000',backgroundColor:'transparent',borderWidth:2,pointRadius:2,tension:0.2,borderDash:[4,2]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{labels:{font:{size:11,weight:'bold'},color:'#2a3a50'}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: £${ctx.raw}/yr`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},maxRotation:45},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'Annual Bill (£)',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>'£'+v},grid:{color:'rgba(0,0,0,0.05)'},min:800}
+    }
+  }
+});
+
+const wageYrs=['2019','2020','2021 Q1','2021 Q4','2022 Q1','2022 Q3','2023 Q1','2023 Q3','2024 Q1','2024 Q3','2025 Q1','2025 Q4','2026 Q1'];
+const nomWage=[3.5,3.8,4.2,4.5,5.8,6.2,6.9,8.5,5.9,4.9,5.2,5.5,5.3];
+const cpiQ   =[1.8,0.7,0.7,4.2,6.2,10.1,10.4,6.7,4.2,1.7,3.0,2.6,3.0];
+const realQ  =nomWage.map((n,i)=>+(n-cpiQ[i]).toFixed(1));
+
+new Chart(document.getElementById('wageChart'),{
+  type:'line',
+  data:{
+    labels:wageYrs,
+    datasets:[
+      {label:'CPI',data:cpiQ,borderColor:'#d40020',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3},
+      {label:'Nominal Wages',data:nomWage,borderColor:'#008844',backgroundColor:'transparent',borderWidth:2,pointRadius:3,tension:0.3},
+      {label:'Real Wages',data:realQ,borderColor:'#6600cc',backgroundColor:'rgba(102,0,204,0.06)',fill:true,borderWidth:2.5,pointRadius:3,tension:0.3}
+    ]
+  },
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:9,weight:'bold'},maxRotation:30},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'Annual Change %',color:'#2a3a50',font:{size:11,weight:'bold'}},ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'},min:-8}
+    }
+  }
+});
+</script>
+</body>
+</html>

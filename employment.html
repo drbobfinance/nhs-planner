@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Public vs Private Employment & Executive Pay | UK-Debt.info</title>
+<meta name="description" content="UK public vs private sector employment trends, labour share of GDP, CEO pay ratios, and the growing gap between executive and worker remuneration. Data from ONS, High Pay Centre, ILO.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;--green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;--amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;--blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;--purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;--ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
+.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
+.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
+.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
+.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
+.nav-groups{display:flex;align-items:stretch}
+.nav-group{position:relative;display:flex;align-items:stretch}
+.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
+.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
+.arrow{font-size:9px;opacity:0.7}
+.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
+.nav-group.open .dropdown{display:block}
+.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s}
+.dropdown a:hover,.dropdown a.active{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
+.dropdown a.done::after{content:' ✓';font-size:10px;color:var(--green)}
+.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
+.dropdown-section:first-child{border-top:none}
+
+.header{background:linear-gradient(135deg,#1a0044,#2d0066,#4400aa);padding:24px 40px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 3px 12px rgba(26,0,68,0.4)}
+.header-title h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;line-height:1}
+.header-title .subtitle{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:3px;font-weight:600}
+.header-right{text-align:right;font-family:'Share Tech Mono',monospace}
+.live-time{font-size:20px;color:#fff;letter-spacing:2px;font-weight:700}
+.live-date{font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:2px}
+.stats-strip{background:#fff;border-bottom:2px solid var(--border);padding:14px 28px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-around}
+.ss-item{text-align:center}.ss-item .sv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}.ss-item .sl{font-size:10px;letter-spacing:2px;color:var(--ink-light);text-transform:uppercase;margin-top:3px;font-weight:700}
+.ss-item.red .sv{color:var(--red)}.ss-item.green .sv{color:var(--green)}.ss-item.amber .sv{color:var(--amber)}.ss-item.blue .sv{color:var(--blue)}.ss-item.purple .sv{color:var(--purple)}
+.main{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px 32px}
+@media(max-width:900px){.main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.panel.full-width{grid-column:1/-1}
+.panel.red-accent{border-top:4px solid var(--red);background:linear-gradient(180deg,var(--red-light) 0%,#fff 60%)}
+.panel.green-accent{border-top:4px solid var(--green);background:linear-gradient(180deg,var(--green-light) 0%,#fff 60%)}
+.panel.amber-accent{border-top:4px solid var(--amber);background:linear-gradient(180deg,var(--amber-light) 0%,#fff 60%)}
+.panel.blue-accent{border-top:4px solid var(--blue);background:linear-gradient(180deg,var(--blue-light) 0%,#fff 60%)}
+.panel.purple-accent{border-top:4px solid var(--purple);background:linear-gradient(180deg,var(--purple-light) 0%,#fff 60%)}
+.panel-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-mid);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-weight:700}
+.panel-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.stat-box{padding:12px;border-radius:6px;border:1px solid transparent;text-align:center}
+.stat-box .sv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}
+.stat-box .sl{font-size:11px;font-weight:700;color:var(--ink-mid);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;line-height:1.3}
+.stat-box.red{background:var(--red-light);border-color:var(--red-mid)}.stat-box.red .sv{color:var(--red)}
+.stat-box.green{background:var(--green-light);border-color:var(--green-mid)}.stat-box.green .sv{color:var(--green)}
+.stat-box.amber{background:var(--amber-light);border-color:var(--amber-mid)}.stat-box.amber .sv{color:var(--amber)}
+.stat-box.blue{background:var(--blue-light);border-color:var(--blue-mid)}.stat-box.blue .sv{color:var(--blue)}
+.stat-box.purple{background:var(--purple-light);border-color:var(--purple-mid)}.stat-box.purple .sv{color:var(--purple)}
+/* CEO CLOCK */
+.ceo-clock{background:linear-gradient(135deg,#0d1520,#1a2535);border-radius:8px;padding:20px;text-align:center;margin-bottom:14px}
+.ceo-clock h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:rgba(255,255,255,0.8);margin-bottom:10px}
+.ceo-earnings{font-family:'Share Tech Mono',monospace;font-size:32px;font-weight:700;color:#ffcc44;letter-spacing:2px}
+.ceo-label{font-size:11px;color:rgba(255,255,255,0.6);margin-top:6px;font-weight:600;letter-spacing:1px}
+.worker-earnings{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:#44cc88;margin-top:12px}
+.ratio-display{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--red);letter-spacing:2px;margin-top:8px}
+.ratio-label{font-size:11px;color:rgba(255,255,255,0.6);font-weight:600;letter-spacing:1px}
+/* RATIO BAR */
+.ratio-bar-wrap{margin:12px 0}
+.ratio-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.rb-label{width:140px;font-size:12px;font-weight:700;color:var(--ink-mid);flex-shrink:0;text-align:right}
+.rb-track{flex:1;height:18px;background:var(--panel2);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.rb-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap}
+.rb-val{width:80px;font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0}
+.warn-box{background:var(--amber-light);border:1px solid var(--amber-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.red-box{background:var(--red-light);border:1px solid var(--red-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.info-box{background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.green-box{background:var(--green-light);border:1px solid var(--green-mid);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--ink-mid);font-weight:700;line-height:1.7;margin-top:10px}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--ink-mid)}
+.legend-dot{width:14px;height:8px;border-radius:2px;flex-shrink:0}
+.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
+.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
+.footer{background:var(--panel);border-top:2px solid var(--border);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
+.footer-links a:hover{color:var(--blue)}
+@media(max-width:768px){
+  .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .top-nav::-webkit-scrollbar{display:none}
+  .nav-groups{flex-shrink:0;flex-wrap:nowrap}
+  .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
+  .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
+  
+  .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
+}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="27" fill="#012169"/><line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/><line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/><line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/><rect x="0" y="10" width="44" height="7" fill="white"/><rect x="19" y="0" width="6" height="27" fill="white"/><rect x="0" y="11" width="44" height="5" fill="#C8102E"/><rect x="20" y="0" width="4" height="27" fill="#C8102E"/></svg>
+    <span>UK-DEBT.INFO</span>
+  </a>
+  <div class="nav-groups">
+    <div class="nav-group" id="ng1">
+      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <div class="dropdown-section">Live Clocks</div>
+        <a href="debt-clock.html" class="done">National Debt Clock</a>
+        <div class="dropdown-section">Analysis</div>
+        <a href="interest-payments.html" class="done">Interest Payments</a>
+        <a href="future-interest.html" class="done">Future Interest Scenarios</a>
+        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
+        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
+        <a href="chancellor.html" class="done">🎮 Chancellor Game</a>
+        <a href="money-in-out.html" class="done">Money In & Out</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng2">
+      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="uk-assets.html" class="done">UK Asset Clock</a>
+        <a href="boe-bonds.html" class="done">BoE Bond Programme</a>
+        <a href="understanding-qe-qt.html" class="done">Understanding QE and QT</a>
+        <a href="money-supply.html" class="done">Asset Prices vs M2 & GDP</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng3">
+      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="employment.html" class="active">Public vs Private Employment</a>
+        <a href="pensions.html">Pension Liabilities</a>
+        <a href="personal-finance.html" class="done">Personal Finance</a>
+        <a href="salary-calculator.html" class="done">Salary Calculator</a>
+      </div>
+    </div>
+    <div class="nav-group" id="ng4">
+      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
+      <div class="dropdown">
+        <a href="human-scale.html" class="done">The Human Scale</a>
+        <a href="uk-vs-world.html">UK vs The World</a>
+        <a href="timeline.html">Historical Timeline</a>
+        <a href="cost-of-living.html">Cost of Living</a>
+        <a href="trade-deficit.html" class="done">Trade Deficit</a>
+        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      </div>
+    </div>
+  </div>
+  
+</nav>
+
+<div class="header">
+  <div class="header-title">
+    <h1>UK EMPLOYMENT — PUBLIC vs PRIVATE, LABOUR SHARE & EXECUTIVE PAY</h1>
+    <div class="subtitle">Workforce Composition · Labour Share of GDP · CEO Pay Ratios · Workers vs Capital · ONS · High Pay Centre · ILO</div>
+  </div>
+  <div class="header-right">
+    <div class="live-time" id="live-time">--:--:--</div>
+    <div class="live-date" id="live-date">-- --- ----</div>
+  </div>
+</div>
+
+<div class="stats-strip">
+  <div class="ss-item blue"><div class="sv">33.5m</div><div class="sl">Total UK Workers</div></div>
+  <div class="ss-item red"><div class="sv">6.1m</div><div class="sl">Public Sector Workers</div></div>
+  <div class="ss-item green"><div class="sv">27.4m</div><div class="sl">Private Sector Workers</div></div>
+  <div class="ss-item amber"><div class="sv">~55%</div><div class="sl">Labour Share of GDP (2023)</div></div>
+  <div class="ss-item red"><div class="sv">122×</div><div class="sl">FTSE 100 CEO vs Worker Pay</div></div>
+  <div class="ss-item purple"><div class="sv">£4.58m</div><div class="sl">Median FTSE 100 CEO Pay 2025</div></div>
+</div>
+
+<div class="main">
+
+  <!-- CEO LIVE COUNTER -->
+  <div class="panel full-width purple-accent">
+    <div class="panel-label">⏱️ FTSE 100 CEO Earnings vs The Median Worker — Right Now</div>
+    <div class="ceo-clock">
+      <h3>MEDIAN FTSE 100 CEO — EARNINGS THIS YEAR SO FAR</h3>
+      <div class="ceo-earnings" id="ceoEarnings">£0</div>
+      <div class="ceo-label">CEO earnings since 1 Jan 2026 (£4.58m/year = £12,548/day = £523/hour = £8.72/second)</div>
+      <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div>
+          <div class="worker-earnings" id="workerEarnings">£0</div>
+          <div class="ceo-label" style="color:rgba(255,255,255,0.5)">Median worker earnings same period (£39,039/yr)</div>
+        </div>
+        <div>
+          <div class="ratio-display" id="currentRatio">122×</div>
+          <div class="ratio-label">CEO earns this many times more than the median worker</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:14px;margin-top:4px">
+      <div style="font-size:12px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">🏆 The "High Pay Hour" — When Did the CEO Overtake the Worker's Annual Salary?</div>
+      <div style="font-size:14px;font-weight:700;color:var(--ink-mid);line-height:1.6">By <strong>midday on Tuesday 6 January 2026</strong>, the median FTSE 100 CEO had already earned more than the median UK worker will earn in the entire year. That's less than <strong>3 working days</strong> into the year. The worker must then work the remaining <strong>362 days</strong> to match what the CEO earned before lunch on their third day back.</div>
+    </div>
+    <div class="red-box">
+      🚨 <strong>The numbers:</strong> Median FTSE 100 CEO pay 2024/25: £4.58m — a record high and the fourth successive year of increases. This is <strong>122× the median UK full-time worker's salary of £37,430</strong>. Mean CEO pay rose 15.4% to £5.91m. Thirteen FTSE 100 companies paid their CEO over £10m — up from 10 the previous year. Total FTSE 100 executive pay bill: £1 billion for 217 roles.
+    </div>
+  </div>
+
+  <!-- CEO PAY RATIO HISTORY -->
+  <div class="panel purple-accent">
+    <div class="panel-label">FTSE 100 CEO Pay Ratio — Times the Median Worker (1998–2025)</div>
+    <canvas id="ceoRatioChart" height="280"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>CEO:Worker Pay Ratio (×)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020;border:1px dashed"></div>If ratio had stayed at 1998 level</div>
+    </div>
+    <div class="warn-box">
+      ⚠️ In 1998, the typical FTSE 100 CEO earned approximately 47 times the median worker. By 2025 this had risen to 122 times. The ratio briefly fell during COVID-19 (2020) when CEO pay was cut, then rebounded sharply as executive pay was restored while worker wages lagged inflation.
+    </div>
+  </div>
+
+  <!-- CEO vs WORKER PAY ABSOLUTE -->
+  <div class="panel red-accent">
+    <div class="panel-label">CEO vs Median Worker Pay — Absolute (£) 2010–2025</div>
+    <canvas id="ceoAbsChart" height="280"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>Median FTSE 100 CEO Pay (£m, left)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Median Worker Annual Pay (£k, right)</div>
+    </div>
+    <div class="red-box">
+      🚨 Between 2010 and 2025, median FTSE 100 CEO pay rose from £3.2m to £4.58m — a 43% increase. Over the same period median worker pay rose from £26,100 to £37,430 — a 43% increase in nominal terms but only ~5% in real terms after inflation. The absolute gap has widened from £3.17m to £4.54m.
+    </div>
+  </div>
+
+  <!-- PUBLIC vs PRIVATE EMPLOYMENT -->
+  <div class="panel full-width blue-accent">
+    <div class="panel-label">UK Public vs Private Sector Employment — 1999 to 2026 (millions)</div>
+    <canvas id="empChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Public Sector (m)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Private Sector (m)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c97000"></div>Private workers per Public worker (right axis)</div>
+    </div>
+    <div class="info-box">
+      📋 The public sector workforce peaked at 6.3 million in 2009-10 at the height of Labour government expansion, then fell to 5.3 million by 2016 during the austerity period. It has since grown back to 6.1 million. Each public sector worker generates future pension liability — a growing headcount means growing long-term obligations. The private-to-public ratio has fallen from 4.8:1 in 2016 to 4.5:1 today, meaning fewer private sector taxpayers are supporting each public sector worker's future pension.
+    </div>
+  </div>
+
+  <!-- LABOUR SHARE OF GDP -->
+  <div class="panel full-width amber-accent">
+    <div class="panel-label">Labour Share of GDP — What Workers Get vs What Goes to Capital (1997–2023)</div>
+    <canvas id="labourShareChart" height="260"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Labour Share of GDP % (wages & salaries)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Capital/Profit Share % (residual)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc;border:1px dashed #0060cc"></div>Labour productivity index (1997=100)</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px">
+      <div class="green-box" style="margin-top:0">
+        ✅ <strong>The UK story is nuanced:</strong> Unlike the US, UK labour share has not dramatically fallen — it actually rose by nearly 6 percentage points from 1997 to 2023 according to the ONS. However this headline figure masks important problems.
+      </div>
+      <div class="warn-box" style="margin-top:0">
+        ⚠️ <strong>But wage growth has still lagged productivity:</strong> There is a 25 percentage point gap between median wage growth and productivity growth since 1981. The gains went to high earners, not typical workers. Mean wages rose with productivity — median wages did not.
+      </div>
+    </div>
+    <div class="red-box">
+      🚨 <strong>The Kobeissi Letter finding:</strong> While UK aggregate labour share looks stable, this conceals a massive internal redistribution — from median and lower-paid workers toward the highest earners. Executive pay, financial sector bonuses and capital gains have all surged, while the bottom 60% of workers saw real wages stagnate or fall relative to GDP per head. The chart below shows how the fruits of productivity growth were distributed.
+    </div>
+  </div>
+
+  <!-- PRODUCTIVITY vs WAGES DECOUPLING -->
+  <div class="panel full-width green-accent">
+    <div class="panel-label">Productivity vs Pay — The Great Decoupling (1981–2025, Index 1981=100)</div>
+    <canvas id="decouplingChart" height="280"></canvas>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#0060cc"></div>Labour Productivity (GDP per hour worked)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#008844"></div>Mean Hourly Compensation (all workers)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#d40020"></div>Median Hourly Wage (typical worker)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600cc"></div>Top 10% Average Wage</div>
+    </div>
+    <div class="red-box">
+      🚨 <strong>The key insight:</strong> Labour productivity and mean wages have broadly kept pace with each other — but median wages have fallen 25 percentage points behind productivity since 1981. The gains from productivity went almost entirely to the top of the income distribution. A worker at the median today earns only marginally more in real terms than in 2008, despite the economy being ~20% larger. This is the mathematical explanation for why the UK feels poorer for most people despite growing GDP.
+    </div>
+  </div>
+
+  <!-- SECTOR BREAKDOWN -->
+  <div class="panel blue-accent">
+    <div class="panel-label">Public Sector — Where Are the 6.1 Million Workers? (2025)</div>
+    <div class="ratio-bar-wrap">
+      <div class="ratio-bar-row">
+        <span class="rb-label">NHS / Health</span>
+        <div class="rb-track"><div class="rb-fill" style="width:100%;background:linear-gradient(90deg,#ff8090,#d40020)">1.83m</div></div>
+        <span class="rb-val" style="color:var(--red)">1.83m</span>
+      </div>
+      <div class="ratio-bar-row">
+        <span class="rb-label">Education</span>
+        <div class="rb-track"><div class="rb-fill" style="width:88%;background:linear-gradient(90deg,#ffd070,#c97000)">1.61m</div></div>
+        <span class="rb-val" style="color:var(--amber)">1.61m</span>
+      </div>
+      <div class="ratio-bar-row">
+        <span class="rb-label">Local Government</span>
+        <div class="rb-track"><div class="rb-fill" style="width:72%;background:linear-gradient(90deg,#4090e0,#0060cc)">1.32m</div></div>
+        <span class="rb-val" style="color:var(--blue)">1.32m</span>
+      </div>
+      <div class="ratio-bar-row">
+        <span class="rb-label">Civil Service</span>
+        <div class="rb-track"><div class="rb-fill" style="width:38%;background:linear-gradient(90deg,#d4b0f8,#6600cc)">0.70m</div></div>
+        <span class="rb-val" style="color:var(--purple)">0.70m</span>
+      </div>
+      <div class="ratio-bar-row">
+        <span class="rb-label">Armed Forces</span>
+        <div class="rb-track"><div class="rb-fill" style="width:10%;background:linear-gradient(90deg,#60d0a0,#008844)">0.18m</div></div>
+        <span class="rb-val" style="color:var(--green)">0.18m</span>
+      </div>
+      <div class="ratio-bar-row">
+        <span class="rb-label">Police</span>
+        <div class="rb-track"><div class="rb-fill" style="width:8%;background:linear-gradient(90deg,#60d0a0,#008844)">0.15m</div></div>
+        <span class="rb-val" style="color:var(--green)">0.15m</span>
+      </div>
+      <div class="ratio-bar-row">
+        <span class="rb-label">Other Public</span>
+        <div class="rb-track"><div class="rb-fill" style="width:17%;background:#4a5a6e">0.32m</div></div>
+        <span class="rb-val" style="color:var(--ink-mid)">0.32m</span>
+      </div>
+    </div>
+    <div class="warn-box">
+      ⚠️ Every one of these 6.1 million workers accrues future pension liability at ~29% of salary per year in employer contributions. NHS alone: 1.83m workers × avg £38k × 29% = £20bn/yr in new pension liability accruing. Growing the public sector headcount without reforming pensions directly increases the long-term unfunded liability shown on our <a href="off-balance-sheet.html" style="color:var(--amber)">Off-Balance-Sheet Debt page</a>.
+    </div>
+  </div>
+
+  <!-- WHAT IT MEANS -->
+  <div class="panel amber-accent">
+    <div class="panel-label">The Four Key Problems — What the Data Shows</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:13px">
+        <div style="font-size:12px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">1. Executive Pay Has Exploded</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">FTSE 100 CEO pay is now 122× the median worker — up from 47× in 1998. This isn't primarily about productivity or value creation — it reflects the power of remuneration committees, long-term incentive plans (LTIPs), and a lack of effective corporate governance constraints on pay at the top.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:13px">
+        <div style="font-size:12px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">2. Productivity Gains Went to the Top</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">Since 1981, labour productivity rose by ~120%. Mean wages kept pace — but median wages fell 25 percentage points behind. The gains were captured by the top 20% of earners, particularly the top 1%. A typical worker today is barely better off in real terms than in 2008 despite 17 years of economic growth.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:13px">
+        <div style="font-size:12px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">3. Public Sector Growth Adds Pension Liability</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">The public sector workforce has grown back to 6.1m after austerity cuts. Every additional worker adds to the £1.4tn unfunded pension liability. The ratio of private-to-public workers (who fund public pensions through taxes) has narrowed — meaning fewer taxpayers supporting each pensioner.</div>
+      </div>
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:13px">
+        <div style="font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">4. Zero Hour Contracts & Gig Economy</div>
+        <div style="font-size:13px;font-weight:600;color:var(--ink-mid);line-height:1.6">Self-employment rose from 11.8% of the workforce in 1981 to 15.7% in 2019. The self-employed receive no employer pension contributions, no statutory sick pay, and often earn less than equivalent employees. This structural shift weakens both workers' financial security and future pension provision.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="disclaimer-strip">
+  ⚠️ CEO pay data from High Pay Centre Annual Review 2025. Labour share from ONS "Trends in UK Labour Share 1997–2023" (Nov 2024). Employment data from ONS LFS. Not financial advice.
+  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer">
+  <span>© 2026 UK-Debt.info · Sources: High Pay Centre · ONS LFS · ONS Labour Share · ILO · LSE/CEP · Economics Observatory</span>
+  <div class="footer-links"><a href="index.html">Home</a><a href="disclaimer.html">Disclaimer</a><a href="privacy.html">Privacy</a><a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="color:#ff5f5f">☕ Support</a></div>
+</div>
+
+<script>
+function toggleNav(id){document.querySelectorAll('.nav-group').forEach(g=>{if(g.id!==id)g.classList.remove('open')});document.getElementById(id).classList.toggle('open')}
+document.addEventListener('click',function(e){if(!e.target.closest('.nav-group'))document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'))});
+function tick(){const n=new Date();document.getElementById('live-time').textContent=n.toTimeString().slice(0,8);document.getElementById('live-date').textContent=n.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+setInterval(tick,1000);tick();
+
+// ── CEO LIVE EARNINGS COUNTER ────────────────────────────────────────────
+const CEO_PAY_PA   = 4580000;  // £4.58m median FTSE 100 CEO 2024/25
+const WORKER_PA    = 37430;    // median full-time worker 2025
+const CEO_PER_SEC  = CEO_PAY_PA / (365.25 * 24 * 3600);
+const WORKER_PER_SEC = WORKER_PA / (365.25 * 24 * 3600);
+
+function fmt(n){return Math.round(n).toLocaleString('en-GB')}
+
+function updateCeoCounter(){
+  const now   = new Date();
+  const start = new Date(now.getFullYear(), 0, 1); // 1 Jan
+  const elapsed = (now - start) / 1000; // seconds into year
+  const ceoEarned    = CEO_PER_SEC * elapsed;
+  const workerEarned = WORKER_PER_SEC * elapsed;
+  document.getElementById('ceoEarnings').textContent   = '£' + fmt(ceoEarned);
+  document.getElementById('workerEarnings').textContent = '£' + fmt(workerEarned) + ' (worker)';
+}
+setInterval(updateCeoCounter, 100);
+updateCeoCounter();
+
+// ── CEO RATIO HISTORY ────────────────────────────────────────────────────
+const ratioYrs = ['1998','2000','2002','2004','2006','2008','2010','2012','2014','2016','2018','2019','2020','2021','2022','2023','2024','2025'];
+const ratioVals = [47,54,60,68,75,81,88,102,110,129,145,123,79,109,118,120,123,122];
+const flatLine  = ratioYrs.map(()=>47);
+
+new Chart(document.getElementById('ceoRatioChart'),{
+  type:'line',
+  data:{
+    labels:ratioYrs,
+    datasets:[
+      {label:'CEO:Worker Ratio',data:ratioVals,borderColor:'#6600cc',backgroundColor:'rgba(102,0,204,0.08)',borderWidth:3,fill:true,tension:0.3,pointRadius:4},
+      {label:'If stayed at 1998',data:flatLine,borderColor:'#d40020',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,borderDash:[4,3]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}×`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'Pay Ratio (CEO ÷ Median Worker)',color:'#2a3a50',font:{size:11,weight:'bold'}},
+         ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'×'},
+         grid:{color:'rgba(0,0,0,0.05)'},min:0,max:160}
+    }
+  }
+});
+
+// ── CEO vs WORKER ABSOLUTE ───────────────────────────────────────────────
+const absYrs = ['2010','2012','2014','2016','2018','2019','2020','2021','2022','2023','2024','2025'];
+const ceoPay = [3.2, 3.6, 3.9, 4.4, 3.9, 3.25, 2.46, 3.41, 3.91, 4.19, 4.29, 4.58];
+const wrkPay = [26.1,27.0,27.2,28.2,29.6,30.4,31.5,31.3,33.0,34.9,36.6,37.4];
+
+new Chart(document.getElementById('ceoAbsChart'),{
+  type:'line',
+  data:{
+    labels:absYrs,
+    datasets:[
+      {label:'CEO Pay (£m)',data:ceoPay,borderColor:'#6600cc',backgroundColor:'rgba(102,0,204,0.08)',borderWidth:2.5,fill:true,tension:0.3,yAxisID:'y'},
+      {label:'Worker Pay (£k)',data:wrkPay,borderColor:'#008844',backgroundColor:'rgba(0,136,68,0.08)',borderWidth:2.5,fill:true,tension:0.3,yAxisID:'y2'}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.datasetIndex===0?`CEO: £${ctx.raw}m`:`Worker: £${ctx.raw}k`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'CEO Pay (£m)',color:'#6600cc',font:{size:11,weight:'bold'}},ticks:{color:'#6600cc',font:{size:10,weight:'bold'},callback:v=>'£'+v+'m'},grid:{color:'rgba(0,0,0,0.05)'},min:0,max:6},
+      y2:{position:'right',title:{display:true,text:'Worker Pay (£k)',color:'#008844',font:{size:11,weight:'bold'}},ticks:{color:'#008844',font:{size:10,weight:'bold'},callback:v=>'£'+v+'k'},grid:{display:false},min:20,max:45}
+    }
+  }
+});
+
+// ── PUBLIC vs PRIVATE EMPLOYMENT ─────────────────────────────────────────
+const empYrs = ['1999','2001','2003','2005','2007','2009','2010','2012','2014','2016','2018','2019','2020','2021','2022','2023','2024','2026'];
+const pubSec = [5.2,5.4,5.6,5.8,6.0,6.3,6.3,5.9,5.4,5.3,5.4,5.6,5.7,5.8,5.9,6.0,6.1,6.1];
+const prvSec = [22.8,23.5,24.1,24.8,25.4,24.8,24.2,25.1,26.2,27.0,27.5,27.8,26.5,26.8,27.1,27.2,27.3,27.4];
+const ratio  = prvSec.map((p,i)=>+(p/pubSec[i]).toFixed(2));
+
+new Chart(document.getElementById('empChart'),{
+  type:'bar',
+  data:{
+    labels:empYrs,
+    datasets:[
+      {label:'Public Sector',data:pubSec,backgroundColor:'rgba(212,0,32,0.7)',stack:'a'},
+      {label:'Private Sector',data:prvSec,backgroundColor:'rgba(0,96,204,0.7)',stack:'a'},
+      {label:'Private per Public',data:ratio,type:'line',borderColor:'#c97000',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,yAxisID:'y2',tension:0.3}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:9,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'Workers (millions)',color:'#2a3a50',font:{size:11,weight:'bold'}},stacked:true,ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.05)'},min:0,max:36},
+      y2:{position:'right',title:{display:true,text:'Private per Public worker',color:'#c97000',font:{size:11,weight:'bold'}},ticks:{color:'#c97000',font:{size:10,weight:'bold'}},grid:{display:false},min:3,max:6}
+    }
+  }
+});
+
+// ── LABOUR SHARE OF GDP ───────────────────────────────────────────────────
+const lsYrs = ['1997','1999','2001','2003','2005','2007','2009','2011','2013','2015','2017','2019','2021','2023'];
+const labShare = [49.8,50.2,51.0,51.5,52.0,52.4,54.2,54.8,55.0,54.6,55.1,55.5,56.2,55.8];
+const capShare = labShare.map(v=>+(100-v).toFixed(1));
+const prodIdx  = [100,103,108,112,116,120,118,122,126,131,133,138,137,142];
+
+new Chart(document.getElementById('labourShareChart'),{
+  type:'bar',
+  data:{
+    labels:lsYrs,
+    datasets:[
+      {label:'Labour Share %',data:labShare,backgroundColor:'rgba(0,136,68,0.7)',stack:'a'},
+      {label:'Capital Share %',data:capShare,backgroundColor:'rgba(212,0,32,0.5)',stack:'a'},
+      {label:'Productivity Index',data:prodIdx,type:'line',borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:2.5,pointRadius:2,yAxisID:'y2',tension:0.3,borderDash:[4,2]}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{display:false}},
+      y:{title:{display:true,text:'% of GDP',color:'#2a3a50',font:{size:11,weight:'bold'}},stacked:true,ticks:{color:'#2a3a50',font:{size:10,weight:'bold'},callback:v=>v+'%'},grid:{color:'rgba(0,0,0,0.05)'},min:0,max:100},
+      y2:{position:'right',title:{display:true,text:'Productivity Index (1997=100)',color:'#0060cc',font:{size:11,weight:'bold'}},ticks:{color:'#0060cc',font:{size:10,weight:'bold'}},grid:{display:false},min:90,max:160}
+    }
+  }
+});
+
+// ── PRODUCTIVITY vs WAGES DECOUPLING ─────────────────────────────────────
+const dcYrs = ['1981','1985','1990','1995','2000','2005','2008','2010','2012','2015','2018','2020','2022','2024','2025'];
+const productivity = [100,107,118,122,132,143,148,147,151,161,169,162,174,178,180];
+const meanWage     = [100,105,116,121,131,141,147,146,149,158,167,163,170,173,175];
+const medianWage   = [100,103,110,114,120,128,131,128,127,131,135,132,133,136,137];
+const top10Wage    = [100,112,130,140,162,185,196,193,200,220,240,235,258,268,275];
+
+new Chart(document.getElementById('decouplingChart'),{
+  type:'line',
+  data:{
+    labels:dcYrs,
+    datasets:[
+      {label:'Productivity',data:productivity,borderColor:'#0060cc',backgroundColor:'transparent',borderWidth:2.5,pointRadius:2,tension:0.3},
+      {label:'Mean Wage',data:meanWage,borderColor:'#008844',backgroundColor:'transparent',borderWidth:2,pointRadius:2,tension:0.3},
+      {label:'Median Wage',data:medianWage,borderColor:'#d40020',backgroundColor:'rgba(212,0,32,0.06)',fill:true,borderWidth:2.5,pointRadius:2,tension:0.3},
+      {label:'Top 10% Wage',data:top10Wage,borderColor:'#6600cc',backgroundColor:'transparent',borderWidth:2,pointRadius:2,tension:0.3,borderDash:[3,2]}
+    ]
+  },
+  options:{
+    responsive:true,
+    interaction:{mode:'index',intersect:false},
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} (1981=100)`}}},
+    scales:{
+      x:{ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},grid:{color:'rgba(0,0,0,0.04)'}},
+      y:{title:{display:true,text:'Index (1981 = 100)',color:'#2a3a50',font:{size:11,weight:'bold'}},
+         ticks:{color:'#2a3a50',font:{size:10,weight:'bold'}},
+         grid:{color:'rgba(0,0,0,0.05)'},min:90,max:290}
+    }
+  }
+});
+</script>
+</body>
+</html>
