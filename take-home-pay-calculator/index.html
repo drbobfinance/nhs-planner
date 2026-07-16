@@ -107,13 +107,21 @@
 <div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong> This is an estimate. Your actual payslip may include other deductions (student loan, court orders) this tool doesn't cover. <strong>Do not base financial decisions on these figures alone.</strong></div>
 
 <div class="form-section"><h3><span>📅</span> Tax Year &amp; Residency</h3>
+  <button type="button" onclick="document.getElementById('ni-explainer').style.display = document.getElementById('ni-explainer').style.display==='none' ? 'block' : 'none';" style="background:#F0FDF4;border:1.5px solid #86EFAC;color:#166534;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:800;cursor:pointer;margin-bottom:14px;">ℹ️ What is National Insurance, and how much does it cost?</button>
+  <div id="ni-explainer" style="display:none;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:18px 20px;margin-bottom:16px;font-size:13px;color:#4A5568;line-height:1.8;">
+    <p style="margin-bottom:10px;"><strong style="color:#166534;">What it is:</strong> National Insurance (NI) is a separate deduction from Income Tax, taken directly from your pay. Unlike Income Tax, which just funds general government spending, NI specifically builds your entitlement to certain state benefits — most importantly your qualifying years towards the <strong>State Pension</strong>, plus some contribution-based benefits (like contribution-based ESA). It does <strong>not</strong> pay into your NHS pension — that's a completely separate scheme and a separate deduction on your payslip.</p>
+    <p style="margin-bottom:10px;"><strong style="color:#166534;">How much it costs (2026/27 rates, used by this calculator):</strong> you pay nothing on the first £12,570 of pay each year (called the Primary Threshold). Above that, up to £50,270 (the Upper Earnings Limit), you pay <strong>8%</strong> of everything in that band. Above £50,270, the rate drops to <strong>2%</strong> on the remainder. So a high earner doesn't keep paying 8% on everything — only that middle slice.</p>
+    <p style="margin-bottom:10px;"><strong style="color:#166534;">Worked example:</strong> on a £50,000 NHS salary, you'd pay nothing on the first £12,570, then 8% on the remaining £37,430 — about £2,994 a year, or roughly £250 a month.</p>
+    <p>These rates and thresholds are set by the government and do change from time to time — this calculator applies the correct rate automatically for whichever tax year you select above.</p>
+  </div>
+
   <div class="form-grid">
     <div class="field"><label>Tax year</label>
       <select id="th-tyear">
         <option value="2023/24">2023/24</option>
-        <option value="2024/25" selected>2024/25 (current)</option>
+        <option value="2024/25">2024/25</option>
         <option value="2025/26">2025/26</option>
-        <option value="2026/27">2026/27</option>
+        <option value="2026/27" selected>2026/27 (current)</option>
       </select>
     </div>
     <div class="field"><label>Scotland resident?</label>
@@ -128,36 +136,56 @@
     <label>NHS band or grade</label>
     <select id="th-band" onchange="nhsftBandChange()">
       <option value="">Select band or grade (auto-fills salary)…</option>
-      <option>Consultant Threshold 1 — £105,504</option>
-      <option>Consultant Threshold 8 — £139,882</option>
-      <option>Foundation Year 1 (F1) — £32,398</option>
-      <option>Foundation Year 2 (F2) — £37,935</option>
-      <option>Specialty Registrar (StR) — £51,017</option>
-      <option>GP (Salaried) — £71,504</option>
-      <option>Band 2 — £24,465</option>
-      <option>Band 3 (Entry) — £24,937</option>
-      <option>Band 3 (Top) — £26,598</option>
-      <option>Band 4 (Entry) — £27,485</option>
-      <option>Band 4 (Top) — £30,162</option>
-      <option>Band 5 (Entry) — £31,049</option>
-      <option>Band 5 (Top) — £37,796</option>
-      <option>Band 6 (Entry) — £38,682</option>
-      <option>Band 6 (Top) — £46,580</option>
-      <option>Band 7 (Entry) — £47,810</option>
-      <option>Band 7 (Top) — £54,710</option>
-      <option>Band 8a (Entry) — £55,690</option>
-      <option>Band 8a (Top) — £62,682</option>
-      <option>Band 8b (Entry) — £64,455</option>
-      <option>Band 8b (Top) — £74,896</option>
-      <option>Band 8c (Entry) — £76,965</option>
-      <option>Band 8c (Top) — £88,682</option>
-      <option>Band 8d (Entry) — £91,342</option>
-      <option>Band 8d (Top) — £105,337</option>
-      <option>Band 9 (Entry) — £109,179</option>
-      <option>Band 9 (Top) — £125,637</option>
+      <optgroup label="── Consultants (2003 contract — 4 thresholds, 2026/27 confirmed rates) ──">
+        <option>Consultant Threshold 1 (entry) — £113,565</option>
+        <option>Consultant Threshold 2a — £120,249</option>
+        <option>Consultant Threshold 2b — £123,672</option>
+        <option>Consultant Threshold 3 — £135,645</option>
+        <option>Consultant Threshold 4 (top) — £150,569</option>
+      </optgroup>
+      <optgroup label="── Doctors in Training: Foundation, Core & Specialty Registrars ──">
+        <option>Foundation Year 1 (F1) — £41,226</option>
+        <option>Foundation Year 2 (F2) — £47,610</option>
+        <option>CT1 / ST1 (Registrar) — £55,355</option>
+        <option>CT2 / ST2 (Registrar) — £55,355</option>
+        <option>CT3 / ST3 (Registrar) — £67,325</option>
+        <option>CT4 / ST4 (Registrar) — £67,998</option>
+        <option>ST5 (Registrar) — £67,998</option>
+        <option>ST6 (Registrar) — £77,348</option>
+        <option>ST7 (Registrar) — £77,348</option>
+        <option>ST8 (Registrar) — £77,348</option>
+      </optgroup>
+      <optgroup label="── GPs ──">
+        <option>GP Trainee (GPST1) — £55,355</option>
+        <option>GP (Salaried, fully qualified) — £73,864</option>
+      </optgroup>
+      <optgroup label="── Agenda for Change Bands (nurses, AHPs, scientists, admin & managers — not doctors) ──">
+        <option>Band 2 — £25,272</option>
+        <option>Band 3 (Entry) — £25,760</option>
+        <option>Band 3 (Top) — £27,472</option>
+        <option>Band 4 (Entry) — £28,394</option>
+        <option>Band 4 (Top) — £31,157</option>
+        <option>Band 5 (Entry) — £32,073</option>
+        <option>Band 5 (Top) — £39,043</option>
+        <option>Band 6 (Entry) — £39,959</option>
+        <option>Band 6 (Top) — £48,113</option>
+        <option>Band 7 (Entry) — £49,388</option>
+        <option>Band 7 (Top) — £56,516</option>
+        <option>Band 8a (Entry) — £57,528</option>
+        <option>Band 8a (Top) — £64,750</option>
+        <option>Band 8b (Entry) — £66,582</option>
+        <option>Band 8b (Top) — £77,367</option>
+        <option>Band 8c (Entry) — £79,505</option>
+        <option>Band 8c (Top) — £91,609</option>
+        <option>Band 8d (Entry) — £94,357</option>
+        <option>Band 8d (Top) — £108,813</option>
+        <option>Band 9 (Entry) — £112,782</option>
+        <option>Band 9 (Top) — £129,783</option>
+      </optgroup>
       <option selected>Other / enter manually</option>
     </select>
   </div>
+  <div style="font-size:11px;color:var(--gray4);margin:-4px 0 10px;">Figures are 2026/27 basic pay before any on-call, weekend or overtime enhancements. Consultants and GPs are on entirely separate pay scales from Agenda for Change — Band 8/9 roles are nursing, AHP, scientist and management posts, not medical grades. If you select an earlier tax year above, remember to update this salary manually to that year's rate.</div>
   <div class="form-grid">
     <div class="field" id="th-consultant-row" style="display:none;"><label>Scheduled PAs in your job plan</label><input type="number" id="th-pas" min="1" max="10" step="0.5" value="10" oninput="nhsftBandRecalc()"><div class="hint">Full time = 10 PAs. Salary = full-time rate ÷ 10 × your PAs.</div></div>
     <div class="field" id="th-band-row" style="display:none;"><label>Contracted hours per week</label><input type="number" id="th-hours" min="4" max="37.5" step="0.5" value="37.5" oninput="nhsftBandRecalc()"><div class="hint">Full time AfC = 37.5 hrs/week.</div></div>

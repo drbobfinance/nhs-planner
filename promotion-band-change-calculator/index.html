@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NHS Overtime &amp; Extra Shifts Calculator — How Much Before You Breach Your Annual Allowance? | NHS Finance Tool</title>
-<meta name="description" content="Free calculator for NHS staff doing extra shifts, overtime or strike cover: enter any ad-hoc payments and see exactly how much more you can earn this year before breaching your pension Annual Allowance.">
-<link rel="canonical" href="https://nhsfinancetool.co.uk/nhs-overtime-annual-allowance-calculator/">
+<title>NHS Promotion &amp; Band Change Calculator — Is It Really Worth It? | NHS Finance Tool</title>
+<meta name="description" content="Free calculator showing exactly what an NHS promotion or band change is worth after tax, National Insurance and pension — plus the long-term pension benefit most people miss.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/promotion-band-change-calculator/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="NHS Finance Tool">
-<meta property="og:title" content="NHS Overtime &amp; Extra Shifts Calculator — How Much Before You Breach Your Annual Allowance?">
-<meta property="og:description" content="Enter any ad-hoc extra shifts or overtime and see how much more you can earn this year before breaching your NHS pension Annual Allowance.">
-<meta property="og:url" content="https://nhsfinancetool.co.uk/nhs-overtime-annual-allowance-calculator/">
+<meta property="og:title" content="NHS Promotion &amp; Band Change Calculator — Is It Really Worth It?">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/promotion-band-change-calculator/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
@@ -97,61 +96,83 @@
   </div>
 </nav>
 <div class="page active">
-<div class="tool-header" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);padding:44px 20px 36px;">
+<div class="tool-header" style="background:linear-gradient(135deg,#2563EB,#1D4ED8);padding:44px 20px 36px;">
   <button class="back-btn" onclick="showPage('home')">← Back to all NHS tools</button>
-  <h1>➕ NHS Overtime &amp; Extra Shifts Calculator</h1>
-  <p>Add up any extra shifts, overtime or strike cover — freehand — and see how much more you can safely earn before breaching your Annual Allowance</p>
+  <h1>📈 Promotion &amp; Band Change Calculator</h1>
+  <p>Is your promotion actually worth what you think? See exactly what you'll take home after tax.</p>
 </div>
 <div class="tool-body">
 
-<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong> This estimates the effect of extra pensionable pay on your Annual Allowance. It doesn't replace your Annual Benefit Statement.</div>
+<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong> This is an estimate based on the figures you enter.</div>
 
-<div style="background:#F5F3FF;border:1px solid #DDD6FE;border-radius:12px;padding:18px 20px;margin-bottom:20px;font-size:13px;color:#4A5568;line-height:1.8;">
-  <strong style="color:#5B21B6;">Why this exists:</strong> normal overtime rates are predictable, but strike cover, urgent locum shifts or one-off enhanced rates can pay several hundred or even over a thousand pounds a day — and it's easy to lose track of how that's adding up against your Annual Allowance until the bill arrives the following year. Add each extra payment below with whatever amount it actually was, then hit calculate.
-</div>
-
-<div class="form-section"><h3><span>📅</span> Your Baseline (before extra shifts)</h3>
+<div class="form-section"><h3><span>📅</span> Tax Year &amp; Residency</h3>
   <div class="form-grid">
     <div class="field"><label>Tax year</label>
-      <select id="ov-tyear">
-        <option value="2023/24">2023/24</option>
-        <option value="2024/25">2024/25</option>
-        <option value="2025/26">2025/26</option>
-        <option value="2026/27" selected>2026/27 (current)</option>
+      <select id="pr-tyear">
+        <option value="2023/24">2023/24</option><option value="2024/25">2024/25</option>
+        <option value="2025/26">2025/26</option><option value="2026/27" selected>2026/27 (current)</option>
       </select>
     </div>
-    <div class="field"><label>Basic NHS pensionable pay this year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-salary"></div><div class="hint">Before any extra shifts — your contracted salary.</div></div>
-    <div class="field"><label>NHS pensionable pay last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-prevpay"></div><div class="hint">Leave blank to assume the same as this year.</div></div>
-    <div class="field"><label>Other income (private practice, dividends etc.)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-other"></div></div>
-    <div class="field"><label>Personal pension contributions already made</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-personalpen"></div></div>
-  </div>
-  <div class="form-grid" style="margin-top:6px;">
-    <div class="field"><label>Carry forward — 3 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf1"></div></div>
-    <div class="field"><label>Carry forward — 2 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf2"></div></div>
-    <div class="field"><label>Carry forward — last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf3"></div></div>
+    <div class="field"><label>Scotland resident?</label><select id="pr-scot"><option value="">No — England / Wales / NI</option><option value="yes">Yes — Scotland</option></select></div>
+    <div class="field"><label>Contracted hours/week</label><input type="number" id="pr-hours" value="37.5" min="4" max="37.5" step="0.5"></div>
+    <div class="field"><label>Years to retirement</label><input type="number" id="pr-retire" value="20" min="1" max="40"></div>
   </div>
 </div>
 
-<div class="form-section"><h3><span>➕</span> Extra Shifts &amp; Overtime This Year</h3>
-  <div style="font-size:12px;color:var(--gray5);margin-bottom:12px;">Add every extra payment as its own row — regular overtime, additional PAs, strike cover, whatever the actual amount was. There's no limit on how many you add.</div>
-  <div id="ov-shifts"></div>
-  <button type="button" onclick="nhsftAddShiftRow()" style="background:#F5F3FF;border:1.5px dashed #C4B5FD;color:#5B21B6;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:800;cursor:pointer;width:100%;margin-top:6px;">+ Add another shift or payment</button>
-  <div style="display:flex;justify-content:space-between;align-items:center;background:var(--gray1);border-radius:9px;padding:12px 16px;margin-top:14px;">
-    <span style="font-size:13px;font-weight:800;color:var(--navy);">Running total of extra shifts:</span>
-    <span id="ov-running-total" style="font-size:16px;font-weight:900;color:#5B21B6;font-family:monospace;">£0</span>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+  <div class="form-section" style="margin-bottom:0;">
+    <h3><span>🔵</span> Current Role</h3>
+    <div class="field" style="margin-bottom:12px;">
+      <label>Band</label>
+      <select id="pr-cur-band" onchange="nhsftPrFillSalary('cur')">
+        <option value="37796">Band 5 (Top) — £37,796</option>
+        <option value="38682">Band 6 (Entry) — £38,682</option>
+        <option value="46580" selected>Band 6 (Top) — £46,580</option>
+        <option value="47810">Band 7 (Entry) — £47,810</option>
+        <option value="54710">Band 7 (Top) — £54,710</option>
+        <option value="55690">Band 8a (Entry) — £55,690</option>
+        <option value="62682">Band 8a (Top) — £62,682</option>
+        <option value="custom">Custom salary</option>
+      </select>
+    </div>
+    <div class="field"><label>Annual salary</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="pr-cur-sal" value="46580" oninput="nhsftPrQuickCalc()"></div></div>
+    <div style="margin-top:12px;padding:12px;background:var(--gray1);border-radius:9px;text-align:center;">
+      <div style="font-size:11px;color:var(--gray4);">CURRENT TAKE-HOME</div>
+      <div style="font-size:20px;font-weight:900;color:var(--navy);" id="pr-cur-th">—</div>
+    </div>
+  </div>
+  <div class="form-section" style="margin-bottom:0;border-color:#2563EB;">
+    <h3><span>🟢</span> New / Promoted Role</h3>
+    <div class="field" style="margin-bottom:12px;">
+      <label>Band</label>
+      <select id="pr-new-band" onchange="nhsftPrFillSalary('new')">
+        <option value="46580">Band 6 (Top) — £46,580</option>
+        <option value="47810" selected>Band 7 (Entry) — £47,810</option>
+        <option value="54710">Band 7 (Top) — £54,710</option>
+        <option value="55690">Band 8a (Entry) — £55,690</option>
+        <option value="62682">Band 8a (Top) — £62,682</option>
+        <option value="64455">Band 8b (Entry) — £64,455</option>
+        <option value="custom">Custom salary</option>
+      </select>
+    </div>
+    <div class="field"><label>Annual salary</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="pr-new-sal" value="47810" oninput="nhsftPrQuickCalc()"></div></div>
+    <div style="margin-top:12px;padding:12px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:9px;text-align:center;">
+      <div style="font-size:11px;color:#2563EB;">NEW TAKE-HOME</div>
+      <div style="font-size:20px;font-weight:900;color:var(--navy);" id="pr-new-th">—</div>
+    </div>
   </div>
 </div>
 
-<button class="calc-btn" onclick="calcOvertimeHeadroom()">Calculate My Headroom →</button>
-<div id="ov-out"></div>
+<button class="calc-btn" onclick="calcPromotion()">Calculate Real Gain →</button>
+<div id="pr-out"></div>
 
-<div class="disclaimer"><strong>Disclaimer:</strong> This assumes all extra pay listed is pensionable — check with your trust's payroll if unsure, since not all extra payments count towards the NHS pension. Always verify against your Annual Benefit Statement and seek specialist pension tax advice before turning down or accepting extra shifts based on this figure.</div>
+<div class="disclaimer"><strong>Disclaimer:</strong> Uses the tax year rates selected above and 2025/26 AfC pay scales as a reference point. Pension projection assumes 2015 CARE 1/54 accrual and CPI+1.5% revaluation. Not financial advice.</div>
 <button class="back-btn-bottom" onclick="showPage('home')">← Back to all NHS tools</button>
 
 </div>
 </div>
 
 <script src="/js/app.js"></script>
-<script>nhsftAddShiftRow(); nhsftAddShiftRow();</script>
+<script>nhsftPrQuickCalc();</script>
 </body>
 </html>

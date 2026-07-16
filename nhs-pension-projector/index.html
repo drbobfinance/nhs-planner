@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NHS Overtime &amp; Extra Shifts Calculator — How Much Before You Breach Your Annual Allowance? | NHS Finance Tool</title>
-<meta name="description" content="Free calculator for NHS staff doing extra shifts, overtime or strike cover: enter any ad-hoc payments and see exactly how much more you can earn this year before breaching your pension Annual Allowance.">
-<link rel="canonical" href="https://nhsfinancetool.co.uk/nhs-overtime-annual-allowance-calculator/">
+<title>NHS Pension Projector — Estimate Your Retirement Income | NHS Finance Tool</title>
+<meta name="description" content="Free NHS pension projector covering the 2015 CARE scheme plus legacy 1995 and 2008 Section benefits. Estimate your annual pension at retirement with a full growth timeline.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/nhs-pension-projector/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="NHS Finance Tool">
-<meta property="og:title" content="NHS Overtime &amp; Extra Shifts Calculator — How Much Before You Breach Your Annual Allowance?">
-<meta property="og:description" content="Enter any ad-hoc extra shifts or overtime and see how much more you can earn this year before breaching your NHS pension Annual Allowance.">
-<meta property="og:url" content="https://nhsfinancetool.co.uk/nhs-overtime-annual-allowance-calculator/">
+<meta property="og:title" content="NHS Pension Projector — Estimate Your Retirement Income">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/nhs-pension-projector/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
@@ -97,61 +96,49 @@
   </div>
 </nav>
 <div class="page active">
-<div class="tool-header" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);padding:44px 20px 36px;">
+<div class="tool-header" style="background:linear-gradient(135deg,#1A2E44,#243B55);padding:44px 20px 36px;">
   <button class="back-btn" onclick="showPage('home')">← Back to all NHS tools</button>
-  <h1>➕ NHS Overtime &amp; Extra Shifts Calculator</h1>
-  <p>Add up any extra shifts, overtime or strike cover — freehand — and see how much more you can safely earn before breaching your Annual Allowance</p>
+  <h1>🏛️ NHS Pension Projector</h1>
+  <p>What will your NHS pension actually pay you at retirement? Covers all three scheme sections.</p>
 </div>
 <div class="tool-body">
 
-<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong> This estimates the effect of extra pensionable pay on your Annual Allowance. It doesn't replace your Annual Benefit Statement.</div>
+<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong> Projections only, not guaranteed.</div>
 
-<div style="background:#F5F3FF;border:1px solid #DDD6FE;border-radius:12px;padding:18px 20px;margin-bottom:20px;font-size:13px;color:#4A5568;line-height:1.8;">
-  <strong style="color:#5B21B6;">Why this exists:</strong> normal overtime rates are predictable, but strike cover, urgent locum shifts or one-off enhanced rates can pay several hundred or even over a thousand pounds a day — and it's easy to lose track of how that's adding up against your Annual Allowance until the bill arrives the following year. Add each extra payment below with whatever amount it actually was, then hit calculate.
-</div>
-
-<div class="form-section"><h3><span>📅</span> Your Baseline (before extra shifts)</h3>
+<div class="form-section"><h3><span>👤</span> Your Details</h3>
   <div class="form-grid">
-    <div class="field"><label>Tax year</label>
-      <select id="ov-tyear">
-        <option value="2023/24">2023/24</option>
-        <option value="2024/25">2024/25</option>
-        <option value="2025/26">2025/26</option>
-        <option value="2026/27" selected>2026/27 (current)</option>
-      </select>
-    </div>
-    <div class="field"><label>Basic NHS pensionable pay this year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-salary"></div><div class="hint">Before any extra shifts — your contracted salary.</div></div>
-    <div class="field"><label>NHS pensionable pay last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-prevpay"></div><div class="hint">Leave blank to assume the same as this year.</div></div>
-    <div class="field"><label>Other income (private practice, dividends etc.)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-other"></div></div>
-    <div class="field"><label>Personal pension contributions already made</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-personalpen"></div></div>
-  </div>
-  <div class="form-grid" style="margin-top:6px;">
-    <div class="field"><label>Carry forward — 3 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf1"></div></div>
-    <div class="field"><label>Carry forward — 2 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf2"></div></div>
-    <div class="field"><label>Carry forward — last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf3"></div></div>
+    <div class="field"><label>Current annual salary</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="pp-salary" value="47810"></div></div>
+    <div class="field"><label>Current age</label><input type="number" id="pp-age" value="38" min="22" max="66"></div>
+    <div class="field"><label>Total years in NHS pension (so far)</label><input type="number" id="pp-served" value="10" min="0" max="40"></div>
+    <div class="field"><label>Target retirement age</label><input type="number" id="pp-retire" value="67" min="55" max="75"></div>
+    <div class="field"><label>Annual salary growth %</label><input type="number" id="pp-raise" value="2.5" step="0.5" min="0" max="10"></div>
+    <div class="field"><label>CPI assumption %</label><input type="number" id="pp-cpi" value="2.5" step="0.5" min="0" max="8"></div>
   </div>
 </div>
 
-<div class="form-section"><h3><span>➕</span> Extra Shifts &amp; Overtime This Year</h3>
-  <div style="font-size:12px;color:var(--gray5);margin-bottom:12px;">Add every extra payment as its own row — regular overtime, additional PAs, strike cover, whatever the actual amount was. There's no limit on how many you add.</div>
-  <div id="ov-shifts"></div>
-  <button type="button" onclick="nhsftAddShiftRow()" style="background:#F5F3FF;border:1.5px dashed #C4B5FD;color:#5B21B6;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:800;cursor:pointer;width:100%;margin-top:6px;">+ Add another shift or payment</button>
-  <div style="display:flex;justify-content:space-between;align-items:center;background:var(--gray1);border-radius:9px;padding:12px 16px;margin-top:14px;">
-    <span style="font-size:13px;font-weight:800;color:var(--navy);">Running total of extra shifts:</span>
-    <span id="ov-running-total" style="font-size:16px;font-weight:900;color:#5B21B6;font-family:monospace;">£0</span>
+<div class="form-section"><h3><span>🏛️</span> Legacy Scheme Benefits (if any)</h3>
+  <div class="hint" style="margin-bottom:12px;">Check your NHS Annual Benefit Statement at totalrewardstatements.nhs.uk for these figures. Leave unticked and zero if not applicable.</div>
+  <div class="field field-full" style="margin-bottom:10px;"><label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="pp-1995-on" style="width:18px;height:18px;"> I have 1995 Section benefits (1/80 final salary)</label></div>
+  <div class="form-grid" style="margin-bottom:14px;">
+    <div class="field"><label>Best salary (last 3 years)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="pp-sal95" value="0"></div></div>
+    <div class="field"><label>Years in 1995 Section</label><input type="number" id="pp-yrs95" value="0"></div>
+  </div>
+  <div class="field field-full" style="margin-bottom:10px;"><label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="pp-2008-on" style="width:18px;height:18px;"> I have 2008 Section benefits (1/60 final salary)</label></div>
+  <div class="form-grid">
+    <div class="field"><label>Best avg salary (best 3 of last 10yrs)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="pp-sal08" value="0"></div></div>
+    <div class="field"><label>Years in 2008 Section</label><input type="number" id="pp-yrs08" value="0"></div>
   </div>
 </div>
 
-<button class="calc-btn" onclick="calcOvertimeHeadroom()">Calculate My Headroom →</button>
-<div id="ov-out"></div>
+<button class="calc-btn" onclick="calcPensionProjector()">Project My NHS Pension →</button>
+<div id="pp-out"></div>
 
-<div class="disclaimer"><strong>Disclaimer:</strong> This assumes all extra pay listed is pensionable — check with your trust's payroll if unsure, since not all extra payments count towards the NHS pension. Always verify against your Annual Benefit Statement and seek specialist pension tax advice before turning down or accepting extra shifts based on this figure.</div>
+<div class="disclaimer"><strong>Disclaimer:</strong> Projections only, not guaranteed. 2015 CARE uses 1/54 accrual, CPI+1.5% revaluation. 1995 Section = 1/80 final salary (excludes automatic lump sum); 2008 Section = 1/60. Always verify against your Annual Benefit Statement.</div>
 <button class="back-btn-bottom" onclick="showPage('home')">← Back to all NHS tools</button>
 
 </div>
 </div>
 
 <script src="/js/app.js"></script>
-<script>nhsftAddShiftRow(); nhsftAddShiftRow();</script>
 </body>
 </html>

@@ -3,716 +3,269 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UK-Debt.info – The UK's Financial Dashboard</title>
-<meta name="description" content="Real-time UK national debt clock, asset tracker, interest payments, pension liabilities, money supply and personal finance data. Independent, non-partisan and sourced from official UK data.">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#f0f4f8;--panel:#fff;--panel2:#f7f9fc;--border:#d0dce8;--border-bright:#a0bcd8;
-  --red:#d40020;--red-light:#fff0f2;--red-mid:#ffd0d6;
-  --green:#008844;--green-light:#edfaf4;--green-mid:#b6ecd4;
-  --amber:#c97000;--amber-light:#fff8ec;--amber-mid:#fde8b0;
-  --blue:#0060cc;--blue-light:#eef5ff;--blue-mid:#bbd6f8;
-  --gold:#b8860b;--gold-light:#fffbea;--gold-mid:#f5d87a;
-  --purple:#6600cc;--purple-light:#f5eeff;--purple-mid:#d4b0f8;
-  --ink:#0d1520;--ink-mid:#2a3a50;--ink-light:#4a5a6e;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--ink);min-height:100vh}
-
-/* NAV */
-.top-nav{background:linear-gradient(135deg,#002f6c,#0057b8,#1a7fe8);padding:0 32px;display:flex;align-items:stretch;justify-content:space-between;box-shadow:0 3px 12px rgba(0,47,108,0.3);position:sticky;top:0;z-index:200}
-.nav-brand{display:flex;align-items:center;gap:12px;padding:10px 0;text-decoration:none}
-.nav-brand svg{width:44px;height:27px;border-radius:2px;flex-shrink:0}
-.nav-brand span{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff}
-.nav-groups{display:flex;align-items:stretch;gap:0}
-.nav-group{position:relative;display:flex;align-items:stretch}
-.nav-group-btn{background:transparent;border:none;color:#fff;padding:0 14px;font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;border-bottom:3px solid transparent}
-.nav-group-btn:hover,.nav-group.open .nav-group-btn{color:#fff;background:rgba(255,255,255,0.1);border-bottom-color:#fff}
-.nav-group-btn .arrow{font-size:9px;opacity:0.7}
-.dropdown{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid var(--border);border-radius:0 0 8px 8px;min-width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300}
-.nav-group.open .dropdown{display:block}
-.dropdown a{display:block;padding:10px 16px;font-size:13px;font-weight:700;color:var(--ink-mid);text-decoration:none;border-left:3px solid transparent;transition:all 0.15s;letter-spacing:0.5px}
-.dropdown a:hover{background:var(--blue-light);color:var(--blue);border-left-color:var(--blue)}
-.dropdown a.done{color:var(--green)}
-.dropdown a.done::after{content:' ✓';font-size:10px}
-.dropdown-section{font-size:9px;letter-spacing:2px;color:var(--ink-light);padding:8px 16px 4px;text-transform:uppercase;font-weight:700;border-top:1px solid var(--border)}
-.dropdown-section:first-child{border-top:none}
-
-.donate-btn:hover{opacity:0.85}
-
-/* HERO */
-.hero{background:linear-gradient(135deg,#002f6c 0%,#0057b8 50%,#1a7fe8 100%);padding:40px 28px 32px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.02) 40px,rgba(255,255,255,0.02) 80px)}
-.hero-flag{display:flex;justify-content:center;margin-bottom:16px}
-.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,7vw,72px);letter-spacing:6px;color:#fff;line-height:1;position:relative}
-.hero .tagline{font-size:14px;letter-spacing:3px;color:rgba(255,255,255,0.8);text-transform:uppercase;margin-top:10px;font-weight:600}
-.hero-stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
-.hero-stat{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:14px 20px;text-align:center;backdrop-filter:blur(4px)}
-.hero-stat .hs-val{font-family:'Share Tech Mono',monospace;font-size:clamp(18px,3vw,26px);color:#fff;font-weight:700;letter-spacing:1px}
-.hero-stat .hs-label{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-top:4px;font-weight:700}
-.hero-live{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:2px;text-transform:uppercase;font-weight:600}
-.pulse{width:8px;height:8px;background:#00e87a;border-radius:50%;animation:pulse 1s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.7)}}
-
-/* MAIN */
-.main{padding:20px 32px}
-.section-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--ink);margin:28px 0 14px;display:flex;align-items:center;gap:12px}
-.section-title::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,var(--border-bright),transparent)}
-
-/* PAGE CARDS GRID */
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);transition:all 0.2s;position:relative;overflow:hidden}
-.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.1);border-color:var(--border-bright)}
-.card.done{border-top:4px solid var(--green)}
-.card.coming{border-top:4px solid var(--amber);opacity:0.85}
-.card-icon{font-size:28px;line-height:1}
-.card-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--ink)}
-.card-desc{font-size:13px;color:var(--ink-mid);line-height:1.5;font-weight:600;flex:1}
-.card-status{display:inline-flex;align-items:center;gap:5px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;padding:3px 10px;border-radius:12px;align-self:flex-start}
-.card-status.live{background:var(--green-light);color:var(--green);border:1px solid var(--green-mid)}
-.card-status.soon{background:var(--amber-light);color:var(--amber);border:1px solid var(--amber-mid)}
-.card-stat{font-family:'Share Tech Mono',monospace;font-size:15px;font-weight:700;color:var(--red)}
-
-/* ABOUT */
-.about-panel{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:28px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
-.about-panel h2{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:var(--blue);margin-bottom:12px}
-.about-panel p{font-size:14px;color:var(--ink-mid);line-height:1.7;margin-bottom:10px;font-weight:600}
-.about-panel p:last-child{margin-bottom:0}
-.sources-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.source-tag{background:var(--blue-light);border:1px solid var(--blue-mid);color:var(--blue);padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:1px}
-
-/* DONATE PLACEHOLDER */
-.donate-panel{background:linear-gradient(135deg,var(--amber-light),#fff);border:2px solid var(--amber-mid);border-radius:8px;padding:24px;text-align:center}
-.donate-panel h3{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--amber);margin-bottom:8px}
-.donate-panel p{font-size:13px;color:var(--ink-mid);font-weight:600;line-height:1.6;margin-bottom:14px}
-.donate-placeholder{background:var(--amber-mid);color:#000;padding:10px 28px;border-radius:5px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;display:inline-block;opacity:0.5}
-
-/* DISCLAIMER STRIP */
-.disclaimer-strip{background:#0d1520;padding:10px 24px;text-align:center;font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px;line-height:1.7}
-.disclaimer-strip a{color:rgba(255,255,255,0.7);text-decoration:underline}
-
-/* FOOTER */
-.footer{background:var(--panel);border-top:2px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--ink-mid);font-weight:600}
-.footer-links{display:flex;gap:16px}
-.footer-links a{color:var(--ink-mid);text-decoration:none;font-weight:700}
-.footer-links a:hover{color:var(--blue)}
-
-  @media(max-width:768px){
-    .nav-groups{display:none}
-    .nav-group-btn{color:#fff!important;-webkit-text-fill-color:#fff!important}
-    .top-nav{flex-wrap:wrap;padding:8px 12px}
-  }
-
-  
-    .nav-groups::-webkit-scrollbar{display:none}
-    .nav-group-btn{padding:0 10px;font-size:10px;letter-spacing:1px;color:#fff!important;-webkit-text-fill-color:#fff!important}
-    .nav-brand span{font-size:18px;letter-spacing:2px}
-    
-    .top-nav{flex-wrap:nowrap;overflow:hidden}
-  }
-  @media(max-width:768px){
-    .top-nav{padding:0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
-    .top-nav::-webkit-scrollbar{display:none}
-    .nav-groups{flex-shrink:0;flex-wrap:nowrap}
-    .nav-group-btn{padding:0 8px;font-size:10px;letter-spacing:1px;white-space:nowrap;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important}
-    .nav-brand span{font-size:16px;letter-spacing:2px;white-space:nowrap}
-    
-    .dropdown{position:fixed;top:52px;left:4px;right:4px;width:auto}
-  }
-</style>
+<title>NHS Finance Tool — Free NHS Salary, Pension &amp; Ltd Company Calculators</title>
+<meta name="description" content="Free calculators built specifically for NHS staff: take-home pay by band or grade, pension Annual Allowance breach checker, and a Ltd company tax optimiser for private practice income. No sign-up, no cookies.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NHS Finance Tool">
+<meta property="og:title" content="NHS Finance Tool — Free NHS Salary, Pension &amp; Ltd Company Calculators">
+<meta property="og:description" content="Free calculators built specifically for NHS staff: take-home pay, pension Annual Allowance, and Ltd company tax planning for private practice income.">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="top-nav">
-  <a class="nav-brand" href="index.html">
-    <svg viewBox="0 0 44 27" xmlns="http://www.w3.org/2000/svg">
-      <rect width="44" height="27" fill="#012169"/>
-      <line x1="0" y1="0" x2="44" y2="27" stroke="white" stroke-width="5.5"/>
-      <line x1="44" y1="0" x2="0" y2="27" stroke="white" stroke-width="5.5"/>
-      <line x1="0" y1="0" x2="44" y2="27" stroke="#C8102E" stroke-width="3.5"/>
-      <line x1="44" y1="0" x2="0" y2="27" stroke="#C8102E" stroke-width="3.5"/>
-      <rect x="0" y="10" width="44" height="7" fill="white"/>
-      <rect x="19" y="0" width="6" height="27" fill="white"/>
-      <rect x="0" y="11" width="44" height="5" fill="#C8102E"/>
-      <rect x="20" y="0" width="4" height="27" fill="#C8102E"/>
-    </svg>
-    <span>UK-DEBT.INFO</span>
-  </a>
-  <div class="nav-groups">
-    <div class="nav-group" id="ng1">
-      <button class="nav-group-btn" onclick="toggleNav('ng1')">💷 Debt & Borrowing <span class="arrow">▼</span></button>
-      <div class="dropdown">
-        <div class="dropdown-section">Live Clocks</div>
-        <a href="debt-clock.html" class="done">National Debt Clock</a>
-        <div class="dropdown-section">Analysis</div>
-        <a href="interest-payments.html">Interest Payments History</a>
-        <a href="future-interest.html">Future Interest Scenarios</a>
-        <a href="off-balance-sheet.html" class="done">Off-Balance-Sheet Debt</a>
-        <a href="fiscal-trajectory.html" class="done">Fiscal Trajectory</a>
-        <a href="money-in-out.html" class="done">Money In &amp; Out</a>
-        <a href="fiscal-gap.html" class="done">True Fiscal Gap</a>
-        <a href="save-the-uk.html" class="done">Can You Save the UK?</a>
-      </div>
+<!-- ── LEAVING SITE MODAL ── -->
+<div id="leaving-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10001;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:460px;width:100%;font-family:'Nunito',sans-serif;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <div style="background:linear-gradient(135deg,#00843D,#007B8A);padding:18px 22px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:15px;font-weight:800;color:#fff;">🔗 You're leaving NHS Finance Tool</div>
+      <button onclick="closeLeavingModal()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;">✕</button>
     </div>
-    <div class="nav-group" id="ng2">
-      <button class="nav-group-btn" onclick="toggleNav('ng2')">🏦 Money & Assets <span class="arrow">▼</span></button>
-      <div class="dropdown">
-        <a href="uk-assets.html" class="done">UK Asset Clock</a>
-        <a href="boe-bonds.html">BoE Bond Programme</a>
-        <a href="money-supply.html">Asset Prices vs M2 & GDP</a>
+    <div style="padding:22px;">
+      <div style="display:flex;align-items:center;gap:12px;background:#F7F9FB;border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:28px;" id="leaving-icon">🔍</div>
+        <div><div style="font-size:14px;font-weight:800;color:#1A2331;" id="leaving-name">Partner site</div><div style="font-size:12px;color:#8A9BB0;" id="leaving-desc">Sponsored link</div></div>
       </div>
-    </div>
-    <div class="nav-group" id="ng3">
-      <button class="nav-group-btn" onclick="toggleNav('ng3')">👥 People & Work <span class="arrow">▼</span></button>
-      <div class="dropdown">
-        <a href="employment.html">Public vs Private Employment</a>
-        <a href="pensions.html">Pension Liabilities</a>
-        <a href="personal-finance.html" class="done">Personal Finance Dashboard</a>
-        <a href="salary-calculator.html" class="done">Salary Calculator</a>
-      </div>
-    </div>
-    <div class="nav-group" id="ng4">
-      <button class="nav-group-btn" onclick="toggleNav('ng4')">🌍 Context <span class="arrow">▼</span></button>
-      <div class="dropdown">
-        <a href="human-scale.html">The Human Scale</a>
-        <a href="uk-vs-world.html">UK vs World</a>
-        <a href="timeline.html">Historical Timeline</a>
-        <a href="cost-of-living.html">Cost of Living</a>
-        <a href="trade-deficit.html" class="done">Trade Deficit</a>
-        <a href="obr-accuracy.html" class="done">OBR Forecast Accuracy</a>
+      <div style="font-size:13px;color:#4A5568;line-height:1.7;margin-bottom:16px;">You are leaving <strong>NHS Finance Tool</strong>. The destination site has its own privacy policy and may use cookies. We may earn a small commission if you apply — at no cost to you, and our calculator results are unaffected by this.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button onclick="closeLeavingModal()" style="padding:11px;background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;font-size:13px;font-weight:700;color:#4A5568;cursor:pointer;">← Stay here</button>
+        <button onclick="proceedToPartnerSite()" style="padding:11px;background:#00843D;border:none;border-radius:8px;font-size:13px;font-weight:800;color:#fff;cursor:pointer;">Continue →</button>
       </div>
     </div>
   </div>
-  
+</div>
+
+<!-- ── DISCLAIMER SPLASH ── -->
+<div id="disclaimer-splash" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.92);z-index:10002;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);">
+  <div style="background:#fff;border-radius:16px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;font-family:'Nunito',sans-serif;box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+    <div style="background:linear-gradient(135deg,#1A2E44,#007B8A);padding:22px 24px;border-radius:16px 16px 0 0;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;"><div style="font-size:28px;">🏥</div><div style="font-size:20px;font-weight:900;color:#fff;">NHS Finance Tool</div></div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.75);">Free NHS-specific calculators — please read before using this site</div>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#FEF2F2;border:2px solid #EF4444;border-radius:10px;padding:16px 18px;margin-bottom:18px;">
+        <div style="font-size:14px;font-weight:900;color:#991B1B;margin-bottom:8px;">⚠️ Not Financial Advice</div>
+        <div style="font-size:13px;color:#7F1D1D;line-height:1.7;">NHS Finance Tool is <strong>not authorised or regulated by the Financial Conduct Authority (FCA)</strong> and does not provide financial, tax or legal advice. Every result is an estimate for general information only. Always consult a qualified, FCA-authorised financial adviser or accountant before making decisions about pensions, tax or your Ltd company.</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:#1A2E44;margin-bottom:10px;">What NHS Finance Tool is:</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🧮</div><strong>Free NHS calculators</strong><br>Take-home pay, pension Annual Allowance, Ltd company tax</div>
+        <div style="background:#F7F9FB;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A2E44;line-height:1.5;"><div style="font-size:16px;margin-bottom:4px;">🔒</div><strong>Completely private</strong><br>All calculations run in your browser — nothing is stored or sent anywhere</div>
+      </div>
+      <div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:#78350F;line-height:1.7;"><strong>What NHS Finance Tool is not:</strong> a financial adviser · an IFA · an accountant · FCA authorised or regulated. Figures are estimates and may differ from your actual payslip, Annual Benefit Statement or HMRC calculation.</div>
+      <div style="background:#F7F9FB;border:1px solid #D0D7DE;border-radius:8px;padding:13px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+        <div id="splash-checkbox" onclick="toggleSplashCheck()" style="width:20px;height:20px;border:2px solid #D0D7DE;border-radius:5px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;"></div>
+        <div style="font-size:12px;color:#4A5568;line-height:1.6;" onclick="toggleSplashCheck()">I understand this tool provides general guidance only, not financial, tax or legal advice, and I will consult a qualified adviser before making decisions.</div>
+      </div>
+      <button id="splash-btn" disabled onclick="acceptDisclaimer()" style="width:100%;padding:13px;background:#D0D7DE;color:#8A9BB0;border:none;border-radius:9px;font-size:14px;font-weight:800;cursor:not-allowed;">Tick the box above to continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── COOKIE NOTICE ── -->
+<div id="cookie-banner">
+  <div class="cookie-text"><strong>🍪 Our cookie policy</strong> — NHS Finance Tool uses <strong>no tracking or advertising cookies</strong>. All calculations run entirely in your browser. <a onclick="showCookieInfo()">Learn more</a></div>
+  <div class="cookie-btns"><button class="cookie-btn-info" onclick="showCookieInfo()">More info</button><button class="cookie-btn-accept" onclick="acceptCookies()">Got it ✓</button></div>
+</div>
+<div id="cookie-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:14px;max-width:520px;width:100%;font-family:'Nunito',sans-serif;">
+    <div style="background:#00843D;padding:18px 22px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:16px;font-weight:800;color:#fff;">🍪 Our Cookie Policy</div>
+      <button onclick="closeCookieInfo()" style="background:rgba(255,255,255,0.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:22px;font-size:13px;color:#4A5568;line-height:1.7;">
+      No tracking, analytics or advertising cookies are used. We store one item in your browser (your preference to dismiss this notice) — nothing personal, nothing sent to a server. All calculations happen entirely on your device.
+      <button onclick="acceptCookies()" style="width:100%;padding:12px;background:#00843D;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px;">Got it — close ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo" style="text-decoration:none;">NHS<span>Finance</span>Tool</a>
+    <div class="nav-right">
+      <div class="nav-trust">
+        <div class="nav-trust-badge"><span>🏥</span> Built for NHS Staff</div>
+        <div class="nav-trust-badge"><span>🔒</span> Data never stored</div>
+      </div>
+      <a href="/privacy/" class="nav-home-btn" style="text-decoration:none;display:inline-block;">Disclaimer &amp; Privacy</a>
+    </div>
+  </div>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-flag">
-    <svg width="70" height="42" viewBox="0 0 70 42" xmlns="http://www.w3.org/2000/svg" style="border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.4)">
-      <rect width="70" height="42" fill="#012169"/>
-      <line x1="0" y1="0" x2="70" y2="42" stroke="white" stroke-width="8"/>
-      <line x1="70" y1="0" x2="0" y2="42" stroke="white" stroke-width="8"/>
-      <line x1="0" y1="0" x2="70" y2="42" stroke="#C8102E" stroke-width="5"/>
-      <line x1="70" y1="0" x2="0" y2="42" stroke="#C8102E" stroke-width="5"/>
-      <rect x="0" y="16" width="70" height="10" fill="white"/>
-      <rect x="30" y="0" width="10" height="42" fill="white"/>
-      <rect x="0" y="17.5" width="70" height="7" fill="#C8102E"/>
-      <rect x="31.5" y="0" width="7" height="42" fill="#C8102E"/>
-    </svg>
-  </div>
-  <h1>UK-DEBT.INFO</h1>
-  <div class="tagline">Real-Time UK Fiscal Data · Independent · Non-Partisan</div>
-  <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hs-val" id="h-debt">£2,796,000,000,000</div>
-      <div class="hs-label">National Debt (Live)</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hs-val" id="h-persec">£4,090</div>
-      <div class="hs-label">Borrowed Per Second</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hs-val">95.1%</div>
-      <div class="hs-label">Debt as % of GDP</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hs-val">£43,090</div>
-      <div class="hs-label">Per Person</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hs-val" id="h-today">£0</div>
-      <div class="hs-label">Borrowed Today</div>
-    </div>
-  </div>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;position:relative;z-index:10">
-    <a href="chancellor.html" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#aa0011,#d40020,#ff3344);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;padding:14px 28px;border-radius:8px;text-decoration:none;box-shadow:0 4px 20px rgba(212,0,32,0.5);position:relative;z-index:10;cursor:pointer">
-      🇬🇧 PLAY: CAN YOU SAVE THE UK?
-    </a>
-    <a href="save-the-uk.html" style="display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.3);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;padding:14px 22px;border-radius:8px;text-decoration:none;position:relative;z-index:10;cursor:pointer">
-      📊 FISCAL SIMULATOR
-    </a>
-  </div>
-  <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
-    <a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:#fff;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;padding:8px 18px;border-radius:6px;text-decoration:none;letter-spacing:0.5px;transition:.2s">
-      ☕ <span>Support this site on Ko-fi — keep it free & independent</span>
-    </a>
-  </div>
-  <div class="hero-live"><div class="pulse"></div> All figures update in real time · Sources: ONS · OBR · HM Treasury · Bank of England</div>
-</div>
+<div class="page active">
 
-<!-- OFF-BALANCE-SHEET REALITY STRIP -->
-<style>
-.obs-strip{background:linear-gradient(135deg,#6b0000 0%,#a80000 50%,#cc2200 100%);padding:28px 28px 24px;position:relative;overflow:hidden;border-bottom:3px solid rgba(255,255,255,0.15)}
-.obs-strip::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.02) 40px,rgba(255,255,255,0.02) 80px)}
-.obs-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,3vw,28px);letter-spacing:4px;color:#fff;text-align:center;margin-bottom:6px;position:relative}
-.obs-subtitle{font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.75);text-transform:uppercase;text-align:center;font-weight:600;margin-bottom:22px;position:relative}
-.obs-cards{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
-.obs-card{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:14px 16px;text-align:center;backdrop-filter:blur(4px);min-width:150px;flex:1;max-width:220px}
-.obs-card .oc-step{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.55);text-transform:uppercase;font-weight:700;margin-bottom:5px}
-.obs-card .oc-val{font-family:'Share Tech Mono',monospace;font-size:clamp(16px,2.5vw,22px);font-weight:700;letter-spacing:1px}
-.obs-card .oc-label{font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.7);text-transform:uppercase;margin-top:4px;font-weight:700}
-.obs-card .oc-desc{font-size:11px;color:rgba(255,255,255,0.6);margin-top:5px;font-weight:600;line-height:1.4}
-.obs-card.oc-official .oc-val{color:#88ffbb}
-.obs-card.oc-add .oc-val{color:#ffdd88}
-.obs-card.oc-total .oc-val{color:#ffaa66}
-.obs-card.oc-real{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.4)}
-.obs-card.oc-real .oc-val{color:#fff}
-.obs-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.2);position:relative}
-.obs-footer-text{font-size:12px;font-weight:700;color:rgba(255,255,255,0.8);line-height:1.7;max-width:680px}
-.obs-compare{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.obs-compare-item{text-align:center}
-.obs-compare-item .ocv{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700}
-.obs-compare-item .ocl{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.5);text-transform:uppercase;font-weight:700;margin-top:2px}
-.obs-compare-arrow{font-size:22px;color:rgba(255,255,255,0.35)}
-.obs-link{font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);text-decoration:none;letter-spacing:1px;border:1px solid rgba(255,255,255,0.3);padding:6px 14px;border-radius:4px;white-space:nowrap}
-.obs-link:hover{background:rgba(255,255,255,0.1)}
-@keyframes pulse2{0%,100%{opacity:1}50%{opacity:0.4}}
-.obs-pulse{width:10px;height:10px;border-radius:50%;background:#fff;display:inline-block;margin-right:8px;animation:pulse2 1.5s infinite;vertical-align:middle}
-</style>
-
-<div class="obs-strip">
-  <div class="obs-title"><span class="obs-pulse"></span>THE REAL DEBT PICTURE — WHAT THE HEADLINE MISSES</div>
-  <div class="obs-subtitle">Official figure vs true liability · Source: Whole of Government Accounts 2023/24 · OBR · ONS</div>
-
-  <!-- LIVE TICKING STATS ROW — mirrors the blue hero above -->
-  <div class="obs-cards">
-    <div class="obs-card oc-real">
-      <div class="oc-step">True Total Liability (Live)</div>
-      <div class="oc-val" id="obs-total">£5.02tn</div>
-      <div class="oc-label">WGA + Pensions Accruing</div>
-      <div class="oc-desc">Ticking up as pension obligations accrue ~£2,100/second on top of new borrowing.</div>
-    </div>
-    <div class="obs-card oc-add">
-      <div class="oc-step">Pension Liability Accruing</div>
-      <div class="oc-val" id="obs-pension-sec">£2,100/s</div>
-      <div class="oc-label">New Obligations Per Second</div>
-      <div class="oc-desc">Public sector pension rights earned each second by NHS staff, teachers, civil servants.</div>
-    </div>
-    <div class="obs-card oc-official">
-      <div class="oc-step">Official Debt (Live)</div>
-      <div class="oc-val" id="obs-official">£2.92tn</div>
-      <div class="oc-label">PSND — What Gov't Admits</div>
-      <div class="oc-desc">The number in the news — gilts and bonds only. Real liability is 72% higher.</div>
-    </div>
-    <div class="obs-card oc-total">
-      <div class="oc-step">Hidden Gap</div>
-      <div class="oc-val" id="obs-gap">£2.11tn</div>
-      <div class="oc-label">True minus Official</div>
-      <div class="oc-desc">Pensions + PFI + student loans. The liabilities never mentioned in Budget speeches.</div>
-    </div>
-    <div class="obs-card oc-real">
-      <div class="oc-step">True Liability Per Person</div>
-      <div class="oc-val">£73,500</div>
-      <div class="oc-label">Every Man, Woman & Child</div>
-      <div class="oc-desc">Against only £38,500 assets per person. Net liability: £34,500 each.</div>
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">🏥 Built for NHS Staff — Free, No Sign-Up</div>
+      <h1>Know Exactly Where<br><em>Your NHS Pay Goes</em></h1>
+      <p>Three calculators built specifically for NHS pay structures and the NHS pension — take-home pay by band or grade, an Annual Allowance breach checker, and Ltd company tax planning for private practice.</p>
     </div>
   </div>
 
-  <!-- EXPLAINER CARDS ROW -->
-  <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;position:relative">
-    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:12px">
-      <div style="font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.5);text-transform:uppercase;font-weight:700;margin-bottom:5px">① Official PSND</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:#88ffbb">£2.92tn</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.65);margin-top:4px;font-weight:600;line-height:1.4">Gilts + bonds only. Does NOT include pensions, PFI or student loans. Reported monthly by ONS.</div>
-    </div>
-    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:12px">
-      <div style="font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.5);text-transform:uppercase;font-weight:700;margin-bottom:5px">② + Unfunded Pensions</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:#ffdd88">+£1.40tn</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.65);margin-top:4px;font-weight:600;line-height:1.4">NHS, teachers, civil servants, forces, police. Pay-as-you-go — no pot of money exists.</div>
-    </div>
-    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:12px">
-      <div style="font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.5);text-transform:uppercase;font-weight:700;margin-bottom:5px">③ + PFI + Student Loans</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:#ffdd88">+£547bn</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.65);margin-top:4px;font-weight:600;line-height:1.4">PFI contracts £310bn + student loan write-offs ~£237bn. Real obligations, not counted.</div>
-    </div>
-    <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:12px">
-      <div style="font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.5);text-transform:uppercase;font-weight:700;margin-bottom:5px">④ Whole of Govt (WGA)</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:#ffaa66">£5.02tn</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.65);margin-top:4px;font-weight:600;line-height:1.4">Total on IFRS accounting — same rules as FTSE 100 companies. HM Treasury publishes annually.</div>
-    </div>
-    <div style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);border-radius:6px;padding:12px">
-      <div style="font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.5);text-transform:uppercase;font-weight:700;margin-bottom:5px">⑤ The Hidden 72%</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:#fff">+72% more</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.65);margin-top:4px;font-weight:600;line-height:1.4">The true liability is 72% larger than what politicians quote. Every year the gap widens.</div>
-    </div>
-  </div>
-
-  <div class="obs-footer">
-    <div class="obs-footer-text">
-      🚨 The official figure of <strong>£2.92tn</strong> is what politicians quote and the media reports.
-      The true liability under standard accounting rules is <strong>£5.02tn</strong> — 72% larger than the headline.
-      Every year the gap widens as pension promises accumulate faster than they are funded.
-    </div>
-    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-      <div class="obs-compare">
-        <div class="obs-compare-item"><div class="ocv" style="color:#88ffbb">£2.92tn</div><div class="ocl">Official</div></div>
-        <div class="obs-compare-arrow">→</div>
-        <div class="obs-compare-item"><div class="ocv" style="color:#fff">£5.02tn</div><div class="ocl">Reality</div></div>
-        <div class="obs-compare-arrow">→</div>
-        <div class="obs-compare-item"><div class="ocv" style="color:#ffdd88">+72%</div><div class="ocl">Hidden</div></div>
-      </div>
-      <a href="off-balance-sheet.html" class="obs-link">Full Breakdown →</a>
-    </div>
-  </div>
-</div>
-
-<div class="main">
-    <!-- CHANCELLOR GAME FEATURED CARD -->
-    <a href="chancellor.html" class="card done" style="grid-column:1/-1;background:linear-gradient(135deg,#1a0000,#3d0000,#600000);border:2px solid var(--red);position:relative;overflow:hidden">
-      <div style="position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.02) 40px,rgba(255,255,255,0.02) 80px)"></div>
-      <div style="position:relative;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-        <div style="font-size:56px">🇬🇧</div>
-        <div style="flex:1;min-width:200px">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;margin-bottom:4px">CHANCELLOR — CAN YOU SAVE THE UK?</div>
-          <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.75);line-height:1.6">Take office as Chancellor. Raise taxes, cut spending, manage crises. Can you get debt under control before it spirals to 274% GDP? Based on real OBR data.</div>
-          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-            <span style="background:rgba(255,51,68,0.2);border:1px solid rgba(255,51,68,0.5);color:#ff8888;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">🎮 FREE TO PLAY</span>
-            <span style="background:rgba(255,170,0,0.15);border:1px solid rgba(255,170,0,0.4);color:#ffaa00;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">📱 INSTALLS AS APP</span>
-            <span style="background:rgba(0,204,119,0.15);border:1px solid rgba(0,204,119,0.4);color:#00cc77;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700">🏫 CURRICULUM-LINKED</span>
-          </div>
+  <div class="section" style="padding-top:36px;">
+    <div class="container">
+      <h2 class="section-title">The three NHS tools</h2>
+      <p class="section-sub" style="margin-bottom:0;">Each one is free to use, with no sign-up required.</p>
+      <div class="tools-grid">
+        <div class="tool-card" onclick="showPage('takehome')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#E6F5EC;">💰</div>
+          <h3><a href="/take-home-pay-calculator/" style="color:inherit;text-decoration:none;">NHS Take-Home Pay Calculator</a></h3>
+          <p>Works from your actual AfC band, consultant PAs or trainee nodal point — handles salary sacrifice, LTFT and NHS-specific extras.</p>
+          <div class="tool-card-link" style="color:#00843D;">Try it now</div>
         </div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#ff6666;text-align:center;padding:12px 20px;background:rgba(212,0,32,0.2);border:1px solid rgba(212,0,32,0.4);border-radius:8px;white-space:nowrap">▶ PLAY NOW</div>
-      </div>
-    </a>
-
-  <!-- DEBT & BORROWING -->
-  <div class="section-title">💷 Debt & Borrowing</div>
-  <div class="cards-grid">
-    <a href="debt-clock.html" class="card done">
-      <div class="card-icon">⏱️</div>
-      <div class="card-title">National Debt Clock</div>
-      <div class="card-desc">Live ticking national debt counter with borrowing per second, per person, debt/GDP ratio, and full fiscal snapshot. Updated with every ONS release.</div>
-      <div class="card-stat" id="card-debt">£2,796bn and rising</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="interest-payments.html" class="card done">
-      <div class="card-icon">📈</div>
-      <div class="card-title">Interest Payments</div>
-      <div class="card-desc">Historical UK government interest payments year by year from 1990 to present, with OBR forecasts to 2030. See how debt servicing costs are crowding out public services.</div>
-      <div class="card-stat">£88bn/yr · 2025/26</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="future-interest.html" class="card done">
-      <div class="card-icon">🎯</div>
-      <div class="card-title">Future Interest Scenarios</div>
-      <div class="card-desc">What happens to annual interest payments if gilt yields rise to 3%, 4%, 5% or 6%? Interactive scenario modeller showing the fiscal cliff edge.</div>
-      <div class="card-stat">+£60bn if rates → 6%</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="off-balance-sheet.html" class="card done">
-      <div class="card-icon">🕳️</div>
-      <div class="card-title">Off-Balance-Sheet Debt</div>
-      <div class="card-desc">PFI/PPP contracts, unfunded pension liabilities, student loan book, nuclear decommissioning and other obligations not counted in the official PSND figure.</div>
-      <div class="card-stat">~£9tn+ hidden liabilities</div>
-      <div class="card-status live">● Live</div>
-    </a>
-  </div>
-
-  <!-- MONEY & ASSETS -->
-  <div class="section-title">🏦 Money & Assets</div>
-  <div class="cards-grid">
-    <a href="uk-assets.html" class="card done">
-      <div class="card-icon">🏦</div>
-      <div class="card-title">UK Asset Clock</div>
-      <div class="card-desc">Gold reserves, foreign currency holdings, IMF drawing rights, M2 money supply and BoE balance sheet. How much does the UK actually own vs what it owes?</div>
-      <div class="card-stat">£130bn reserves vs £2.8tn debt</div>
-      <div class="card-status live">● Live</div>
-    </a>
-        <a href="understanding-qe-qt.html" class="card done">
-      <div class="card-icon">🖨️</div>
-      <div class="card-title">Understanding QE and QT</div>
-      <div class="card-desc">What money printing actually did, who gained, who lost, and what it's costing taxpayers now.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-            <a href="silver.html" class="card done">
-      <div class="card-icon">🪙</div>
-      <div class="card-title">Silver — Supply, Demand &amp; Future</div>
-      <div class="card-desc">Six consecutive annual deficits. COMEX registered vs eligible explained. Samsung's solid-state battery needs 1kg of silver per car. Solar thrifting vs real substitution. Price scenarios to 2030.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="gold.html" class="card done">
-      <div class="card-icon">🪙</div>
-      <div class="card-title">Gold — History, Central Banks &amp; Future</div>
-      <div class="card-desc">The reserve currency cycle from Dutch guilder to dollar. Who holds the most gold. Fort Knox mystery. Why central banks bought 1,000 tonnes for three years running. And what might happen next.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="boe-bonds.html" class="card done">
-      <div class="card-icon">🏛️</div>
-      <div class="card-title">BoE Bond Programme</div>
-      <div class="card-desc">The full story of Quantitative Easing and Quantitative Tightening — how much was created, what it cost, the losses being crystallised, and who pays for them.</div>
-      <div class="card-stat">~£50bn QT losses est.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="money-supply.html" class="card done">
-      <div class="card-icon">📊</div>
-      <div class="card-title">Asset Prices vs M2 & GDP</div>
-      <div class="card-desc">House prices, gold, equities and average salaries plotted against M2 money supply and GDP growth since 1990. What has money creation done to asset values?</div>
-      <div class="card-stat">House prices +580% since 1990</div>
-      <div class="card-status live">● Live</div>
-    </a>
-  </div>
-
-  <!-- PEOPLE & WORK -->
-  <div class="section-title">👥 People & Work</div>
-  <div class="cards-grid">
-    <a href="employment.html" class="card done">
-      <div class="card-icon">👷</div>
-      <div class="card-title">Public vs Private Employment</div>
-      <div class="card-desc">Historical and forecast split between public and private sector workers, economic inactivity trends, and what the ratio means for tax receipts and sustainability.</div>
-      <div class="card-stat">6.1m public sector workers</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="pensions.html" class="card done">
-      <div class="card-icon">👴</div>
-      <div class="card-title">Pension Liabilities</div>
-      <div class="card-desc">Civil service, NHS, police, teachers and armed forces pension liabilities year by year. Actual contributions vs projected payouts — the gap that future taxpayers must fill.</div>
-      <div class="card-stat">~£2.6tn civil service liability</div>
-      <div class="card-status live">● Live</div>
-    </a>
-        <a href="uk-wealth-decline.html" class="card done">
-      <div class="card-icon">📉</div>
-      <div class="card-title">UK Wealth Decline</div>
-      <div class="card-desc">Why Britons are 23% poorer than in 2020 — the worst wealth decline of any developed nation. Sources, causes, and what happens next.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="personal-finance.html" class="card done">
-      <div class="card-icon">💳</div>
-      <div class="card-title">Personal Finance Dashboard</div>
-      <div class="card-desc">Average UK mortgage debt, credit card balances, personal loans, savings rates and net worth per household. The financial position of the average British person.</div>
-      <div class="card-stat">Avg mortgage £137k outstanding</div>
-      <div class="card-status live">● Live</div>
-    </a>
-  </div>
-
-  <!-- CONTEXT -->
-  <div class="section-title">🌍 Context & Comparison</div>
-  <div class="cards-grid">
-        <a href="save-the-uk.html" class="card done">
-      <div class="card-icon">🇬🇧</div>
-      <div class="card-title">Can You Save the UK?</div>
-      <div class="card-desc">Interactive fiscal simulator. Raise taxes, cut spending, grow the economy. Can you get debt under control before it spirals to 274%?</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="fiscal-gap.html" class="card done">
-      <div class="card-icon">🔥</div>
-      <div class="card-title">The True Fiscal Gap</div>
-      <div class="card-desc">Every spending stream stacked to 2075. How much extra tax or borrowing — year by year — and what happens when debt compounds.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="human-scale.html" class="card done">
-      <div class="card-icon">🧑</div>
-      <div class="card-title">The Human Scale</div>
-      <div class="card-desc">What if the UK government were a single person? Convert GDP to salary, national debt to personal debt, and government spending to a household budget. Suddenly it all makes sense.</div>
-      <div class="card-stat">Govt spends 45p of every £1 earned</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="fiscal-trajectory.html" class="card done">
-      <div class="card-icon">🔮</div>
-      <div class="card-title">Fiscal Trajectory</div>
-      <div class="card-desc">When does UK debt become unsustainable? OBR long-term model to 2075.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="money-in-out.html" class="card done">
-      <div class="card-icon">💰</div>
-      <div class="card-title">Money In &amp; Money Out</div>
-      <div class="card-desc">Every tax source and spending category. Petrol price breakdown included.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="salary-calculator.html" class="card done">
-      <div class="card-icon">💷</div>
-      <div class="card-title">Salary Calculator</div>
-      <div class="card-desc">Where do you rank? Tax freedom day, decile analysis &amp; pension planner.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-        <a href="russia-economy-war.html" class="card done">
-      <div class="card-icon">🪖</div>
-      <div class="card-title">Russia's War Economy</div>
-      <div class="card-desc">Have sanctions worked? GDP, oil revenues, gold reserves and debt through four years of war. The honest data-driven verdict.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="trade-deficit.html" class="card done">
-      <div class="card-icon">🚢</div>
-      <div class="card-title">Trade Deficit</div>
-      <div class="card-desc">UK trade balance in goods &amp; services. Historical data from 1980.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-        <a href="jobs-data-accuracy.html" class="card done">
-      <div class="card-icon">📊</div>
-      <div class="card-title">Jobs Data — How Accurate?</div>
-      <div class="card-desc">US jobs numbers revised by 911,000. UK data suspended. Markets move billions on figures later proved wrong. The full story.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-        <a href="obr-spring-2026.html" class="card done">
-      <div class="card-icon">📋</div>
-      <div class="card-title">OBR Spring Statement 2026</div>
-      <div class="card-desc">Debt rising to 96% GDP. Growth cut to 1.1%. Borrowing at £129bn. What Rachel Reeves said vs what the numbers actually show.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="obr-accuracy.html" class="card done">
-      <div class="card-icon">🎯</div>
-      <div class="card-title">OBR Forecast Accuracy</div>
-      <div class="card-desc">Inflation forecast 387% wrong. Borrowing 74% underestimated. The track record.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-        <a href="debt-reduction-success.html" class="card done">
-      <div class="card-icon">📉</div>
-      <div class="card-title">Who Successfully Reduced Their Debt?</div>
-      <div class="card-desc">Argentina eliminated a 123-year deficit. Greece cut debt by 63 points. Ireland went from bailout to surplus. Lessons for the UK.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-        <a href="wealth-taxes.html" class="card done">
-      <div class="card-icon">🏛️</div>
-      <div class="card-title">Wealth Taxes — The Evidence</div>
-      <div class="card-desc">Norway lost more than it gained. France abolished its wealth tax. Spain collected 40% of target. What the international data actually shows about wealth taxes, mansion taxes and the 38% question.</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="uk-vs-world.html" class="card done">
-      <div class="card-icon">🌐</div>
-      <div class="card-title">UK vs The World</div>
-      <div class="card-desc">How does UK debt, gold reserves, interest burden and fiscal position compare to the USA, Germany, France, Japan and other G7 nations? Credit ratings and competitiveness.</div>
-      <div class="card-stat">UK #17 in gold holdings</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="timeline.html" class="card done">
-      <div class="card-icon">📅</div>
-      <div class="card-title">Historical Timeline</div>
-      <div class="card-desc">UK national debt from 1900 to present with key events marked — World Wars, Bretton Woods, Black Wednesday, the 2008 crisis, COVID. How did we get here?</div>
-      <div class="card-stat">Debt peaked at 250% GDP post-WW2</div>
-      <div class="card-status live">● Live</div>
-    </a>
-    <a href="cost-of-living.html" class="card done">
-      <div class="card-icon">🛒</div>
-      <div class="card-title">Cost of Living</div>
-      <div class="card-desc">Real wages vs CPI inflation vs house prices vs energy costs since 1970. Are people genuinely better or worse off than their parents? The data tells the story.</div>
-      <div class="card-stat">Real wages flat since 2008</div>
-      <div class="card-status live">● Live</div>
-    </a>
-  </div>
-
-  <!-- ABOUT & DONATE -->
-  <div class="section-title">ℹ️ About This Site</div>
-  <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px">
-    <div class="about-panel">
-      <h2>What is UK-Debt.info?</h2>
-      <p>UK-Debt.info is an independent, non-partisan public information resource providing real-time and historical data on the United Kingdom's fiscal position. It brings together official data from ONS, OBR, HM Treasury and the Bank of England in one place.</p>
-      <p>All figures are derived from official UK government sources including the Office for National Statistics (ONS), the Office for Budget Responsibility (OBR), HM Treasury, and the Bank of England. Live counters are estimates based on the latest published annual figures divided to a per-second rate — they are illustrative of the scale and direction of public finances, not audited accounts.</p>
-      <p>This site has no political affiliation. It does not advocate for any party, policy position or ideology. The data speaks for itself.</p>
-      <p><strong>For journalists and researchers:</strong> All source data is publicly available from the links below. Please cite as "UK-Debt.info, based on ONS/OBR data" and include the date of access as figures update monthly.</p>
-      <div class="sources-list">
-        <span class="source-tag">ONS</span>
-        <span class="source-tag">OBR</span>
-        <span class="source-tag">HM Treasury</span>
-        <span class="source-tag">Bank of England</span>
-        <span class="source-tag">IMF</span>
-        <span class="source-tag">CEIC Data</span>
-        <span class="source-tag">DWP</span>
-        <span class="source-tag">ONS Population</span>
+        <div class="tool-card" onclick="showPage('aa')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#F3E8FF;">⚙️</div>
+          <h3><a href="/pension-annual-allowance-calculator/" style="color:inherit;text-decoration:none;">Pension Annual Allowance Checker</a></h3>
+          <p>Uses the correct NHS PIA formula, with a month-by-month breach projection and carry forward from your last three years.</p>
+          <div class="tool-card-link" style="color:#9333EA;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('ltd')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#EFF6FF;">🏢</div>
+          <h3><a href="/ltd-company-tax-calculator/" style="color:inherit;text-decoration:none;">Ltd Company Tax Optimiser</a></h3>
+          <p>For private practice or locum income through a limited company — compares salary, dividend and pension strategies side by side.</p>
+          <div class="tool-card-link" style="color:#3B82F6;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('overtime')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#F5F3FF;">➕</div>
+          <h3><a href="/nhs-overtime-annual-allowance-calculator/" style="color:inherit;text-decoration:none;">Overtime &amp; Extra Shifts Calculator</a></h3>
+          <p>Add up any extra shifts, overtime or strike cover — freehand — and see how much more you can earn before breaching your Annual Allowance.</p>
+          <div class="tool-card-link" style="color:#7C3AED;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('shouldiltd')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#FFF7ED;">🤔</div>
+          <h3><a href="/should-i-set-up-a-limited-company/" style="color:inherit;text-decoration:none;">Should I Set Up a Ltd Company?</a></h3>
+          <p>The costs, paperwork and liabilities of incorporating for private practice income — and how it can help with your Annual Allowance too.</p>
+          <div class="tool-card-link" style="color:#EA580C;">Read the guide</div>
+        </div>
+        <div class="tool-card" onclick="showPage('salsac')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#FEF2F2;">🚗</div>
+          <h3><a href="/salary-sacrifice-true-cost-calculator/" style="color:inherit;text-decoration:none;">Salary Sacrifice True Cost Calculator</a></h3>
+          <p>Car lease, cycle to work, tech and childcare schemes save tax today — see what they really cost your NHS pension long-term.</p>
+          <div class="tool-card-link" style="color:#DC2626;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('promotion')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#EFF6FF;">📈</div>
+          <h3><a href="/promotion-band-change-calculator/" style="color:inherit;text-decoration:none;">Promotion &amp; Band Change Calculator</a></h3>
+          <p>Is your promotion actually worth what you think? See exactly what you'll take home after tax.</p>
+          <div class="tool-card-link" style="color:#2563EB;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('pensionproj')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#F0F4F8;">🏛️</div>
+          <h3><a href="/nhs-pension-projector/" style="color:inherit;text-decoration:none;">NHS Pension Projector</a></h3>
+          <p>What will your NHS pension actually pay at retirement? Covers 2015 CARE plus 1995 and 2008 Section benefits.</p>
+          <div class="tool-card-link" style="color:#1A2E44;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('parttime')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#ECFEFF;">⏱️</div>
+          <h3><a href="/part-time-ltft-calculator/" style="color:inherit;text-decoration:none;">Part-Time &amp; LTFT Calculator</a></h3>
+          <p>The real cost of working fewer hours — today and across your entire career pension.</p>
+          <div class="tool-card-link" style="color:#0891B2;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('locum')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#F0FDFA;">🏥</div>
+          <h3><a href="/locum-bank-shift-optimiser/" style="color:inherit;text-decoration:none;">Locum &amp; Bank Shift Optimiser</a></h3>
+          <p>How many extra shifts before tax bites hard? Annual Allowance breach warning included.</p>
+          <div class="tool-card-link" style="color:#0D9488;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('optout')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#FEF2F2;">⚠️</div>
+          <h3><a href="/nhs-pension-opt-out-calculator/" style="color:inherit;text-decoration:none;">Pension: Stay In vs Opt Out</a></h3>
+          <p>An honest comparison — including the employer contribution you'd lose forever.</p>
+          <div class="tool-card-link" style="color:#B91C1C;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('selfassess')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#F5F3FF;">🧾</div>
+          <h3><a href="/self-assessment-tax-estimator/" style="color:inherit;text-decoration:none;">Self-Assessment Tax Estimator</a></h3>
+          <p>Estimate your Self Assessment bill from private practice, medical reports, rentals and more.</p>
+          <div class="tool-card-link" style="color:#7C3AED;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('mortgage')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#ECFDF5;">🏠</div>
+          <h3><a href="/nhs-mortgage-affordability-calculator/" style="color:inherit;text-decoration:none;">Mortgage Affordability Calculator</a></h3>
+          <p>How much can you borrow? Uses NHS-specific income multiples across lender types.</p>
+          <div class="tool-card-link" style="color:#059669;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('annualleave')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#FEFCE8;">📅</div>
+          <h3><a href="/nhs-annual-leave-calculator/" style="color:inherit;text-decoration:none;">Annual Leave Calculator</a></h3>
+          <p>Pro-rata annual leave for any hours pattern, including part-year starters.</p>
+          <div class="tool-card-link" style="color:#CA8A04;">Try it now</div>
+        </div>
+        <div class="tool-card" onclick="showPage('studentloan')">
+          <div class="badge-free">Free</div>
+          <div class="tool-card-icon" style="background:#EEF2FF;">🎓</div>
+          <h3><a href="/student-loan-repayment-calculator/" style="color:inherit;text-decoration:none;">Student Loan Repayment Calculator</a></h3>
+          <p>Plans 1, 2, 4 and 5 — your monthly deduction, total repaid, and write-off projection.</p>
+          <div class="tool-card-link" style="color:#4338CA;">Try it now</div>
+        </div>
       </div>
     </div>
-    <div class="donate-panel">
-      <h3>☕ Support This Site</h3>
-      <p>UK-Debt.info is free, independent and carries no advertising. If you find it useful, a small donation helps keep it updated and ad-free.</p>
-      <a href="https://ko-fi.com/ukdebtinfo" target="_blank" rel="noopener"
-         style="display:inline-flex;align-items:center;gap:10px;background:#ff5f5f;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;padding:14px 32px;border-radius:8px;text-decoration:none;box-shadow:0 4px 14px rgba(255,95,95,0.4)">
-        ☕ SUPPORT ON KO-FI
+  </div>
+
+  <div class="section section-alt">
+    <div class="container">
+      <div class="section-tag">Need a general calculator?</div>
+      <h2 class="section-title">Mortgages, credit cards, savings &amp; more</h2>
+      <p class="section-sub">NHS Finance Tool sticks to NHS-specific pay and pension tools. For general UK financial calculators — mortgages, credit cards, ISAs, personal loans and more — visit our sister site.</p>
+      <a href="#" onclick="return leavesite('https://www.cookie-free.co.uk','Cookie-Free.co.uk','45+ free UK financial calculators','🍪')" style="display:inline-flex;align-items:center;gap:10px;background:#fff;border:2px solid #00843D;border-radius:10px;padding:13px 20px;text-decoration:none;margin-top:8px;">
+        <span style="font-size:20px;">🍪</span>
+        <div><div style="font-size:13px;font-weight:800;color:#00843D;">Cookie-Free.co.uk</div><div style="font-size:11px;color:#6B7280;">45+ free UK financial calculators</div></div>
+        <span style="font-size:16px;color:#00843D;">→</span>
       </a>
-      <p style="margin-top:12px;font-size:11px;color:var(--ink-light)">One-off or monthly · No account needed · Processed securely by Ko-fi</p>
     </div>
   </div>
 
-</div>
-
-<!-- DISCLAIMER STRIP -->
-<div class="disclaimer-strip">
-  ⚠️ All figures are estimates based on publicly available official data. This site is not affiliated with HM Treasury, ONS, OBR or any government body. Not financial advice.
-  <a href="disclaimer.html">Full Disclaimer</a> · <a href="privacy.html">Privacy Policy</a>
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-  <span>© 2026 UK-Debt.info · Independent · Non-partisan · No advertising</span>
-  <div class="footer-links">
-    <a href="disclaimer.html">Disclaimer</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="mailto:info@uk-debt.info">Contact</a>
+  <div class="section">
+    <div class="container">
+      <div class="section-tag">Why NHS Finance Tool?</div>
+      <h2 class="section-title">Built around how the NHS actually pays you</h2>
+      <div class="why-grid">
+        <div class="why-card"><span class="why-icon">🎯</span><h3>NHS-Specific</h3><p>Real AfC bands, consultant PA structures and the correct NHS pension PIA formula — not a generic calculator.</p></div>
+        <div class="why-card"><span class="why-icon">🔒</span><h3>Completely Private</h3><p>All calculations happen in your browser. We never store or transmit your salary or pension figures.</p></div>
+        <div class="why-card"><span class="why-icon">📱</span><h3>Works Anywhere</h3><p>Fully usable on your phone, tablet or desktop.</p></div>
+        <div class="why-card"><span class="why-icon">🆓</span><h3>Always Free</h3><p>No sign-up, no subscription, no hidden charges.</p></div>
+      </div>
+    </div>
   </div>
+
+  <footer>
+    <div style="max-width:800px;margin:0 auto;text-align:center;">
+      <div class="footer-logo">NHS<span>Finance</span>Tool</div>
+      <p style="font-size:14px;margin-bottom:8px;">Free calculators built for NHS pay and pensions</p>
+      <div class="footer-links">
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/privacy/">Terms of Use</a>
+        <a href="/privacy/">Disclaimer</a>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:9px;padding:14px 20px;max-width:700px;margin:18px auto 0;font-size:12px;text-align:left;line-height:1.6;color:rgba(255,255,255,0.6);">
+        <strong style="color:rgba(255,255,255,0.85);">Not financial advice:</strong> NHS Finance Tool is not FCA regulated. Do not base any financial decision on these figures — they are for illustration only.
+      </div>
+      <div class="footer-copy">© 2026 NHSFinanceTool.co.uk — part of the same family of free UK finance tools as Cookie-Free.co.uk</div>
+    </div>
+  </footer>
 </div>
 
-<script>
-// Live debt ticker on homepage
-const BASE_DEBT = 2796e9;
-const ANNUAL_BORROW = 129e9;
-const POPULATION = 68400000;
-const BASE_DATE = new Date('2026-05-01').getTime();
-const SEC_PER_YEAR = 31536000;
-
-function fmt(n){return n.toLocaleString('en-GB',{maximumFractionDigits:0})}
-function fmtShort(n){
-  if(n>=1e9) return '£'+(n/1e9).toFixed(1)+'bn';
-  if(n>=1e6) return '£'+(n/1e6).toFixed(1)+'m';
-  return '£'+fmt(n);
-}
-
-function tick(){
-  const now = Date.now();
-  const elapsed = (now - BASE_DATE)/1000;
-  const perSec = ANNUAL_BORROW/SEC_PER_YEAR;
-  const current = BASE_DEBT + perSec*elapsed;
-  document.getElementById('h-debt').textContent = '£'+fmt(current);
-  document.getElementById('h-persec').textContent = '£'+fmt(perSec);
-  const dayStart = new Date();dayStart.setHours(0,0,0,0);
-  const secsToday = (now - dayStart.getTime())/1000;
-  document.getElementById('h-today').textContent = fmtShort(perSec*secsToday);
-  document.getElementById('card-debt').textContent = '£'+fmt(current/1e9)+'bn and rising';
-}
-setInterval(tick,200);tick();
-
-// Live true debt ticker for red OBS strip
-// WGA total liabilities base: £5.02tn
-// Pension accrual: ~£66bn/yr new accruals = ~£2,094/sec
-// Official debt ticks at same rate as above
-const WGA_BASE = 5.02e12;
-const WGA_BASE_DATE = new Date('2026-05-01').getTime();
-const PENSION_ACCRUAL_SEC = 66e9 / 31536000; // £66bn/yr pension accruals
-const OBS_BORROW_SEC = ANNUAL_BORROW / SEC_PER_YEAR;
-
-function tickObs(){
-  const now = Date.now();
-  const elapsed = (now - WGA_BASE_DATE)/1000;
-  // True total grows with both borrowing AND pension accrual
-  const trueTotal = WGA_BASE + (OBS_BORROW_SEC + PENSION_ACCRUAL_SEC)*elapsed;
-  const officialNow = BASE_DEBT + OBS_BORROW_SEC*elapsed;
-  const hiddenGap = trueTotal - officialNow;
-
-  const el = id => document.getElementById(id);
-  if(el('obs-total')){
-    el('obs-total').textContent = '£'+(trueTotal/1e12).toFixed(3)+'tn';
-  }
-  if(el('obs-pension-sec')){
-    el('obs-pension-sec').textContent = '£'+fmt(PENSION_ACCRUAL_SEC)+'/s';
-  }
-  if(el('obs-official')){
-    el('obs-official').textContent = '£'+(officialNow/1e12).toFixed(3)+'tn';
-  }
-  if(el('obs-gap')){
-    el('obs-gap').textContent = '£'+(hiddenGap/1e12).toFixed(2)+'tn';
-  }
-}
-setInterval(tickObs,200);tickObs();
-
-// Nav dropdowns
-function toggleNav(id){
-  document.querySelectorAll('.nav-group').forEach(g=>{
-    if(g.id!==id) g.classList.remove('open');
-  });
-  document.getElementById(id).classList.toggle('open');
-}
-document.addEventListener('click',function(e){
-  if(!e.target.closest('.nav-group')) document.querySelectorAll('.nav-group').forEach(g=>g.classList.remove('open'));
-});
-</script>
+<script src="/js/app.js"></script>
 </body>
 </html>

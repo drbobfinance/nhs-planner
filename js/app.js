@@ -96,7 +96,17 @@ var NHSFT_URL_MAP = {
   "aa": "/pension-annual-allowance-calculator/",
   "ltd": "/ltd-company-tax-calculator/",
   "overtime": "/nhs-overtime-annual-allowance-calculator/",
-  "shouldiltd": "/should-i-set-up-a-limited-company/"
+  "shouldiltd": "/should-i-set-up-a-limited-company/",
+  "salsac": "/salary-sacrifice-true-cost-calculator/",
+  "promotion": "/promotion-band-change-calculator/",
+  "pensionproj": "/nhs-pension-projector/",
+  "parttime": "/part-time-ltft-calculator/",
+  "locum": "/locum-bank-shift-optimiser/",
+  "optout": "/nhs-pension-opt-out-calculator/",
+  "selfassess": "/self-assessment-tax-estimator/",
+  "mortgage": "/nhs-mortgage-affordability-calculator/",
+  "annualleave": "/nhs-annual-leave-calculator/",
+  "studentloan": "/student-loan-repayment-calculator/"
 };
 function showPage(id) {
   window.location.href = NHSFT_URL_MAP[id] || ('/' + id + '/');
@@ -135,20 +145,26 @@ const NHSFT_TY = {
 };
 const NHSFT_MONTHS = ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar"];
 const NHSFT_BANDS = {
-  "Band 2 — £24,465": 24465, "Band 3 (Entry) — £24,937": 24937, "Band 3 (Top) — £26,598": 26598,
-  "Band 4 (Entry) — £27,485": 27485, "Band 4 (Top) — £30,162": 30162,
-  "Band 5 (Entry) — £31,049": 31049, "Band 5 (Top) — £37,796": 37796,
-  "Band 6 (Entry) — £38,682": 38682, "Band 6 (Top) — £46,580": 46580,
-  "Band 7 (Entry) — £47,810": 47810, "Band 7 (Top) — £54,710": 54710,
-  "Band 8a (Entry) — £55,690": 55690, "Band 8a (Top) — £62,682": 62682,
-  "Band 8b (Entry) — £64,455": 64455, "Band 8b (Top) — £74,896": 74896,
-  "Band 8c (Entry) — £76,965": 76965, "Band 8c (Top) — £88,682": 88682,
-  "Band 8d (Entry) — £91,342": 91342, "Band 8d (Top) — £105,337": 105337,
-  "Band 9 (Entry) — £109,179": 109179, "Band 9 (Top) — £125,637": 125637,
-  "Foundation Year 1 (F1) — £32,398": 32398, "Foundation Year 2 (F2) — £37,935": 37935,
-  "Specialty Registrar (StR) — £51,017": 51017,
-  "Consultant Threshold 1 — £105,504": 105504, "Consultant Threshold 8 — £139,882": 139882,
-  "GP (Salaried) — £71,504": 71504, "Other / enter manually": 0
+  "Band 2 — £25,272": 25272, "Band 3 (Entry) — £25,760": 25760, "Band 3 (Top) — £27,472": 27472,
+  "Band 4 (Entry) — £28,394": 28394, "Band 4 (Top) — £31,157": 31157,
+  "Band 5 (Entry) — £32,073": 32073, "Band 5 (Top) — £39,043": 39043,
+  "Band 6 (Entry) — £39,959": 39959, "Band 6 (Top) — £48,113": 48113,
+  "Band 7 (Entry) — £49,388": 49388, "Band 7 (Top) — £56,516": 56516,
+  "Band 8a (Entry) — £57,528": 57528, "Band 8a (Top) — £64,750": 64750,
+  "Band 8b (Entry) — £66,582": 66582, "Band 8b (Top) — £77,367": 77367,
+  "Band 8c (Entry) — £79,505": 79505, "Band 8c (Top) — £91,609": 91609,
+  "Band 8d (Entry) — £94,357": 94357, "Band 8d (Top) — £108,813": 108813,
+  "Band 9 (Entry) — £112,782": 112782, "Band 9 (Top) — £129,783": 129783,
+  "Foundation Year 1 (F1) — £41,226": 41226, "Foundation Year 2 (F2) — £47,610": 47610,
+  "CT1 / ST1 (Registrar) — £55,355": 55355, "CT2 / ST2 (Registrar) — £55,355": 55355,
+  "CT3 / ST3 (Registrar) — £67,325": 67325, "CT4 / ST4 (Registrar) — £67,998": 67998,
+  "ST5 (Registrar) — £67,998": 67998, "ST6 (Registrar) — £77,348": 77348,
+  "ST7 (Registrar) — £77,348": 77348, "ST8 (Registrar) — £77,348": 77348,
+  "GP Trainee (GPST1) — £55,355": 55355,
+  "Consultant Threshold 1 (entry) — £113,565": 113565, "Consultant Threshold 2a — £120,249": 120249,
+  "Consultant Threshold 2b — £123,672": 123672, "Consultant Threshold 3 — £135,645": 135645,
+  "Consultant Threshold 4 (top) — £150,569": 150569,
+  "GP (Salaried, fully qualified) — £73,864": 73864, "Other / enter manually": 0
 };
 
 /* ── CORE MATHS (identical logic to the original tool) ── */
@@ -186,10 +202,10 @@ function nhsftRetainedAnalysis(retained, futureGross, ty) {
    ══════════════════════════════════════════════════════ */
 function nhsftBandChange() {
   const band = tval("th-band");
-  const sel = document.getElementById("th-band");
   document.getElementById("th-consultant-row").style.display = band.startsWith("Consultant") ? "block" : "none";
   document.getElementById("th-band-row").style.display = band.startsWith("Band") ? "block" : "none";
-  document.getElementById("th-trainee-row").style.display = (band.startsWith("Foundation") || band.startsWith("Specialty") || band.startsWith("GP")) ? "block" : "none";
+  const isTraineeGrade = band && band !== "Other / enter manually" && !band.startsWith("Consultant") && !band.startsWith("Band");
+  document.getElementById("th-trainee-row").style.display = isTraineeGrade ? "block" : "none";
   nhsftBandRecalc();
 }
 function nhsftBandRecalc() {
@@ -419,6 +435,86 @@ function calcOvertimeHeadroom() {
 }
 
 /* ══════════════════════════════════════════════════════
+   CALCULATOR — SALARY SACRIFICE TRUE COST
+   Shows the real lifetime pension cost of sacrificing pay
+   for a car lease, cycle to work, tech scheme, childcare
+   vouchers, or additional pension (AVC) contributions.
+   ══════════════════════════════════════════════════════ */
+const NHSFT_SS_NOTES = {
+  car: "England/Wales/NI: reduces pensionable pay. Scotland: also reduces pensionable pay (from December 2023).",
+  cycle: "England/Wales/NI: reduces pensionable pay. Scotland: pension-neutral (exempt).",
+  tech: "Reduces pensionable pay in all regions, including Scotland.",
+  childcare: "Legacy scheme only (joined before Oct 2018). England/Wales/NI: reduces pensionable pay. Scotland: pension-neutral (exempt).",
+  avc: "Does NOT reduce pensionable pay — you are buying additional pension directly, not sacrificing salary for a benefit. No CARE pension loss."
+};
+function nhsftSSSchemeChange() {
+  const scheme = tval("ss-scheme");
+  const note = document.getElementById("ss-scheme-note");
+  note.textContent = NHSFT_SS_NOTES[scheme] || "";
+}
+function calcSalarySacrifice() {
+  const ty = tval("ss-tyear"), scot = tchecked("ss-scotland");
+  const salary = tv("ss-salary");
+  if (!salary) { alert("Please enter your annual NHS salary."); return; }
+  const age = tv("ss-age") || 38;
+  const retire = tv("ss-retire") || 67;
+  const monthly = tv("ss-monthly");
+  const years = tv("ss-years") || 3;
+  const cpi = tv("ss-cpi") || 2.5;
+  const scheme = tval("ss-scheme");
+
+  const annual = monthly * 12;
+  const reduced = Math.max(0, salary - annual);
+  const revalRate = (cpi + 1.5) / 100;
+  const yearsToRetire = Math.max(1, retire - age);
+  const yearsInRetire = Math.max(1, 88 - retire);
+
+  const taxFull = nhsftIncomeTax(salary, scot, ty), taxRed = nhsftIncomeTax(reduced, scot, ty);
+  const niFull = nhsftNI(salary, ty), niRed = nhsftNI(reduced, ty);
+  const taxSaved = taxFull - taxRed, niSaved = niFull - niRed;
+  const annualSaving = taxSaved + niSaved;
+  const totalSaved = annualSaving * years;
+
+  const schemeHasPensionImpact = scheme !== "avc";
+  const scotExempt = scot && (scheme === "cycle" || scheme === "childcare");
+  const actualPenImpact = schemeHasPensionImpact && !scotExempt;
+
+  let annualPenLost = 0, lifetimePenLost = 0;
+  if (actualPenImpact) {
+    annualPenLost = annual / 54;
+    for (let y = 0; y < years; y++) {
+      lifetimePenLost += annualPenLost * Math.pow(1 + revalRate, yearsToRetire - y);
+    }
+    lifetimePenLost *= yearsInRetire;
+  }
+
+  const net = totalSaved - lifetimePenLost;
+  const breakeven = annualSaving > 0 ? lifetimePenLost / annualSaving : null;
+
+  let verdict;
+  if (!actualPenImpact) {
+    verdict = alertBox("success", "No pension impact", `${scotExempt ? "Scotland exemption applies — " : ""}This scheme has no CARE pension impact. You get the full tax/NI saving of ${fmtC(totalSaved)} over ${years} year${years > 1 ? "s" : ""} with no pension penalty.`);
+  } else if (net >= 0) {
+    verdict = alertBox("info", "Net position: likely worthwhile", `The ${fmtC(totalSaved)} tax/NI saving over ${years} years exceeds the estimated lifetime pension cost of ${fmtC(lifetimePenLost)}. This scheme may be worthwhile — but the pension loss is real and permanent, so only take it if you genuinely want and use the benefit.`);
+  } else {
+    verdict = alertBox("warning", "Net position: costs more than it saves", `The estimated lifetime pension cost of ${fmtC(lifetimePenLost)} exceeds the ${fmtC(totalSaved)} tax/NI saving. You'd need roughly ${Math.round(breakeven)} years in retirement just to break even. Over a full lifetime, this scheme is estimated to cost more than it saves.`);
+  }
+
+  document.getElementById("ss-out").innerHTML = resultBox(
+    resultGrid([
+      ["Annual Tax + NI Saving", fmtC(annualSaving), "green"],
+      [`Total Saved (${years}yr)`, fmtC(totalSaved), "green"],
+      ["Annual Pension Lost", actualPenImpact ? fmtC(annualPenLost) + "/yr" : "£0 — no impact", actualPenImpact ? "red" : ""],
+      ["Lifetime Pension Lost", fmtC(lifetimePenLost), lifetimePenLost > 0 ? "red" : ""],
+      ["Net Lifetime Position", (net >= 0 ? "+" : "−") + fmtC(Math.abs(net)), net >= 0 ? "green" : "red"],
+      ["Breakeven (years in retirement)", breakeven ? Math.round(breakeven) + " years" : "N/A", ""]
+    ]) + verdict +
+    resultNote(`Assumes you live to age 88 and retire at ${retire}. The pension figure uses the NHS 2015 Scheme's 1/54 CARE accrual rate, revalued at CPI + 1.5% until retirement. This is a simplified lifetime estimate, not a substitute for a full pension projection — see your Annual Benefit Statement for your actual position.`)
+  );
+  showRes("ss-out");
+}
+
+/* ══════════════════════════════════════════════════════
    CALCULATOR 3 — LTD COMPANY TAX OPTIMISER
    (private practice / locum income via a limited company)
    ══════════════════════════════════════════════════════ */
@@ -511,4 +607,538 @@ function calcLtdOptimiser() {
 
   document.getElementById("ltd-out").innerHTML = resultBox(html);
   showRes("ltd-out");
+}
+
+/* ══════════════════════════════════════════════════════
+   SHARED TOGGLE HELPERS (used by several tools below)
+   ══════════════════════════════════════════════════════ */
+function nhsftToggleEl(togId, wrapId) {
+  const tog = document.getElementById(togId), wrap = document.getElementById(wrapId);
+  const on = !tog.classList.contains("on");
+  tog.classList.toggle("on", on); tog.classList.toggle("off", !on);
+  wrap.style.display = on ? "block" : "none";
+}
+function nhsftToggleSwitch(togId) {
+  const tog = document.getElementById(togId);
+  const on = !tog.classList.contains("on");
+  tog.classList.toggle("on", on); tog.classList.toggle("off", !on);
+}
+function nhsftIsOn(togId) { const t = document.getElementById(togId); return t && t.classList.contains("on"); }
+function nhsftMonthlyPmt(loan, rate, years) {
+  if (rate === 0) return loan / (years * 12);
+  const r = rate / 100 / 12, n = years * 12;
+  return loan * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL — PROMOTION / BAND CHANGE CALCULATOR
+   ══════════════════════════════════════════════════════ */
+function nhsftPrFillSalary(which) {
+  const sel = document.getElementById("pr-" + which + "-band");
+  const salEl = document.getElementById("pr-" + which + "-sal");
+  if (sel.value && sel.value !== "custom") salEl.value = sel.value;
+  nhsftPrQuickCalc();
+}
+function nhsftPrQuickCalc() {
+  const ty = tval("pr-tyear"), scot = tval("pr-scot") === "yes";
+  const curSal = tv("pr-cur-sal"), newSal = tv("pr-new-sal");
+  const curTH = curSal - nhsftIncomeTax(curSal, scot, ty) - nhsftNI(curSal, ty) - nhsftPen(curSal, ty);
+  const newTH = newSal - nhsftIncomeTax(newSal, scot, ty) - nhsftNI(newSal, ty) - nhsftPen(newSal, ty);
+  document.getElementById("pr-cur-th").textContent = fmtC(curTH) + "/yr";
+  document.getElementById("pr-new-th").textContent = fmtC(newTH) + "/yr";
+}
+function calcPromotion() {
+  const ty = tval("pr-tyear");
+  const scot = tval("pr-scot") === "yes";
+  const hrs = tv("pr-hours") || 37.5, retire = tv("pr-retire") || 20;
+  const ratio = hrs / 37.5;
+  const curSal = Math.round(tv("pr-cur-sal") * ratio), newSal = Math.round(tv("pr-new-sal") * ratio);
+
+  const ct = nhsftIncomeTax(curSal, scot, ty), cni = nhsftNI(curSal, ty), cp = nhsftPen(curSal, ty), cth = curSal - ct - cni - cp;
+  const nt = nhsftIncomeTax(newSal, scot, ty), nni = nhsftNI(newSal, ty), np = nhsftPen(newSal, ty), nth = newSal - nt - nni - np;
+
+  const diff = nth - cth, salDiff = newSal - curSal, taxDiff = nt - ct, niDiff = nni - cni, penDiff = np - cp;
+  const keepPct = salDiff > 0 ? (diff / salDiff) * 100 : 0;
+  const marginal = salDiff > 0 ? ((taxDiff + niDiff) / salDiff) * 100 : 0;
+  const curHrly = cth / (hrs * 52), newHrly = nth / (hrs * 52);
+
+  const annualPenGain = salDiff / 54;
+  const revalued = annualPenGain * Math.pow(1.035, retire);
+  const lifetimePen = revalued * 20;
+
+  const rows = [
+    ["Gross salary", fmtC(curSal), fmtC(newSal), fmtC(salDiff)],
+    ["Income tax", fmtC(ct), fmtC(nt), fmtC(taxDiff)],
+    ["National Insurance", fmtC(cni), fmtC(nni), fmtC(niDiff)],
+    ["NHS pension", fmtC(cp), fmtC(np), fmtC(penDiff)],
+    ["Take-home", fmtC(cth), fmtC(nth), fmtC(diff)]
+  ];
+
+  document.getElementById("pr-out").innerHTML = resultBox(
+    heroResult("Extra Take-Home Per Year", (diff >= 0 ? "+" : "−") + fmtC(Math.abs(diff)), fmtC(Math.abs(diff / 12)) + "/month · " + fmtC(Math.abs(diff / 52)) + "/week") +
+    resultGrid([
+      ["Gross Pay Rise", (salDiff >= 0 ? "+" : "−") + fmtC(Math.abs(salDiff)), ""],
+      ["You Keep (per £1)", Math.round(keepPct) + "p", ""],
+      ["Marginal Rate", pctC(marginal), ""],
+      ["Net Hourly Gain", "+£" + (newHrly - curHrly).toFixed(2) + "/hr", "green"]
+    ]) +
+    resultTable(["Item", "Current", "After promotion", "Change"], rows) +
+    alertBox("info", "Long-term pension benefit", `The higher salary adds ${fmtC(annualPenGain)}/yr to your NHS pension at retirement. Revalued over ${retire} years this becomes roughly ${fmtC(revalued)}/yr — worth an estimated ${fmtC(lifetimePen)} over a 20-year retirement. Total estimated benefit including take-home gains over your career: roughly ${fmtC(diff * retire + lifetimePen)}.`) +
+    (newSal > 100000 ? alertBox("warning", "Personal Allowance trap", "Your new salary exceeds £100,000. Between £100,000–£125,140 your effective tax rate is 60% as your Personal Allowance is gradually withdrawn. Consider salary sacrifice to reduce gross pay below £100,000.") : "") +
+    resultNote("Assumes the same pension tier applies throughout. Uses the tax year selected above and 2025/26 AfC pay scales as a reference — always check your own trust's exact figures.")
+  );
+  showRes("pr-out");
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL — NHS PENSION PROJECTOR
+   ══════════════════════════════════════════════════════ */
+function calcPensionProjector() {
+  const salary = tv("pp-salary");
+  if (!salary) { alert("Please enter your current annual salary."); return; }
+  const age = tv("pp-age") || 38, served = tv("pp-served") || 10;
+  const retire = tv("pp-retire") || 67, raise = (tv("pp-raise") || 2.5) / 100, cpiR = ((tv("pp-cpi") || 2.5) + 1.5) / 100;
+  const ytr = Math.max(1, retire - age), yInR = Math.max(1, 88 - retire);
+
+  let care = 0;
+  for (let y = 1; y <= served; y++) {
+    const ago = served - y;
+    const sal = salary / Math.pow(1 + raise, ago);
+    care += sal / 54 * Math.pow(1 + cpiR, ytr + ago);
+  }
+  for (let y2 = 1; y2 <= ytr; y2++) {
+    const sal2 = salary * Math.pow(1 + raise, y2);
+    care += sal2 / 54 * Math.pow(1 + cpiR, ytr - y2);
+  }
+
+  let p95 = 0, p08 = 0;
+  if (tchecked("pp-1995-on")) { p95 = (tv("pp-sal95") * tv("pp-yrs95")) / 80; }
+  if (tchecked("pp-2008-on")) { p08 = (tv("pp-sal08") * tv("pp-yrs08")) / 60; }
+
+  const total = care + p95 + p08;
+  const salAtRetire = salary * Math.pow(1 + raise, ytr);
+  const ratio = salAtRetire > 0 ? (total / salAtRetire) * 100 : 0;
+  const withState = total + 11502;
+  const dis = salary * 2;
+
+  let timelineRows = [];
+  for (let yr = 5; yr <= ytr; yr += 5) {
+    const salY = salary * Math.pow(1 + raise, yr);
+    let penY = 0;
+    for (let y3 = 1; y3 <= served + yr; y3++) {
+      const ySince = (served + yr) - y3;
+      const sY = salary / Math.pow(1 + raise, ySince - yr);
+      if (sY > 0) penY += sY / 54 * Math.pow(1 + cpiR, Math.max(0, (ytr - yr) + (served + yr - y3)));
+    }
+    const isTarget = age + yr === retire;
+    timelineRows.push(["+" + yr + " yrs", (age + yr) + (isTarget ? " 🎯" : ""), fmtC(salY), fmtC(penY) + "/yr"]);
+  }
+
+  let note;
+  if (ratio >= 67) note = alertBox("success", "Strong replacement ratio", `A replacement ratio of ${Math.round(ratio)}% is well above the 50% guideline. Combined with the state pension your retirement income looks healthy.`);
+  else if (ratio < 50) note = alertBox("warning", "Below the 50% guideline", `Your replacement ratio of ${Math.round(ratio)}% is below 50%. Consider increasing NHS AVC contributions or reviewing your retirement age.`);
+  else note = alertBox("info", "Replacement ratio", `${Math.round(ratio)}%. With the state pension included: ${fmtC(withState)}/yr total estimated retirement income.`);
+
+  document.getElementById("pp-out").innerHTML = resultBox(
+    heroResult("Estimated Annual NHS Pension at Retirement", fmtC(total), fmtC(total / 12) + " per month") +
+    resultGrid([
+      ["2015 CARE Pension", fmtC(care) + "/yr", ""],
+      ["1995 Section", p95 > 0 ? fmtC(p95) + "/yr" : "N/A", ""],
+      ["2008 Section", p08 > 0 ? fmtC(p08) + "/yr" : "N/A", ""],
+      ["Replacement Ratio", Math.round(ratio) + "%", ""],
+      ["With State Pension", fmtC(withState) + "/yr", "green"],
+      ["Death in Service (est.)", fmtC(dis), ""]
+    ]) +
+    '<div style="font-size:13px;font-weight:800;color:var(--navy);margin:16px 0 4px;">Pension growth timeline</div>' +
+    resultTable(["Year", "Age", "Projected salary", "Pension if retired then"], timelineRows) +
+    note +
+    resultNote("Projections only, not guaranteed. 2015 CARE uses 1/54 accrual, CPI + 1.5% revaluation. 1995 Section = 1/80 final salary (excludes automatic lump sum from this total); 2008 Section = 1/60. State pension assumed at the full new rate. Always verify against your Annual Benefit Statement at totalrewardstatements.nhs.uk.")
+  );
+  showRes("pp-out");
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL — PART-TIME / LTFT CALCULATOR
+   ══════════════════════════════════════════════════════ */
+function nhsftPtUpdateLabel(which) {
+  const hrs = parseFloat(document.getElementById("pt-" + which + "-hrs").value) || 37.5;
+  const wte = Math.round(hrs / 37.5 * 100);
+  document.getElementById("pt-" + which + "-label").textContent = hrs + "hrs (" + wte + "% WTE)";
+}
+function nhsftPtPreset(hrs) {
+  document.getElementById("pt-new-hrs").value = hrs;
+  nhsftPtUpdateLabel("new");
+}
+function calcPartTime() {
+  const ty = tval("pt-tyear");
+  const ftSal = tv("pt-salary");
+  if (!ftSal) { alert("Please enter your full-time equivalent salary."); return; }
+  const retire = tv("pt-retire") || 20, cpi = ((tv("pt-cpi") || 2.5) + 1.5) / 100;
+  const scot = tval("pt-scot") === "yes";
+  const curHrs = parseFloat(document.getElementById("pt-cur-hrs").value) || 37.5;
+  const newHrs = parseFloat(document.getElementById("pt-new-hrs").value) || 30;
+  const curSal = Math.round(ftSal * curHrs / 37.5), newSal = Math.round(ftSal * newHrs / 37.5);
+
+  const ct = nhsftIncomeTax(curSal, scot, ty), cni = nhsftNI(curSal, ty), cp = nhsftPen(curSal, ty), cth = curSal - ct - cni - cp;
+  const nt = nhsftIncomeTax(newSal, scot, ty), nni = nhsftNI(newSal, ty), np = nhsftPen(newSal, ty), nth = newSal - nt - nni - np;
+  const diff = nth - cth, salDiff = newSal - curSal;
+  const taxCushion = Math.abs(salDiff) - Math.abs(diff);
+  const keepPct = salDiff !== 0 ? (diff / salDiff) * 100 : 0;
+  const hoursFreed = curHrs - newHrs;
+  const costPerHr = hoursFreed > 0 ? Math.abs(diff) / (hoursFreed * 52) : 0;
+  const curAL = Math.round(27 * curHrs / 37.5), newAL = Math.round(27 * newHrs / 37.5);
+
+  const annualPenLost = (curSal - newSal) / 54;
+  let lifetimePenLost = 0;
+  for (let y = 0; y < retire; y++) lifetimePenLost += annualPenLost * Math.pow(1 + cpi, retire - y);
+  lifetimePenLost *= 20;
+
+  document.getElementById("pt-out").innerHTML = resultBox(
+    heroResult("Annual Take-Home Change", (diff >= 0 ? "+" : "−") + fmtC(Math.abs(diff)), fmtC(Math.abs(diff / 12)) + "/month · " + fmtC(Math.abs(diff / 52)) + "/week") +
+    resultGrid([
+      ["Salary Reduction", "−" + fmtC(Math.abs(salDiff)), "red"],
+      ["Tax Cushion", fmtC(taxCushion), "green"],
+      ["You Keep (per £1 cut)", Math.abs(Math.round(keepPct)) + "p", ""],
+      ["Cost Per Free Hour", "£" + costPerHr.toFixed(2), ""],
+      ["Annual Leave (est.)", newAL + " days (was " + curAL + ")", ""],
+      ["Lifetime Pension Lost", fmtC(lifetimePenLost), "red"]
+    ]) +
+    alertBox("warning", "Long-term pension cost", `Reducing to ${newHrs}hrs costs ${fmtC(annualPenLost)}/yr in NHS pension at retirement. Over ${retire} years and a 20-year retirement, the estimated lifetime pension loss is ${fmtC(lifetimePenLost)} — significantly more than the ${fmtC(Math.abs(diff * retire))} total take-home reduction over the same period.`) +
+    alertBox("success", "Time gained", `${hoursFreed.toFixed(1)} hours/week freed (roughly ${Math.round(hoursFreed / 7.5 * 10) / 10} days). Net cost of each freed hour: £${costPerHr.toFixed(2)} after tax savings.`) +
+    resultNote("Assumes 27 days base annual leave entitlement, pro-rated. Pension assumes 2015 CARE 1/54 accrual. Not HR or financial advice.")
+  );
+  showRes("pt-out");
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL — LOCUM & BANK SHIFT OPTIMISER
+   ══════════════════════════════════════════════════════ */
+function calcLocum() {
+  const ty = tval("lk-tyear");
+  const nhsSal = tv("lk-salary");
+  if (!nhsSal) { alert("Please enter your annual NHS basic salary."); return; }
+  const rate = tv("lk-rate"), hrs = tv("lk-hrs") || 8;
+  const mthShifts = tv("lk-mth") || 2, cf = tv("lk-cf") || 0;
+  const weekend = tchecked("lk-weekend"), pensionable = tchecked("lk-pensionable");
+  const effRate = rate * (weekend ? 1.3 : 1);
+  const shiftsPerYear = mthShifts * 12, annualGross = effRate * hrs * shiftsPerYear;
+  const combined = nhsSal + annualGross;
+
+  const nhsTax = nhsftIncomeTax(nhsSal, false, ty), nhsNI = nhsftNI(nhsSal, ty);
+  const combTax = nhsftIncomeTax(combined, false, ty), combNI = nhsftNI(combined, ty);
+  const extraTH = (combined - combTax - combNI) - (nhsSal - nhsTax - nhsNI);
+  const extraPerShift = shiftsPerYear > 0 ? extraTH / shiftsPerYear : 0;
+  const netHrly = hrs > 0 ? extraPerShift / hrs : 0;
+  const marginal = annualGross > 0 ? ((combTax - nhsTax + combNI - nhsNI) / annualGross) * 100 : 0;
+  const keepPct = annualGross > 0 ? (extraTH / annualGross) * 100 : 0;
+
+  const pen = pensionable ? nhsftPen(combined, ty) : nhsftPen(nhsSal, ty);
+  const empContrib = combined * NHSFT_TY[ty].empR;
+  const thr = combined - 0, adj = thr + empContrib;
+  const aa = nhsftTapAA(adj, thr, ty);
+  const pia = pensionable ? nhsftPIA(combined, combined) : nhsftPIA(nhsSal, nhsSal);
+  const effAA = aa + cf;
+  const breach = Math.max(0, pia - effAA);
+  const headroom = Math.max(0, effAA - pia);
+
+  let bandWarn = "";
+  if (nhsSal < NHSFT_TY[ty].basic + NHSFT_TY[ty].pa && combined > NHSFT_TY[ty].basic + NHSFT_TY[ty].pa) {
+    bandWarn = alertBox("warning", "Higher-rate threshold crossed", `Your shift income crosses the £${(NHSFT_TY[ty].basic + NHSFT_TY[ty].pa).toLocaleString()} higher-rate threshold. Shift income above this is taxed at 40% — you keep only around ${Math.round(100 - marginal)}p per £1 earned at this level.`);
+  }
+  const paWarn = (combined > 100000 && combined <= 125140) ? alertBox("danger", "60% effective tax zone", "You are in the £100,000–£125,140 Personal Allowance withdrawal zone. Each £1 of extra income costs you roughly 60p in tax. Consider salary sacrifice to reduce gross income below £100,000.") : "";
+
+  let aaNote;
+  if (breach > 0) aaNote = alertBox("danger", "Annual Allowance breach", `Estimated breach of ${fmtC(breach)}. Estimated additional tax charge: ${fmtC(breach * 0.4)}+. Consider Scheme Pays or speak to a specialist adviser.`);
+  else if (pia > aa * 0.85) aaNote = alertBox("warning", "Approaching your Annual Allowance", `You are using roughly ${pctC(pia / effAA * 100)} of your effective Annual Allowance. Check your position before taking on more pensionable work.`);
+  else aaNote = alertBox("success", "Within your Annual Allowance", `Your estimated pension input (${fmtC(pia)}) is within your Annual Allowance (${fmtC(aa)}). Headroom: ${fmtC(headroom)}.`);
+
+  document.getElementById("lk-out").innerHTML = resultBox(
+    heroResult("Extra Take-Home From Shifts (Annual)", fmtC(extraTH), fmtC(extraPerShift) + "/shift · £" + netHrly.toFixed(2) + "/hr net") +
+    resultGrid([
+      ["Gross Shift Income", fmtC(annualGross), ""],
+      ["You Keep", Math.round(keepPct) + "p/£", ""],
+      ["Marginal Tax Rate", pctC(marginal), ""],
+      ["Combined Gross Income", fmtC(combined), ""]
+    ]) + bandWarn + paWarn +
+    '<div style="font-size:13px;font-weight:800;color:var(--navy);margin:16px 0 4px;">Annual Allowance position</div>' +
+    resultGrid([
+      ["Your Tapered AA", fmtC(aa), ""],
+      ["Pension Input (est.)", fmtC(pia), ""],
+      ["Carry Forward", fmtC(cf), ""],
+      ["AA Headroom / Breach", breach > 0 ? "−" + fmtC(breach) : "+" + fmtC(headroom), breach > 0 ? "red" : "green"]
+    ]) + aaNote +
+    resultNote("Assumes shifts are pensionable only if you've ticked that box — check with your trust, since this varies. AA uses the tax year selected above.")
+  );
+  showRes("lk-out");
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL — NHS PENSION: STAY IN VS OPT OUT
+   ══════════════════════════════════════════════════════ */
+function calcOptOut() {
+  const ty = tval("oo-tyear");
+  const salary = tv("oo-salary");
+  if (!salary) { alert("Please enter your annual salary."); return; }
+  const age = tv("oo-age") || 38, served = tv("oo-served") || 10;
+  const retire = tv("oo-retire") || 67, invR = (tv("oo-return") || 5) / 100;
+  const taxR = (tv("oo-taxrate") || 20) / 100, cpiR = ((tv("oo-cpi") || 2.5) + 1.5) / 100;
+  const ytr = Math.max(1, retire - age), yInR = Math.max(1, 88 - retire);
+
+  const empPen = nhsftPen(salary, ty);
+  const nhsTax = nhsftIncomeTax(salary, false, ty), nhsNI = nhsftNI(salary, ty);
+  const thIn = salary - nhsTax - nhsNI - empPen;
+  const thOut = salary - nhsTax - nhsNI;
+  const monthlyGain = (thOut - thIn) / 12;
+
+  let care = 0;
+  for (let y = 1; y <= served; y++) { const ago = served - y; care += (salary / Math.pow(1.025, ago)) / 54 * Math.pow(1 + cpiR, ytr + ago); }
+  for (let y2 = 1; y2 <= ytr; y2++) { care += salary / 54 * Math.pow(1 + cpiR, ytr - y2); }
+  const nhsAnnual = care, nhsLifetime = nhsAnnual * yInR;
+
+  const annualInvest = empPen;
+  const pot = annualInvest * ((Math.pow(1 + invR, ytr) - 1) / invR);
+  const annualDrawdown = pot * 0.04;
+  const netDrawdown = annualDrawdown * (1 - taxR);
+  const invLifetime = netDrawdown * yInR;
+
+  const empContrib = salary * NHSFT_TY[ty].empR;
+  const dis = salary * 2;
+
+  const targetPot = nhsAnnual / 0.04;
+  const needed = targetPot * invR / (Math.pow(1 + invR, ytr) - 1);
+
+  const gap = nhsLifetime - invLifetime;
+  const wins = nhsLifetime > invLifetime;
+
+  const verdict = wins
+    ? alertBox("success", "NHS pension wins", `The NHS pension is estimated to win by ${fmtC(gap)} over your ${yInR}-year retirement. To match it through private investment you'd need to invest ${fmtC(needed)}/yr — versus just ${fmtC(empPen)}/yr in employee contributions. The ${fmtC(monthlyGain)}/month short-term gain from opting out is estimated to cost ${fmtC(gap)} in lifetime income.`)
+    : alertBox("warning", "Private investing edges ahead in this scenario", `At ${Math.round(invR * 100)}% investment return and ${Math.round(taxR * 100)}% withdrawal tax, private investing marginally beats the NHS pension here. This ignores death-in-service cover (${fmtC(dis)}), ill-health retirement protection, and the guaranteed, government-backed nature of the NHS pension. Please seek specialist financial advice before opting out.`);
+
+  document.getElementById("oo-out").innerHTML = resultBox(
+    alertBox("danger", "Before you consider this", "The RCN, BMA and most financial advisers strongly advise against opting out of the NHS Pension Scheme. This calculator is here to show you why — please read carefully.") +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;">' +
+      `<div style="background:linear-gradient(135deg,#1A2E44,#007B8A);border-radius:12px;padding:20px;text-align:center;"><div style="font-size:11px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-bottom:6px;">✅ Stay In NHS Pension</div><div style="font-size:28px;font-weight:900;color:#fff;">${fmtC(nhsLifetime)}</div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;">${fmtC(nhsAnnual)}/yr lifetime income</div></div>` +
+      `<div style="background:linear-gradient(135deg,#78350F,#92400E);border-radius:12px;padding:20px;text-align:center;"><div style="font-size:11px;color:rgba(255,255,255,0.75);text-transform:uppercase;margin-bottom:6px;">⚠️ Opt Out + Invest</div><div style="font-size:28px;font-weight:900;color:#fff;">${fmtC(invLifetime)}</div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;">${fmtC(netDrawdown)}/yr drawdown</div></div>` +
+    '</div>' +
+    resultGrid([
+      ["Immediate Monthly Gain", fmtC(monthlyGain), "green"],
+      ["Employer Contribution Lost", fmtC(empContrib) + "/yr", "red"],
+      ["Investment Pot at Retirement", fmtC(pot), ""],
+      ["Lifetime Income Gap", (wins ? "NHS better by " : "Invest better by ") + fmtC(Math.abs(gap)), ""],
+      ["To Match NHS Pension, Invest", fmtC(needed) + "/yr", "red"],
+      ["Death in Service Lost", fmtC(dis), "red"]
+    ]) + verdict +
+    resultNote("NHS pension projection uses 2015 CARE 1/54 accrual and CPI + 1.5% revaluation. Investment returns are not guaranteed — market values can fall. Employer contribution rules vary by trust. Always seek specialist financial advice before opting out.")
+  );
+  showRes("oo-out");
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL — SELF-ASSESSMENT TAX ESTIMATOR
+   ══════════════════════════════════════════════════════ */
+function calcSelfAssess() {
+  const ty = tval("sa-tyear");
+  const nhsSal = tv("sa-nhs");
+  if (!nhsSal) { alert("Please enter your NHS salary."); return; }
+  const privPrac = tv("sa-pp"), medRep = tv("sa-mr"), otherSE = tv("sa-other-se");
+  const rental = tv("sa-rental"), mortInt = tv("sa-mortint"), interest = tv("sa-interest"), divs = tv("sa-divs");
+  const poa = tv("sa-poa"), scot = tval("sa-scot") === "yes";
+  const pen = tv("sa-pen") || nhsftPen(nhsSal, ty);
+
+  const selfEmpProfit = privPrac + medRep + otherSE;
+  const mortRelief = mortInt * 0.20;
+  const gross = nhsSal - pen + selfEmpProfit + rental + interest + divs;
+
+  const tax = Math.max(0, nhsftIncomeTax(gross, scot, ty) - mortRelief);
+  const nhsTaxOnly = nhsftIncomeTax(Math.max(0, nhsSal - pen), scot, ty);
+
+  let cl4 = 0;
+  if (selfEmpProfit > 12570) {
+    cl4 = (Math.min(selfEmpProfit, 50270) - 12570) * 0.09;
+    if (selfEmpProfit > 50270) cl4 += (selfEmpProfit - 50270) * 0.02;
+  }
+  const cl2 = selfEmpProfit > 12570 ? 179.40 : 0;
+
+  const totalTax = tax + cl4 + cl2;
+  const paye = nhsTaxOnly + nhsftNI(Math.max(0, nhsSal - pen), ty);
+  const balance = totalTax - paye - poa;
+
+  const note = (gross > 100000 && gross <= 125140)
+    ? alertBox("warning", "Personal Allowance withdrawal zone", "You're in the zone where your Personal Allowance is gradually withdrawn. Consider pension contributions to bring gross income below £100,000.")
+    : balance < 0
+    ? alertBox("success", "You may be due a refund", `You appear to have overpaid tax via PAYE/payments on account. You may be entitled to a refund of ${fmtC(Math.abs(balance))}.`)
+    : alertBox("info", "Set this aside for January", `Set aside ${fmtC(Math.max(0, balance))} for your January payment. HMRC may also require payments on account for next year — typically 50% of this year's balance, due in January and July.`);
+
+  const poaNote = balance > 1000 ? alertBox("info", "Payments on account", `HMRC will likely require advance payments for next year — 50% of this year's bill (${fmtC(balance / 2)}) — due in both January and July.`) : "";
+
+  document.getElementById("sa-out").innerHTML = resultBox(
+    heroResult("Estimated Self-Assessment Tax Bill", fmtC(Math.max(0, balance)), balance < 0 ? "You may be due a refund of " + fmtC(Math.abs(balance)) : "Due 31 January following the tax year end") +
+    resultGrid([
+      ["Total Gross Income", fmtC(gross), ""],
+      ["Income Tax (total)", fmtC(tax), "red"],
+      ["Class 2 + 4 NI (self-employed)", fmtC(cl4 + cl2), "red"],
+      ["Tax Already Collected via PAYE", fmtC(paye), "green"],
+      ["Payments on Account Made", fmtC(poa), "green"],
+      ["Balance Due in January", fmtC(Math.abs(balance)), ""]
+    ]) + note + poaNote +
+    resultNote("Estimate only. Actual bill depends on allowable expenses, exact pension contributions, and other HMRC adjustments. Always submit an accurate Self Assessment return and consult a qualified accountant.")
+  );
+  showRes("sa-out");
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL — NHS MORTGAGE AFFORDABILITY CALCULATOR
+   ══════════════════════════════════════════════════════ */
+function calcMortgage() {
+  const sal1 = tv("mg-sal1");
+  if (!sal1) { alert("Please enter your NHS basic salary."); return; }
+  const sal2 = tv("mg-sal2"), extra = tv("mg-extra");
+  const dep = tv("mg-dep"), outgoings = tv("mg-loans") + tv("mg-car") + tv("mg-childcare");
+  const deps = parseInt(tval("mg-deps")) || 0, rate = tv("mg-rate") || 4.5;
+  const emptype = tval("mg-emptype");
+
+  const totalIncome = sal1 + sal2 + extra;
+  const netOut = outgoings * 12;
+  const netIncome = Math.max(0, totalIncome - netOut);
+
+  let multiple = emptype === "se" ? 4.0 : emptype === "contract" ? 4.25 : 4.5;
+  if (deps >= 2) multiple -= 0.25;
+  if (deps >= 3) multiple -= 0.25;
+
+  const maxLoan = netIncome * multiple;
+  const maxProp = maxLoan + dep;
+  const ltv = maxProp > 0 ? (maxLoan / maxProp) * 100 : 0;
+  const pmt = nhsftMonthlyPmt(maxLoan, rate, 25);
+
+  const mults = [[4.0, "Conservative"], [4.5, "Standard NHS"], [5.0, "Stretched"], [5.5, "NHS specialist lenders"]];
+  const tblRows = mults.map(([m, name]) => { const loan = netIncome * m; return [name, m.toFixed(1) + "×", fmtC(loan), fmtC(loan + dep)]; });
+
+  const note = ltv > 90
+    ? alertBox("warning", "High loan-to-value", `LTV of ${Math.round(ltv)}% — you may need a higher deposit to access standard mortgage rates. Some NHS specialist lenders offer schemes for key workers.`)
+    : ltv <= 75
+    ? alertBox("success", "Strong position", `LTV of ${Math.round(ltv)}% puts you in a strong position for competitive mortgage rates.`)
+    : alertBox("info", "Worth shopping around", `LTV of ${Math.round(ltv)}%. A specialist NHS mortgage broker may secure a higher income multiple — some offer up to 5.5× for NHS staff.`);
+
+  document.getElementById("mg-out").innerHTML = resultBox(
+    heroResult("Estimated Maximum Borrowing", fmtC(maxLoan), multiple.toFixed(2) + "× income multiple · " + rate + "% rate") +
+    resultGrid([
+      ["Your Deposit", fmtC(dep), ""],
+      ["Max Property Value", fmtC(maxProp), "green"],
+      ["Loan-to-Value", Math.round(ltv) + "%", ""],
+      ["Est. Monthly Payment", fmtC(pmt), ""]
+    ]) +
+    '<div style="font-size:13px;font-weight:800;color:var(--navy);margin:16px 0 4px;">Range across lender types</div>' +
+    resultTable(["Lender type", "Multiple", "Max borrowing", "Max property"], tblRows) +
+    note +
+    alertBox("info", "NHS pension tip", "Your NHS pension contributions reduce your take-home pay, but some lenders will add them back when assessing affordability — ask your broker specifically about this.") +
+    resultNote("Estimates based on income multiples only. Actual mortgage offers depend on credit score, lender criteria, affordability stress tests and individual circumstances. Always consult a qualified mortgage broker.")
+  );
+  showRes("mg-out");
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL — NHS ANNUAL LEAVE CALCULATOR
+   ══════════════════════════════════════════════════════ */
+function nhsftALToggle() {
+  const partYear = tval("al-partyear") === "yes";
+  document.getElementById("al-partyear-wrap").style.display = partYear ? "block" : "none";
+}
+function calcAnnualLeave() {
+  const hrs = tv("al-hrs") || 30, ftDays = parseInt(tval("al-service")) || 29;
+  const bhFull = parseInt(tval("al-bh")) || 8, partYear = tval("al-partyear") === "yes";
+  const wte = hrs / 37.5;
+
+  let fraction = 1;
+  if (partYear) {
+    const startMonth = parseInt(tval("al-startmonth")) || 1;
+    const startDay = tv("al-startday") || 1;
+    const monthsWorked = 12 - startMonth + 1 + (startDay > 1 ? -1 : 0);
+    fraction = Math.max(0, Math.min(1, monthsWorked / 12));
+  }
+
+  const prorataDays = Math.round(ftDays * wte * fraction * 10) / 10;
+  const prorataBH = Math.round(bhFull * wte * fraction * 10) / 10;
+  const totalDays = Math.round((prorataDays + prorataBH) * 10) / 10;
+  const totalHrs = Math.round(totalDays * 7.5 * 10) / 10;
+  const daysHrsOnly = Math.round(prorataDays * 7.5 * 10) / 10;
+
+  const note = partYear
+    ? alertBox("info", "Part-year calculation", `Based on approximately ${Math.round(fraction * 12)} months of service this leave year. Check the exact calculation with HR, as trust policies may vary for part-year starters.`)
+    : alertBox("success", "Your pro-rata entitlement", `At ${Math.round(wte * 100)}% WTE: ${prorataDays} days leave + ${prorataBH} bank holidays = ${totalDays} days total (${totalHrs} hours).`);
+
+  document.getElementById("al-out").innerHTML = resultBox(
+    heroResult("Pro-Rata Annual Leave", prorataDays + " days", daysHrsOnly + " hours") +
+    resultGrid([
+      ["Full-Time Entitlement", ftDays + " days", ""],
+      ["Your WTE", Math.round(wte * 100) + "%", ""],
+      ["Pro-Rata Days", prorataDays + " days", "green"],
+      ["Bank Holidays (pro-rata)", prorataBH + " days", ""],
+      ["Total Leave inc. BH", totalDays + " days", "green"],
+      ["In Hours", totalHrs + " hrs", ""]
+    ]) + note +
+    resultNote("Based on standard Agenda for Change leave entitlements. Actual entitlement depends on your contract, trust policy and any local agreements — always check with your line manager or HR.")
+  );
+  showRes("al-out");
+}
+
+/* ══════════════════════════════════════════════════════
+   TOOL — STUDENT LOAN REPAYMENT CALCULATOR
+   Verified current thresholds (2026/27), per plan.
+   ══════════════════════════════════════════════════════ */
+const NHSFT_STUDENT_LOAN = {
+  1: { thresh: 26900, rate: 0.09, term: "age65", interest: 4.3, label: "Plan 1 — England/Wales pre-2012" },
+  2: { thresh: 29385, rate: 0.09, term: 30, interest: 6.0, label: "Plan 2 — England/Wales 2012–2023" },
+  4: { thresh: 33795, rate: 0.09, term: 30, interest: 3.2, label: "Plan 4 — Scotland" },
+  5: { thresh: 25000, rate: 0.09, term: 40, interest: 3.2, label: "Plan 5 — England/Wales 2023+" }
+};
+function nhsftSlPlanChange() {
+  const plan = parseInt(tval("sl-plan")) || 2;
+  const p = NHSFT_STUDENT_LOAN[plan];
+  const writeoffText = p.term === "age65" ? "Written off at age 65" : `Written off after ${p.term} years`;
+  document.getElementById("sl-plan-info").innerHTML = `${p.label} · Threshold: £${p.thresh.toLocaleString("en-GB")} · Rate: ${Math.round(p.rate * 100)}% above threshold · Interest: ~${p.interest}% · ${writeoffText}`;
+  document.getElementById("sl-rate").value = p.interest;
+}
+function calcStudentLoan() {
+  const plan = parseInt(tval("sl-plan")) || 2;
+  const balance = tv("sl-balance"), salary = tv("sl-salary"), growth = (tv("sl-growth") || 3) / 100;
+  const interest = (tv("sl-rate") || 6) / 100, yearsSince = tv("sl-age") || 5;
+  const p = NHSFT_STUDENT_LOAN[plan];
+
+  const monthly = salary > p.thresh ? (salary - p.thresh) * p.rate / 12 : 0;
+  const annual = monthly * 12;
+
+  let bal = balance, totalPaid = 0, yearsToRepay = null, writeoffBal = null;
+  const maxYears = p.term === "age65" ? Math.max(0, 65 - 25 - yearsSince) : p.term - yearsSince;
+  let curSal = salary;
+  for (let yr = 1; yr <= maxYears; yr++) {
+    curSal *= (1 + growth);
+    const payment = curSal > p.thresh ? (curSal - p.thresh) * p.rate : 0;
+    bal = bal * (1 + interest) - payment;
+    totalPaid += payment;
+    if (bal <= 0 && yearsToRepay === null) { yearsToRepay = yr; break; }
+  }
+  if (bal > 0) writeoffBal = bal;
+
+  const writeoffLabel = p.term === "age65" ? `Age 65 (~${Math.round(25 + maxYears - yearsSince)} yrs)` : `~Year ${new Date().getFullYear() + Math.round(maxYears)}`;
+
+  const note = yearsToRepay
+    ? alertBox("success", "Projected to clear your loan", `Projected to clear after ${yearsToRepay} years. Total repaid: approximately ${fmtC(Math.min(totalPaid, balance * 1.5))}.`)
+    : alertBox("info", "Not projected to clear before write-off", "This means you'll repay a portion but never the full balance — which may actually be a good outcome if the total repaid ends up less than the original balance.");
+  const warn = (writeoffBal && writeoffBal < balance * 0.3)
+    ? alertBox("info", "Before making voluntary overpayments", `You're projected to have roughly ${fmtC(writeoffBal)} written off at your write-off date. If you've received a bonus or inheritance, paying off the loan early may not be worth it — get financial advice first.`)
+    : "";
+
+  document.getElementById("sl-out").innerHTML = resultBox(
+    heroResult("Monthly Deduction (current year)", fmtC(monthly), fmtC(annual) + " per year deducted from your payslip") +
+    resultGrid([
+      ["Repayment Threshold", fmtC(p.thresh), ""],
+      ["Rate Above Threshold", "9%", ""],
+      ["Years to Clear (projected)", yearsToRepay ? yearsToRepay + " years" : "Won't clear before write-off", ""],
+      ["Write-Off Point", writeoffLabel, ""],
+      ["Projected Total Repaid", fmtC(Math.min(totalPaid, balance + (balance * interest * Math.min(maxYears, yearsToRepay || maxYears)))), ""],
+      ["Balance at Write-Off", writeoffBal ? fmtC(writeoffBal) + " written off" : "Cleared before write-off ✅", writeoffBal ? "" : "green"]
+    ]) + note + warn +
+    resultNote("Projection based on your salary, growth rate and interest rate assumptions. Actual repayments depend on income, interest rate changes, and HMRC thresholds, which are reviewed annually. Check your real balance at studentloanrepayment.co.uk.")
+  );
+  showRes("sl-out");
 }

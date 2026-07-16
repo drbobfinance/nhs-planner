@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://uk-debt.info/sitemap.xml
+Sitemap: https://nhsfinancetool.co.uk/sitemap.xml

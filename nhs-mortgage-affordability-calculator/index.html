@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NHS Overtime &amp; Extra Shifts Calculator — How Much Before You Breach Your Annual Allowance? | NHS Finance Tool</title>
-<meta name="description" content="Free calculator for NHS staff doing extra shifts, overtime or strike cover: enter any ad-hoc payments and see exactly how much more you can earn this year before breaching your pension Annual Allowance.">
-<link rel="canonical" href="https://nhsfinancetool.co.uk/nhs-overtime-annual-allowance-calculator/">
+<title>NHS Mortgage Affordability Calculator | NHS Finance Tool</title>
+<meta name="description" content="Free NHS mortgage affordability calculator showing how much you could borrow, using NHS-specific income multiples across conservative, standard and specialist lenders.">
+<link rel="canonical" href="https://nhsfinancetool.co.uk/nhs-mortgage-affordability-calculator/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="NHS Finance Tool">
-<meta property="og:title" content="NHS Overtime &amp; Extra Shifts Calculator — How Much Before You Breach Your Annual Allowance?">
-<meta property="og:description" content="Enter any ad-hoc extra shifts or overtime and see how much more you can earn this year before breaching your NHS pension Annual Allowance.">
-<meta property="og:url" content="https://nhsfinancetool.co.uk/nhs-overtime-annual-allowance-calculator/">
+<meta property="og:title" content="NHS Mortgage Affordability Calculator">
+<meta property="og:url" content="https://nhsfinancetool.co.uk/nhs-mortgage-affordability-calculator/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
@@ -97,61 +96,49 @@
   </div>
 </nav>
 <div class="page active">
-<div class="tool-header" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);padding:44px 20px 36px;">
+<div class="tool-header" style="background:linear-gradient(135deg,#059669,#047857);padding:44px 20px 36px;">
   <button class="back-btn" onclick="showPage('home')">← Back to all NHS tools</button>
-  <h1>➕ NHS Overtime &amp; Extra Shifts Calculator</h1>
-  <p>Add up any extra shifts, overtime or strike cover — freehand — and see how much more you can safely earn before breaching your Annual Allowance</p>
+  <h1>🏠 NHS Mortgage Affordability Calculator</h1>
+  <p>How much can you borrow? Uses NHS-specific income multiples and accounts for pension contributions.</p>
 </div>
 <div class="tool-body">
 
-<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong> This estimates the effect of extra pensionable pay on your Annual Allowance. It doesn't replace your Annual Benefit Statement.</div>
+<div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#92400E;line-height:1.5;"><strong>Guidance only — not financial advice.</strong></div>
 
-<div style="background:#F5F3FF;border:1px solid #DDD6FE;border-radius:12px;padding:18px 20px;margin-bottom:20px;font-size:13px;color:#4A5568;line-height:1.8;">
-  <strong style="color:#5B21B6;">Why this exists:</strong> normal overtime rates are predictable, but strike cover, urgent locum shifts or one-off enhanced rates can pay several hundred or even over a thousand pounds a day — and it's easy to lose track of how that's adding up against your Annual Allowance until the bill arrives the following year. Add each extra payment below with whatever amount it actually was, then hit calculate.
-</div>
-
-<div class="form-section"><h3><span>📅</span> Your Baseline (before extra shifts)</h3>
+<div class="form-section"><h3><span>💰</span> Your Income</h3>
   <div class="form-grid">
-    <div class="field"><label>Tax year</label>
-      <select id="ov-tyear">
-        <option value="2023/24">2023/24</option>
-        <option value="2024/25">2024/25</option>
-        <option value="2025/26">2025/26</option>
-        <option value="2026/27" selected>2026/27 (current)</option>
-      </select>
-    </div>
-    <div class="field"><label>Basic NHS pensionable pay this year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-salary"></div><div class="hint">Before any extra shifts — your contracted salary.</div></div>
-    <div class="field"><label>NHS pensionable pay last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-prevpay"></div><div class="hint">Leave blank to assume the same as this year.</div></div>
-    <div class="field"><label>Other income (private practice, dividends etc.)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-other"></div></div>
-    <div class="field"><label>Personal pension contributions already made</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-personalpen"></div></div>
-  </div>
-  <div class="form-grid" style="margin-top:6px;">
-    <div class="field"><label>Carry forward — 3 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf1"></div></div>
-    <div class="field"><label>Carry forward — 2 years ago</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf2"></div></div>
-    <div class="field"><label>Carry forward — last year</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="ov-cf3"></div></div>
+    <div class="field"><label>NHS basic salary (annual gross)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="mg-sal1" value="47810"></div></div>
+    <div class="field"><label>Partner's salary (if joint)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="mg-sal2" value="0"></div></div>
+    <div class="field"><label>Regular additional income (annual)</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="mg-extra" value="0"></div><div class="hint">Guaranteed overtime, private practice etc.</div></div>
+    <div class="field"><label>Employment type</label><select id="mg-emptype"><option value="paye">Employed (PAYE / NHS)</option><option value="se">Self-employed (private practice)</option><option value="contract">Contractor</option></select></div>
   </div>
 </div>
 
-<div class="form-section"><h3><span>➕</span> Extra Shifts &amp; Overtime This Year</h3>
-  <div style="font-size:12px;color:var(--gray5);margin-bottom:12px;">Add every extra payment as its own row — regular overtime, additional PAs, strike cover, whatever the actual amount was. There's no limit on how many you add.</div>
-  <div id="ov-shifts"></div>
-  <button type="button" onclick="nhsftAddShiftRow()" style="background:#F5F3FF;border:1.5px dashed #C4B5FD;color:#5B21B6;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:800;cursor:pointer;width:100%;margin-top:6px;">+ Add another shift or payment</button>
-  <div style="display:flex;justify-content:space-between;align-items:center;background:var(--gray1);border-radius:9px;padding:12px 16px;margin-top:14px;">
-    <span style="font-size:13px;font-weight:800;color:var(--navy);">Running total of extra shifts:</span>
-    <span id="ov-running-total" style="font-size:16px;font-weight:900;color:#5B21B6;font-family:monospace;">£0</span>
+<div class="form-section"><h3><span>🏡</span> Property &amp; Deposit</h3>
+  <div class="form-grid">
+    <div class="field"><label>Your deposit</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="mg-dep" value="50000"></div></div>
+    <div class="field"><label>Number of dependants</label><select id="mg-deps"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3+</option></select></div>
   </div>
 </div>
 
-<button class="calc-btn" onclick="calcOvertimeHeadroom()">Calculate My Headroom →</button>
-<div id="ov-out"></div>
+<div class="form-section"><h3><span>📋</span> Monthly Commitments</h3>
+  <div class="form-grid">
+    <div class="field"><label>Loan / credit card payments</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="mg-loans" value="0"></div></div>
+    <div class="field"><label>Car finance</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="mg-car" value="0"></div></div>
+    <div class="field"><label>Childcare</label><div class="input-wrap has-prefix"><span class="input-prefix">£</span><input type="number" id="mg-childcare" value="0"></div></div>
+    <div class="field"><label>Interest rate (% for payment calc)</label><input type="number" id="mg-rate" value="4.5" step="0.1" min="0" max="15"></div>
+  </div>
+</div>
 
-<div class="disclaimer"><strong>Disclaimer:</strong> This assumes all extra pay listed is pensionable — check with your trust's payroll if unsure, since not all extra payments count towards the NHS pension. Always verify against your Annual Benefit Statement and seek specialist pension tax advice before turning down or accepting extra shifts based on this figure.</div>
+<button class="calc-btn" onclick="calcMortgage()">Calculate My Borrowing Power →</button>
+<div id="mg-out"></div>
+
+<div class="disclaimer"><strong>Disclaimer:</strong> Estimates based on income multiples only. Actual mortgage offers depend on credit score, lender criteria, affordability stress tests and individual circumstances. Always consult a qualified mortgage broker.</div>
 <button class="back-btn-bottom" onclick="showPage('home')">← Back to all NHS tools</button>
 
 </div>
 </div>
 
 <script src="/js/app.js"></script>
-<script>nhsftAddShiftRow(); nhsftAddShiftRow();</script>
 </body>
 </html>
